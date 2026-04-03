@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/geometry/Offset.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+enum PathSegmentTypeProto {
+  PATH_SEGMENT_TYPE_MOVE = 0;
+  PATH_SEGMENT_TYPE_LINE = 1;
+  PATH_SEGMENT_TYPE_QUADRATIC = 2;
+  PATH_SEGMENT_TYPE_CONIC = 3;
+  PATH_SEGMENT_TYPE_CUBIC = 4;
+  PATH_SEGMENT_TYPE_CLOSE = 5;
+  PATH_SEGMENT_TYPE_DONE = 6;
+}
+
+message PathSegmentProto {
+  PathSegmentTypeProto type = 1;
+  repeated sdui.ui.geometry.OffsetProto points = 2;
+  float weight = 3;
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/text/TextLinkStyles.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message LinkAnnotationUrlProto {
+  string url = 1;
+  TextLinkStylesProto styles = 2;
+  string interaction_tag = 3;
+}
+
+message LinkAnnotationClickableProto {
+  string tag = 1;
+  TextLinkStylesProto styles = 2;
+  string interaction_tag = 3;
+}
+
+message LinkAnnotationProto {
+  oneof value {
+    LinkAnnotationUrlProto url = 1;
+    LinkAnnotationClickableProto clickable = 2;
+  }
+}

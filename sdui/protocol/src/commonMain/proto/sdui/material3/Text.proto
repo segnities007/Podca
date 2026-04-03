@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/text/AnnotatedString.proto";
+import "sdui/ui/text/ParagraphStyle.proto";
+import "sdui/ui/text/SpanStyle.proto";
+import "sdui/ui/text/TextOverflow.proto";
+import "sdui/ui/text/TextStyle.proto";
+import "sdui/ui/text/font/FontFamily.proto";
+import "sdui/ui/text/font/Font.proto";
+import "sdui/ui/text/font/FontStyle.proto";
+import "sdui/ui/text/font/FontWeight.proto";
+import "sdui/ui/unit/TextUnit.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message MaterialTextProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  oneof text_content {
+    string text = 2;
+    sdui.ui.text.AnnotatedStringProto annotated_string = 3;
+  }
+  sdui.ui.graphics.ColorProto color = 4;
+  sdui.ui.unit.TextUnitProto font_size = 5;
+  sdui.ui.text.font.FontStyleProto font_style = 6;
+  sdui.ui.text.font.FontWeightProto font_weight = 7;
+  sdui.ui.text.font.FontFamilyProto font_family = 8;
+  sdui.ui.unit.TextUnitProto letter_spacing = 9;
+  sdui.ui.text.TextDecorationProto text_decoration = 10;
+  sdui.ui.text.TextAlignProto text_align = 11;
+  sdui.ui.unit.TextUnitProto line_height = 12;
+  sdui.ui.text.TextOverflowProto overflow = 13;
+  bool soft_wrap = 14;
+  int32 max_lines = 15;
+  int32 min_lines = 16;
+  sdui.ui.text.TextStyleProto style = 17;
+}

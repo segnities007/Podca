@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message TonalPaletteProto {
+  sdui.ui.graphics.ColorProto tone0 = 1;
+  sdui.ui.graphics.ColorProto tone10 = 2;
+  sdui.ui.graphics.ColorProto tone20 = 3;
+  sdui.ui.graphics.ColorProto tone30 = 4;
+  sdui.ui.graphics.ColorProto tone40 = 5;
+  sdui.ui.graphics.ColorProto tone50 = 6;
+  sdui.ui.graphics.ColorProto tone60 = 7;
+  sdui.ui.graphics.ColorProto tone70 = 8;
+  sdui.ui.graphics.ColorProto tone80 = 9;
+  sdui.ui.graphics.ColorProto tone90 = 10;
+  sdui.ui.graphics.ColorProto tone95 = 11;
+  sdui.ui.graphics.ColorProto tone98 = 12;
+  sdui.ui.graphics.ColorProto tone99 = 13;
+  sdui.ui.graphics.ColorProto tone100 = 14;
+}

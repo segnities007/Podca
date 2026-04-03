@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message IntervalProto {
+  float start = 1;
+  float end = 2;
+  string data_tag = 3;
+}
+
+message IntervalTreeProto {
+  repeated IntervalProto intervals = 1;
+}
+
+message IntervalQueryProto {
+  float start = 1;
+  float end = 2;
+}

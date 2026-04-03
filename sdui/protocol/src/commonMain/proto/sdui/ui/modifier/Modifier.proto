@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package sdui.ui.modifier;
+
+import "sdui/ui/alignment/Alignment.proto";
+import "sdui/ui/graphics/Brush.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/Shape.proto";
+import "sdui/ui/graphics/PathEffect.proto";
+import "sdui/ui/unit/Dp.proto";
+import "sdui/ui/unit/IntOffset.proto";
+import "sdui/ui/unit/IntRect.proto";
+import "sdui/ui/unit/IntSize.proto";
+import "sdui/ui/unit/TextUnit.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.modifier";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.Modifier 相当
+ *
+ * Compose の Modifier は連結可能なチェーンなので、順序付きの要素列として保持する。
+ */
+message ModifierProto {
+  repeated ModifierElementProto elements = 1;
+}
+
+message ModifierElementProto {
+  string name = 1;
+  repeated ModifierPropertyProto properties = 2;
+}
+
+message ModifierPropertyProto {
+  string key = 1;
+  oneof value {
+    bool bool_value = 2;
+    int32 int32_value = 3;
+    int64 int64_value = 4;
+    float float_value = 5;
+    string string_value = 6;
+    sdui.ui.unit.DpProto dp_value = 7;
+    sdui.ui.unit.TextUnitProto text_unit_value = 8;
+    sdui.ui.graphics.ColorProto color_value = 9;
+    sdui.ui.graphics.ShapeProto shape_value = 10;
+    sdui.ui.alignment.AlignmentProto alignment_value = 11;
+    sdui.ui.alignment.HorizontalAlignmentProto horizontal_alignment_value = 12;
+    sdui.ui.alignment.VerticalAlignmentProto vertical_alignment_value = 13;
+    sdui.ui.unit.IntOffsetProto int_offset_value = 14;
+    sdui.ui.unit.IntSizeProto int_size_value = 15;
+    sdui.ui.unit.IntRectProto int_rect_value = 16;
+    sdui.ui.graphics.BrushProto brush_value = 17;
+    sdui.ui.graphics.PathEffectProto path_effect_value = 18;
+  }
+}

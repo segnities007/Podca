@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.VertexMode 相当
+ */
+enum VertexModeProto {
+  VERTEX_MODE_TRIANGLES = 0;
+  VERTEX_MODE_TRIANGLE_STRIP = 1;
+  VERTEX_MODE_TRIANGLE_FAN = 2;
+}

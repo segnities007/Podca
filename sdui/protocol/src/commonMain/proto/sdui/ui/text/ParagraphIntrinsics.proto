@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message ParagraphIntrinsicsProto {
+  bool has_stale_resolved_fonts = 1;
+  float min_intrinsic_width = 2;
+  float max_intrinsic_width = 3;
+}

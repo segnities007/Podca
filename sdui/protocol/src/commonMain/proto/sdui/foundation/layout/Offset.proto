@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/ui/unit/Dp.proto";
+import "sdui/ui/unit/IntOffset.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message OffsetModifierProto {
+  sdui.ui.unit.DpProto x = 1;
+  sdui.ui.unit.DpProto y = 2;
+  bool rtl_aware = 3;
+}
+
+message OffsetPxModifierProto {
+  sdui.ui.unit.IntOffsetProto offset = 1;
+  bool rtl_aware = 2;
+}

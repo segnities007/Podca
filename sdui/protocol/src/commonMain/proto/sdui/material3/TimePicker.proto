@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum TimePickerLayoutTypeProto {
+  TIME_PICKER_LAYOUT_TYPE_HORIZONTAL = 0;
+  TIME_PICKER_LAYOUT_TYPE_VERTICAL = 1;
+}
+
+enum TimePickerSelectionModeProto {
+  TIME_PICKER_SELECTION_MODE_HOUR = 0;
+  TIME_PICKER_SELECTION_MODE_MINUTE = 1;
+}
+
+message TimePickerColorsProto {
+  sdui.ui.graphics.ColorProto clock_dial_color = 1;
+  sdui.ui.graphics.ColorProto selector_color = 2;
+  sdui.ui.graphics.ColorProto container_color = 3;
+  sdui.ui.graphics.ColorProto period_selector_border_color = 4;
+  sdui.ui.graphics.ColorProto clock_dial_selected_content_color = 5;
+  sdui.ui.graphics.ColorProto clock_dial_unselected_content_color = 6;
+  sdui.ui.graphics.ColorProto period_selector_selected_container_color = 7;
+  sdui.ui.graphics.ColorProto period_selector_unselected_container_color = 8;
+  sdui.ui.graphics.ColorProto period_selector_selected_content_color = 9;
+  sdui.ui.graphics.ColorProto period_selector_unselected_content_color = 10;
+  sdui.ui.graphics.ColorProto time_selector_selected_container_color = 11;
+  sdui.ui.graphics.ColorProto time_selector_unselected_container_color = 12;
+  sdui.ui.graphics.ColorProto time_selector_selected_content_color = 13;
+  sdui.ui.graphics.ColorProto time_selector_unselected_content_color = 14;
+}
+
+message TimePickerProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  int32 selected_hour = 2;
+  int32 selected_minute = 3;
+  bool enabled = 4;
+  TimePickerLayoutTypeProto layout_type = 5;
+  TimePickerSelectionModeProto selection_mode = 6;
+  TimePickerColorsProto colors = 7;
+  bool has_content = 8;
+}

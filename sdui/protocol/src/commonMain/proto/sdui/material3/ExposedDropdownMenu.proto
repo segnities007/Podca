@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum ExposedDropdownMenuAnchorTypeProto {
+  EXPOSED_DROPDOWN_MENU_ANCHOR_TYPE_UNSPECIFIED = 0;
+  EXPOSED_DROPDOWN_MENU_ANCHOR_TYPE_PRIMARY_NOT_EDITABLE = 1;
+  EXPOSED_DROPDOWN_MENU_ANCHOR_TYPE_PRIMARY_EDITABLE = 2;
+  EXPOSED_DROPDOWN_MENU_ANCHOR_TYPE_SECONDARY_EDITABLE = 3;
+}

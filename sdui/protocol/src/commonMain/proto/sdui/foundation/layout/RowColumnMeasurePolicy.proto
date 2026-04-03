@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/Arrangement.proto";
+import "sdui/foundation/layout/RowColumnImpl.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message RowColumnMeasurePolicyProto {
+  LayoutOrientationProto orientation = 1;
+  ArrangementHorizontalProto horizontal_arrangement = 2;
+  ArrangementVerticalProto vertical_arrangement = 3;
+  CrossAxisAlignmentProto cross_axis_alignment = 4;
+  bool is_horizontal = 5;
+}

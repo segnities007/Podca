@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package sdui.ui.alignment;
+
+option java_package = "com.podca.sdui.protocol.ui.alignment";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.Alignment / AbsoluteAlignment 相当
+ */
+enum AlignmentPresetProto {
+  ALIGNMENT_PRESET_UNSPECIFIED = 0;
+  TOP_START = 1;
+  TOP_CENTER = 2;
+  TOP_END = 3;
+  CENTER_START = 4;
+  CENTER = 5;
+  CENTER_END = 6;
+  BOTTOM_START = 7;
+  BOTTOM_CENTER = 8;
+  BOTTOM_END = 9;
+  TOP_LEFT = 10;
+  TOP_RIGHT = 11;
+  CENTER_LEFT = 12;
+  CENTER_RIGHT = 13;
+  BOTTOM_LEFT = 14;
+  BOTTOM_RIGHT = 15;
+}
+
+enum HorizontalAlignmentPresetProto {
+  HORIZONTAL_ALIGNMENT_UNSPECIFIED = 0;
+  START = 1;
+  CENTER_HORIZONTALLY = 2;
+  END = 3;
+  LEFT = 4;
+  RIGHT = 5;
+}
+
+enum VerticalAlignmentPresetProto {
+  VERTICAL_ALIGNMENT_UNSPECIFIED = 0;
+  TOP = 1;
+  CENTER_VERTICALLY = 2;
+  BOTTOM = 3;
+}
+
+message BiasAlignmentProto {
+  float horizontal_bias = 1;
+  float vertical_bias = 2;
+}
+
+message BiasHorizontalAlignmentProto {
+  float bias = 1;
+}
+
+message BiasVerticalAlignmentProto {
+  float bias = 1;
+}
+
+message BiasAbsoluteAlignmentProto {
+  float horizontal_bias = 1;
+  float vertical_bias = 2;
+}
+
+message AlignmentProto {
+  oneof value {
+    AlignmentPresetProto preset = 1;
+    BiasAlignmentProto bias = 2;
+    BiasAbsoluteAlignmentProto absolute_bias = 3;
+  }
+}
+
+message HorizontalAlignmentProto {
+  oneof value {
+    HorizontalAlignmentPresetProto preset = 1;
+    BiasHorizontalAlignmentProto bias = 2;
+  }
+}
+
+message VerticalAlignmentProto {
+  oneof value {
+    VerticalAlignmentPresetProto preset = 1;
+    BiasVerticalAlignmentProto bias = 2;
+  }
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.Dp 相当
+ * 1つ1つの Dp をメッセージにするとオーバーヘッドが大きいため、
+ * 単体で送る用と、各構造体 (Offset, Size, Rect) 内で float を直接持つ形で定義します。
+ */
+
+message DpProto {
+  float value = 1;
+}
+
+/**
+ * androidx.compose.ui.unit.DpOffset 相当
+ */
+message DpOffsetProto {
+  float x = 1;
+  float y = 2;
+}
+
+/**
+ * androidx.compose.ui.unit.DpSize 相当
+ */
+message DpSizeProto {
+  float width = 1;
+  float height = 2;
+}
+
+/**
+ * androidx.compose.ui.unit.DpRect 相当
+ */
+message DpRectProto {
+  float left = 1;
+  float top = 2;
+  float right = 3;
+  float bottom = 4;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message InputIdentifierProto {
+  int32 value = 1;
+}
+
+message DateInputValidatorProto {
+  bool accepts_partial_input = 1;
+}
+
+message DateInputProto {
+  bool has_end_date = 1;
+  InputIdentifierProto input_identifier = 2;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+enum TextOverflowProto {
+  TEXT_OVERFLOW_UNSPECIFIED = 0;
+  TEXT_OVERFLOW_CLIP = 1;
+  TEXT_OVERFLOW_ELLIPSIS = 2;
+  TEXT_OVERFLOW_VISIBLE = 3;
+  TEXT_OVERFLOW_START_ELLIPSIS = 4;
+  TEXT_OVERFLOW_MIDDLE_ELLIPSIS = 5;
+}

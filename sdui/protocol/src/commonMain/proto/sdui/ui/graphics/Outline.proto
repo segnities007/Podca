@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/geometry/Rect.proto";
+import "sdui/ui/geometry/RoundRect.proto";
+import "sdui/ui/graphics/Path.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.Outline 相当
+ */
+message OutlineProto {
+  oneof value {
+    sdui.ui.geometry.RectProto rectangle = 1;
+    sdui.ui.geometry.RoundRectProto rounded = 2;
+    PathProto generic = 3;
+  }
+}

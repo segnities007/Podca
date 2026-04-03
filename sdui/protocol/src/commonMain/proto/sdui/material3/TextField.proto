@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/TextFieldDefaults.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/text/TextLayoutResult.proto";
+import "sdui/ui/text/TextStyle.proto";
+import "sdui/ui/unit/TextUnit.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message TextFieldStateProto {
+  string text = 1;
+  int32 selection_start = 2;
+  int32 selection_end = 3;
+}
+
+message TextFieldProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  TextFieldStateProto state = 2;
+  bool enabled = 3;
+  bool read_only = 4;
+  sdui.ui.text.TextStyleProto text_style = 5;
+  string label = 6;
+  string placeholder = 7;
+  string prefix = 8;
+  string suffix = 9;
+  string supporting_text = 10;
+  bool is_error = 11;
+  TextFieldColorsProto colors = 12;
+  int32 line_limits = 13;
+}

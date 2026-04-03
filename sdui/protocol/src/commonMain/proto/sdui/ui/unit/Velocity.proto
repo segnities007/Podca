@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.Velocity 相当
+ * 1秒あたりのピクセル数で表される2次元の速度。
+ */
+message VelocityProto {
+  // 水平方向の速度 (pixels per second)
+  float x = 1;
+
+  // 垂直方向の速度 (pixels per second)
+  float y = 2;
+}

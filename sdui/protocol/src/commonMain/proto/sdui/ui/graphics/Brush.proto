@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/geometry/Offset.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/BlendMode.proto";
+import "sdui/ui/graphics/TileMode.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * SolidColor 相当
+ */
+message SolidColorProto {
+  ColorProto value = 1;
+}
+
+/**
+ * LinearGradient 相当
+ */
+message LinearGradientProto {
+  repeated ColorProto colors = 1;
+  repeated float stops = 2;
+  sdui.ui.geometry.OffsetProto start = 3;
+  sdui.ui.geometry.OffsetProto end = 4;
+  TileModeProto tile_mode = 5;
+}
+
+/**
+ * RadialGradient 相当
+ */
+message RadialGradientProto {
+  repeated ColorProto colors = 1;
+  repeated float stops = 2;
+  sdui.ui.geometry.OffsetProto center = 3;
+  float radius = 4;
+  TileModeProto tile_mode = 5;
+}
+
+/**
+ * SweepGradient 相当
+ */
+message SweepGradientProto {
+  repeated ColorProto colors = 1;
+  repeated float stops = 2;
+  sdui.ui.geometry.OffsetProto center = 3;
+}
+
+/**
+ * CompositeShaderBrush 相当
+ */
+message CompositeBrushProto {
+  BrushProto dst_brush = 1;
+  BrushProto src_brush = 2;
+  BlendModeProto blend_mode = 3;
+}
+
+/**
+ * androidx.compose.ui.graphics.Brush 相当
+ */
+message BrushProto {
+  oneof value {
+    SolidColorProto solid_color = 1;
+    LinearGradientProto linear_gradient = 2;
+    RadialGradientProto radial_gradient = 3;
+    SweepGradientProto sweep_gradient = 4;
+    CompositeBrushProto composite = 5;
+  }
+}

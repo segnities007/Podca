@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sdui.core;
+
+import "sdui/core/Action.proto";
+
+option java_package = "com.podca.sdui.protocol.core";
+option java_multiple_files = true;
+
+message NodeProto {
+  string type = 1;
+  bytes payload = 2;
+  repeated NodeProto children = 3;
+  string key = 4;
+  repeated ActionBindingProto actions = 5;
+  string slot = 6;
+}

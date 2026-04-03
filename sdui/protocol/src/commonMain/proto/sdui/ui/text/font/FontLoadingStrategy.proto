@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.ui.text.font;
+
+option java_package = "com.podca.sdui.protocol.ui.text.font";
+option java_multiple_files = true;
+
+enum FontLoadingStrategyProto {
+  FONT_LOADING_STRATEGY_BLOCKING = 0;
+  FONT_LOADING_STRATEGY_OPTIONAL_LOCAL = 1;
+  FONT_LOADING_STRATEGY_ASYNC = 2;
+}

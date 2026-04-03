@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.PathFillType 相当
+ */
+enum PathFillTypeProto {
+  PATH_FILL_TYPE_NON_ZERO = 0;
+  PATH_FILL_TYPE_EVEN_ODD = 1;
+}

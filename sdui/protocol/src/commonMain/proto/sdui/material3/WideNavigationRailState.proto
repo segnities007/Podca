@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/WideNavigationRail.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message WideNavigationRailStateProto {
+  bool is_animating = 1;
+  WideNavigationRailValueProto target_value = 2;
+  WideNavigationRailValueProto current_value = 3;
+  float current_offset = 4;
+  bool is_expanded = 5;
+  bool is_collapsed = 6;
+  bool modal_visible = 7;
+}

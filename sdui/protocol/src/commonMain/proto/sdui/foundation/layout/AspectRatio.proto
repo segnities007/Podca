@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message AspectRatioModifierProto {
+  float aspect_ratio = 1;
+  bool match_height_constraints_first = 2;
+}

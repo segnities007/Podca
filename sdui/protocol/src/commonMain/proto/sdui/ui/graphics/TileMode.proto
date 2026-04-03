@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.TileMode 相当
+ */
+enum TileModeProto {
+  // 端の色で引き伸ばす
+  TILE_MODE_CLAMP = 0;
+  // 繰り返す
+  TILE_MODE_REPEATED = 1;
+  // 反転して繰り返す
+  TILE_MODE_MIRROR = 2;
+  // 境界外を透明にする (Android 12+)
+  TILE_MODE_DECAL = 3;
+}

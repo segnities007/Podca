@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/FlowLayout.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message ContextualFlowRowScopeProto {
+  float fill_max_row_height_fraction = 1;
+  int32 line_index = 2;
+  int32 index_in_line = 3;
+}
+
+message ContextualFlowRowOverflowScopeProto {
+  ContextualFlowRowScopeProto row_scope = 1;
+}
+
+message ContextualFlowColumnScopeProto {
+  float fill_max_column_width_fraction = 1;
+  int32 line_index = 2;
+  int32 index_in_line = 3;
+}
+
+message ContextualFlowColumnOverflowScopeProto {
+  ContextualFlowColumnScopeProto column_scope = 1;
+}
+
+message ContextualFlowRowProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  int32 item_count = 2;
+  int32 max_lines = 3;
+  int32 max_items_in_each_row = 4;
+}
+
+message ContextualFlowColumnProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  int32 item_count = 2;
+  int32 max_lines = 3;
+  int32 max_items_in_each_column = 4;
+}

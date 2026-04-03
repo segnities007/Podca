@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.IntRect 相当
+ * ピクセル単位の境界矩形。
+ */
+message IntRectProto {
+  // 左端の座標 (pixels)
+  int32 left = 1;
+
+  // 上端の座標 (pixels)
+  int32 top = 2;
+
+  // 右端の座標 (pixels)
+  int32 right = 3;
+
+  // 下端の座標 (pixels)
+  int32 bottom = 4;
+}

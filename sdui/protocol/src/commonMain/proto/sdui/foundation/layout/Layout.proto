@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+// Deprecated aggregate file. Definitions were split into source-aligned *.proto files.

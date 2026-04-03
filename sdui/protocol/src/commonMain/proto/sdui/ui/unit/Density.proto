@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.Density 相当
+ * 画面密度とフォントスケールの設定。
+ */
+message DensityProto {
+  // 論理密度 (Dp を Px に変換するためのスケーリング係数)
+  float density = 1;
+
+  // フォントのスケーリング係数
+  float font_scale = 2;
+}

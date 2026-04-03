@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum TimeFormatProto {
+  TIME_FORMAT_12_HOUR = 0;
+  TIME_FORMAT_24_HOUR = 1;
+}

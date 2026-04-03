@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/geometry/Size.proto";
+import "sdui/ui/unit/Density.proto";
+import "sdui/ui/unit/LayoutDirection.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message RectangleShapeProto {
+  sdui.ui.geometry.SizeProto size = 1;
+  sdui.ui.unit.LayoutDirectionProto layout_direction = 2;
+  sdui.ui.unit.DensityProto density = 3;
+  bool is_default = 4;
+  string debug_name = 5;
+}

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/graphics/colorspace/ColorSpace.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.Color 相当
+ *
+ * Compose の Color は内部的に 64ビットの ULong で色情報を管理しています。
+ * 1. sRGB (32ビット ARGB) の場合は、上位 32ビットに値が入ります。
+ * 2. それ以外 (HDR等) の場合は、各成分が 16ビット浮動小数などでパッキングされます。
+ */
+message ColorProto {
+  oneof value {
+    // 32ビットの ARGB 整数値 (0xAARRGGBB)
+    // 最も一般的で効率的な形式です。
+    fixed32 argb = 1;
+
+    // Compose 本家の 64ビットパッキング値 (ULong)
+    // 広色域 (Wide Gamut) や高精度な色情報をそのまま送る場合に使用します。
+    fixed64 packed = 2;
+
+    // 成分ごとに展開された色情報です。
+    ColorComponentsProto components = 3;
+  }
+}
+
+message ColorComponentsProto {
+  float red = 1;
+  float green = 2;
+  float blue = 3;
+  float alpha = 4;
+  sdui.ui.graphics.colorspace.ColorSpaceProto color_space = 5;
+}

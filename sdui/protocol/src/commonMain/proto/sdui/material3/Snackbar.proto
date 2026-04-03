@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/SnackbarHost.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/Shape.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message SnackbarDefaultsProto {
+  sdui.ui.graphics.ShapeProto shape = 1;
+  sdui.ui.graphics.ColorProto color = 2;
+  sdui.ui.graphics.ColorProto content_color = 3;
+  sdui.ui.graphics.ColorProto action_color = 4;
+  sdui.ui.graphics.ColorProto action_content_color = 5;
+  sdui.ui.graphics.ColorProto dismiss_action_content_color = 6;
+}
+
+message SnackbarProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool has_action = 2;
+  bool has_dismiss_action = 3;
+  bool action_on_new_line = 4;
+  sdui.ui.graphics.ShapeProto shape = 5;
+  sdui.ui.graphics.ColorProto container_color = 6;
+  sdui.ui.graphics.ColorProto content_color = 7;
+  sdui.ui.graphics.ColorProto action_content_color = 8;
+  sdui.ui.graphics.ColorProto dismiss_action_content_color = 9;
+  SnackbarDataProto snackbar_data = 10;
+  sdui.ui.graphics.ColorProto action_color = 11;
+}

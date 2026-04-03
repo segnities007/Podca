@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum IconButtonWidthOptionProto {
+  ICON_BUTTON_WIDTH_OPTION_NARROW = 0;
+  ICON_BUTTON_WIDTH_OPTION_UNIFORM = 1;
+  ICON_BUTTON_WIDTH_OPTION_WIDE = 2;
+}
+
+message IconButtonColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto content_color = 2;
+  sdui.ui.graphics.ColorProto disabled_container_color = 3;
+  sdui.ui.graphics.ColorProto disabled_content_color = 4;
+}
+
+message IconToggleButtonColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto content_color = 2;
+  sdui.ui.graphics.ColorProto disabled_container_color = 3;
+  sdui.ui.graphics.ColorProto disabled_content_color = 4;
+  sdui.ui.graphics.ColorProto checked_container_color = 5;
+  sdui.ui.graphics.ColorProto checked_content_color = 6;
+}
+
+message IconButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  IconButtonColorsProto colors = 3;
+  bool has_content = 4;
+}

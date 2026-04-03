@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/geometry/Offset.proto";
+import "sdui/ui/geometry/Rect.proto";
+import "sdui/ui/geometry/RoundRect.proto";
+import "sdui/ui/graphics/PathFillType.proto";
+import "sdui/ui/graphics/PathOperation.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.Path 相当
+ *
+ * Path は本来可変の図形データなので、ここでは記録可能なコマンド列として表現する。
+ */
+message PathProto {
+  PathFillTypeProto fill_type = 1;
+  repeated PathElementProto elements = 2;
+  bool is_convex = 3;
+  bool is_empty = 4;
+  sdui.ui.geometry.RectProto bounds = 5;
+}
+
+message PathElementProto {
+  oneof value {
+    MoveToProto move_to = 1;
+    LineToProto line_to = 2;
+    QuadraticBezierToProto quadratic_bezier_to = 3;
+    CubicBezierToProto cubic_bezier_to = 4;
+    ArcToProto arc_to = 5;
+    ClosePathProto close = 6;
+    RelativeMoveToProto relative_move_to = 7;
+    RelativeLineToProto relative_line_to = 8;
+    RelativeQuadraticBezierToProto relative_quadratic_bezier_to = 9;
+    RelativeCubicBezierToProto relative_cubic_bezier_to = 10;
+    AddRectProto add_rect = 11;
+    AddOvalProto add_oval = 12;
+    AddRoundRectProto add_round_rect = 13;
+    AddPathProto add_path = 14;
+    TranslatePathProto translate = 15;
+    TransformPathProto transform = 16;
+    SetPathOperationProto apply_operation = 17;
+  }
+}
+
+message MoveToProto {
+  float x = 1;
+  float y = 2;
+}
+
+message LineToProto {
+  float x = 1;
+  float y = 2;
+}
+
+message RelativeMoveToProto {
+  float dx = 1;
+  float dy = 2;
+}
+
+message RelativeLineToProto {
+  float dx = 1;
+  float dy = 2;
+}
+
+message QuadraticBezierToProto {
+  float x1 = 1;
+  float y1 = 2;
+  float x2 = 3;
+  float y2 = 4;
+}
+
+message CubicBezierToProto {
+  float x1 = 1;
+  float y1 = 2;
+  float x2 = 3;
+  float y2 = 4;
+  float x3 = 5;
+  float y3 = 6;
+}
+
+message RelativeQuadraticBezierToProto {
+  float dx1 = 1;
+  float dy1 = 2;
+  float dx2 = 3;
+  float dy2 = 4;
+}
+
+message RelativeCubicBezierToProto {
+  float dx1 = 1;
+  float dy1 = 2;
+  float dx2 = 3;
+  float dy2 = 4;
+  float dx3 = 5;
+  float dy3 = 6;
+}
+
+message ArcToProto {
+  sdui.ui.geometry.RectProto rect = 1;
+  float start_angle = 2;
+  float sweep_angle = 3;
+  bool force_move_to = 4;
+}
+
+message ClosePathProto {}
+
+message AddRectProto {
+  sdui.ui.geometry.RectProto rect = 1;
+}
+
+message AddOvalProto {
+  sdui.ui.geometry.RectProto oval_bounds = 1;
+}
+
+message AddRoundRectProto {
+  sdui.ui.geometry.RoundRectProto round_rect = 1;
+}
+
+message AddPathProto {
+  PathProto path = 1;
+  sdui.ui.geometry.OffsetProto offset = 2;
+}
+
+message TranslatePathProto {
+  sdui.ui.geometry.OffsetProto offset = 1;
+}
+
+message TransformPathProto {
+  repeated float matrix_values = 1;
+}
+
+message SetPathOperationProto {
+  PathOperationProto operation = 1;
+  PathProto other = 2;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/text/SpanStyle.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message TextLinkStylesProto {
+  SpanStyleProto style = 1;
+  SpanStyleProto focused_style = 2;
+  SpanStyleProto hovered_style = 3;
+  SpanStyleProto pressed_style = 4;
+}

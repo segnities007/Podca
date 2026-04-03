@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/foundation/layout/Padding.proto";
+import "sdui/material3/Surface.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/Shape.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message ButtonElevationProto {
+  sdui.ui.unit.DpProto default_elevation = 1;
+  sdui.ui.unit.DpProto pressed_elevation = 2;
+  sdui.ui.unit.DpProto focused_elevation = 3;
+  sdui.ui.unit.DpProto hovered_elevation = 4;
+  sdui.ui.unit.DpProto disabled_elevation = 5;
+}
+
+message ButtonColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto content_color = 2;
+  sdui.ui.graphics.ColorProto disabled_container_color = 3;
+  sdui.ui.graphics.ColorProto disabled_content_color = 4;
+}
+
+message ButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  sdui.ui.graphics.ShapeProto shape = 3;
+  ButtonColorsProto colors = 4;
+  ButtonElevationProto elevation = 5;
+  BorderStrokeProto border = 6;
+  sdui.foundation.layout.PaddingValuesProto content_padding = 7;
+  bool has_content = 8;
+}
+
+message ElevatedButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  sdui.ui.graphics.ShapeProto shape = 3;
+  ButtonColorsProto colors = 4;
+  ButtonElevationProto elevation = 5;
+  BorderStrokeProto border = 6;
+  sdui.foundation.layout.PaddingValuesProto content_padding = 7;
+  bool has_content = 8;
+}
+
+message FilledTonalButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  sdui.ui.graphics.ShapeProto shape = 3;
+  ButtonColorsProto colors = 4;
+  ButtonElevationProto elevation = 5;
+  BorderStrokeProto border = 6;
+  sdui.foundation.layout.PaddingValuesProto content_padding = 7;
+  bool has_content = 8;
+}
+
+message OutlinedButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  sdui.ui.graphics.ShapeProto shape = 3;
+  ButtonColorsProto colors = 4;
+  ButtonElevationProto elevation = 5;
+  BorderStrokeProto border = 6;
+  sdui.foundation.layout.PaddingValuesProto content_padding = 7;
+  bool has_content = 8;
+}
+
+message TextButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  sdui.ui.graphics.ShapeProto shape = 3;
+  ButtonColorsProto colors = 4;
+  ButtonElevationProto elevation = 5;
+  BorderStrokeProto border = 6;
+  sdui.foundation.layout.PaddingValuesProto content_padding = 7;
+  bool has_content = 8;
+}

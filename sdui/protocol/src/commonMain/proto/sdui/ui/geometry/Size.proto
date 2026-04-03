@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.geometry;
+
+option java_package = "com.podca.sdui.protocol.ui.geometry";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.geometry.Size 相当
+ * 2次元の浮動小数点サイズ。
+ */
+message SizeProto {
+  // 横幅
+  float width = 1;
+
+  // 高さ
+  float height = 2;
+}

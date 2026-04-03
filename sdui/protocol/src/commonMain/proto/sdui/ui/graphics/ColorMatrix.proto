@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.ColorMatrix 相当
+ * 4x5 のマトリックス（20個の浮動小数点数）を保持します。
+ */
+message ColorMatrixProto {
+  // 行メジャー順の 20 個の浮動小数点数
+  repeated float values = 1;
+}

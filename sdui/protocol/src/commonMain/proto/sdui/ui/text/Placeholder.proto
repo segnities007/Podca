@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/unit/TextUnit.proto";
+import "sdui/ui/text/PlaceholderVerticalAlign.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.text.Placeholder 相当
+ */
+message PlaceholderProto {
+  sdui.ui.unit.TextUnitProto width = 1;
+  sdui.ui.unit.TextUnitProto height = 2;
+  PlaceholderVerticalAlignProto placeholder_vertical_align = 3;
+}

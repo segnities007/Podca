@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message DatePickerDialogProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool dismiss_on_back_press = 2;
+  bool dismiss_on_click_outside = 3;
+  sdui.ui.graphics.ColorProto container_color = 4;
+  sdui.ui.graphics.ColorProto tonal_elevation_overlay_color = 5;
+  sdui.ui.unit.DpProto tonal_elevation = 6;
+}

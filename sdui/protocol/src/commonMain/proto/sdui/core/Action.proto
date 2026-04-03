@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package sdui.core;
+
+option java_package = "com.podca.sdui.protocol.core";
+option java_multiple_files = true;
+
+enum ActionTriggerProto {
+  ACTION_TRIGGER_UNSPECIFIED = 0;
+  ACTION_TRIGGER_CLICK = 1;
+  ACTION_TRIGGER_LONG_CLICK = 2;
+  ACTION_TRIGGER_VALUE_CHANGE = 3;
+  ACTION_TRIGGER_SUBMIT = 4;
+  ACTION_TRIGGER_DISMISS = 5;
+}
+
+message ActionArgumentProto {
+  string name = 1;
+  oneof value {
+    string string_value = 2;
+    int64 int_value = 3;
+    double double_value = 4;
+    bool bool_value = 5;
+    bytes bytes_value = 6;
+  }
+}
+
+message ActionBindingProto {
+  ActionTriggerProto trigger = 1;
+  string action_id = 2;
+  repeated ActionArgumentProto arguments = 3;
+  bool expects_state_update = 4;
+}
+
+message ClientEventProto {
+  string event_id = 1;
+  string node_key = 2;
+  string action_id = 3;
+  ActionTriggerProto trigger = 4;
+  repeated ActionArgumentProto arguments = 5;
+  int64 client_timestamp_epoch_millis = 6;
+}
+
+message StatePatchProto {
+  bytes encoded_root = 1;
+  int64 revision = 2;
+}
+
+message ActionResultProto {
+  string event_id = 1;
+  bool accepted = 2;
+  string error_message = 3;
+  StatePatchProto state_patch = 4;
+}

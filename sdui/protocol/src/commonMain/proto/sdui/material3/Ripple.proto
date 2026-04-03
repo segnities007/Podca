@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message RippleAlphaProto {
+  float pressed_alpha = 1;
+  float focused_alpha = 2;
+  float dragged_alpha = 3;
+  float hovered_alpha = 4;
+}
+
+message RippleConfigurationProto {
+  sdui.ui.graphics.ColorProto color = 1;
+  RippleAlphaProto ripple_alpha = 2;
+}

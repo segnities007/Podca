@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/unit/Dp.proto";
+import "sdui/ui/geometry/CornerRadius.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.Shape 相当の基本形状定義。
+ */
+message ShapeProto {
+  oneof value {
+    // 矩形
+    bool rectangle = 1;
+    // 円形
+    bool circle = 2;
+    // 全ての角が同じ半径の角丸矩形
+    sdui.ui.unit.DpProto rounded_corner = 3;
+    // 角ごとに異なる半径を指定可能な角丸矩形
+    GenericRoundedCornerShapeProto custom_rounded_corner = 4;
+    // カット（面取り）形状
+    sdui.ui.unit.DpProto cut_corner = 5;
+  }
+}
+
+message GenericRoundedCornerShapeProto {
+  sdui.ui.unit.DpProto top_start = 1;
+  sdui.ui.unit.DpProto top_end = 2;
+  sdui.ui.unit.DpProto bottom_end = 3;
+  sdui.ui.unit.DpProto bottom_start = 4;
+}

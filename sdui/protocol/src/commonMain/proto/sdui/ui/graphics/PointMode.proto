@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.PointMode 相当
+ */
+enum PointModeProto {
+  // 点として描画
+  POINT_MODE_POINTS = 0;
+  // 線として描画
+  POINT_MODE_LINES = 1;
+  // ポリゴンとして描画
+  POINT_MODE_POLYGON = 2;
+}

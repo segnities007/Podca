@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message CheckboxColorsProto {
+  sdui.ui.graphics.ColorProto checked_checkmark_color = 1;
+  sdui.ui.graphics.ColorProto unchecked_checkmark_color = 2;
+  sdui.ui.graphics.ColorProto checked_box_color = 3;
+  sdui.ui.graphics.ColorProto unchecked_box_color = 4;
+  sdui.ui.graphics.ColorProto disabled_checked_box_color = 5;
+  sdui.ui.graphics.ColorProto disabled_unchecked_box_color = 6;
+  sdui.ui.graphics.ColorProto disabled_indeterminate_box_color = 7;
+  sdui.ui.graphics.ColorProto checked_border_color = 8;
+  sdui.ui.graphics.ColorProto unchecked_border_color = 9;
+  sdui.ui.graphics.ColorProto disabled_border_color = 10;
+  sdui.ui.graphics.ColorProto disabled_unchecked_border_color = 11;
+  sdui.ui.graphics.ColorProto disabled_indeterminate_border_color = 12;
+}
+
+message CheckboxProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool checked = 2;
+  bool enabled = 3;
+  CheckboxColorsProto colors = 4;
+}

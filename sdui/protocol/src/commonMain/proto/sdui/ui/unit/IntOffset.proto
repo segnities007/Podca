@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.IntOffset 相当
+ * ピクセル単位の2次元座標。
+ */
+message IntOffsetProto {
+  // 水平方向の座標 (pixels)
+  int32 x = 1;
+
+  // 垂直方向の座標 (pixels)
+  int32 y = 2;
+}

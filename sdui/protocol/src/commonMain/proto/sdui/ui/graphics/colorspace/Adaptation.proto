@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sdui.ui.graphics.colorspace;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics.colorspace";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.colorspace.Adaptation 相当
+ * 色度順応に使用される von Kries 変換の行列。
+ */
+enum AdaptationProto {
+  // CIECAM97s で定義された Bradford 変換
+  ADAPTATION_BRADFORD = 0;
+
+  // von Kries 変換
+  ADAPTATION_VON_KRIES = 1;
+
+  // CIECAM02 で定義された CIECAT02 変換
+  ADAPTATION_CIECAT02 = 2;
+}

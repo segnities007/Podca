@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/ui/alignment/Alignment.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+enum GridFlowProto {
+  GRID_FLOW_ROW = 0;
+  GRID_FLOW_COLUMN = 1;
+}
+
+message FrProto {
+  float value = 1;
+}
+
+enum GridTrackTypeProto {
+  GRID_TRACK_TYPE_FIXED = 0;
+  GRID_TRACK_TYPE_PERCENTAGE = 1;
+  GRID_TRACK_TYPE_FLEX = 2;
+  GRID_TRACK_TYPE_MIN_CONTENT = 3;
+  GRID_TRACK_TYPE_MAX_CONTENT = 4;
+  GRID_TRACK_TYPE_AUTO = 5;
+}
+
+message GridTrackSizeProto {
+  GridTrackTypeProto type = 1;
+  oneof value {
+    sdui.ui.unit.DpProto fixed = 2;
+    float percentage = 3;
+    FrProto flex = 4;
+  }
+}
+
+message GridItemProto {
+  int32 row = 1;
+  int32 column = 2;
+  int32 row_span = 3;
+  int32 column_span = 4;
+  sdui.ui.alignment.AlignmentProto alignment = 5;
+}
+
+message GridConfigurationProto {
+  GridFlowProto flow = 1;
+  repeated GridTrackSizeProto columns = 2;
+  repeated GridTrackSizeProto rows = 3;
+  sdui.ui.unit.DpProto row_gap = 4;
+  sdui.ui.unit.DpProto column_gap = 5;
+  int32 max_grid_index = 6;
+  int32 grid_index_unspecified = 7;
+}
+
+message GridScopeProto {
+  GridItemProto grid_item = 1;
+}
+
+message GridProto {
+  GridConfigurationProto config = 1;
+  sdui.ui.modifier.ModifierProto modifier = 2;
+}

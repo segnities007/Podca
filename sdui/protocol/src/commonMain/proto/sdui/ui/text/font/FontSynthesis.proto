@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sdui.ui.text.font;
+
+option java_package = "com.podca.sdui.protocol.ui.text.font";
+option java_multiple_files = true;
+
+enum FontSynthesisProto {
+  FONT_SYNTHESIS_NONE = 0;
+  FONT_SYNTHESIS_WEIGHT = 1;
+  FONT_SYNTHESIS_STYLE = 2;
+  FONT_SYNTHESIS_ALL = 65535;
+}

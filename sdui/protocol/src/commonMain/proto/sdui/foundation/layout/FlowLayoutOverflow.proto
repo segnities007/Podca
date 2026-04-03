@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+enum FlowLayoutOverflowTypeProto {
+  FLOW_LAYOUT_OVERFLOW_TYPE_VISIBLE = 0;
+  FLOW_LAYOUT_OVERFLOW_TYPE_CLIP = 1;
+  FLOW_LAYOUT_OVERFLOW_TYPE_EXPAND_INDICATOR = 2;
+  FLOW_LAYOUT_OVERFLOW_TYPE_EXPAND_OR_COLLAPSE_INDICATOR = 3;
+}
+
+message FlowRowOverflowProto {
+  FlowLayoutOverflowTypeProto type = 1;
+}
+
+message FlowColumnOverflowProto {
+  FlowLayoutOverflowTypeProto type = 1;
+}
+
+message ContextualFlowRowOverflowProto {
+  FlowLayoutOverflowTypeProto type = 1;
+}
+
+message ContextualFlowColumnOverflowProto {
+  FlowLayoutOverflowTypeProto type = 1;
+}
+
+message FlowLayoutOverflowProto {
+  FlowLayoutOverflowTypeProto type = 1;
+}

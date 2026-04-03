@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+enum PathIteratorConicEvaluationProto {
+  PATH_ITERATOR_CONIC_EVALUATION_AS_CONIC = 0;
+  PATH_ITERATOR_CONIC_EVALUATION_AS_QUADRATICS = 1;
+}
+
+message PathIteratorProto {
+  PathIteratorConicEvaluationProto conic_evaluation = 1;
+  float tolerance = 2;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/graphics/Brush.proto";
+import "sdui/ui/graphics/Shape.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message BulletProto {
+  sdui.ui.unit.DpProto width = 1;
+  sdui.ui.unit.DpProto height = 2;
+  sdui.ui.unit.DpProto padding = 3;
+  sdui.ui.graphics.BrushProto brush = 4;
+  float alpha = 5;
+  sdui.ui.graphics.ShapeProto shape = 6;
+}

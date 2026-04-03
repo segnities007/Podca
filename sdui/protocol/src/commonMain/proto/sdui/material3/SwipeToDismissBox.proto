@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum SwipeToDismissBoxValueProto {
+  SWIPE_TO_DISMISS_BOX_VALUE_START_TO_END = 0;
+  SWIPE_TO_DISMISS_BOX_VALUE_END_TO_START = 1;
+  SWIPE_TO_DISMISS_BOX_VALUE_SETTLED = 2;
+}
+
+message SwipeToDismissBoxStateProto {
+  SwipeToDismissBoxValueProto current_value = 1;
+  SwipeToDismissBoxValueProto target_value = 2;
+  SwipeToDismissBoxValueProto settled_value = 3;
+  float progress = 4;
+  SwipeToDismissBoxValueProto dismiss_direction = 5;
+}

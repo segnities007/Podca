@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Shape.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message ShapesProto {
+  sdui.ui.graphics.ShapeProto extra_small = 1;
+  sdui.ui.graphics.ShapeProto small = 2;
+  sdui.ui.graphics.ShapeProto medium = 3;
+  sdui.ui.graphics.ShapeProto large = 4;
+  sdui.ui.graphics.ShapeProto extra_large = 5;
+  sdui.ui.graphics.ShapeProto large_increased = 6;
+  sdui.ui.graphics.ShapeProto extra_large_increased = 7;
+  sdui.ui.graphics.ShapeProto extra_extra_large = 8;
+}

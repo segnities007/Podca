@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message SwitchColorsProto {
+  sdui.ui.graphics.ColorProto checked_thumb_color = 1;
+  sdui.ui.graphics.ColorProto checked_track_color = 2;
+  sdui.ui.graphics.ColorProto checked_border_color = 3;
+  sdui.ui.graphics.ColorProto checked_icon_color = 4;
+  sdui.ui.graphics.ColorProto unchecked_thumb_color = 5;
+  sdui.ui.graphics.ColorProto unchecked_track_color = 6;
+  sdui.ui.graphics.ColorProto unchecked_border_color = 7;
+  sdui.ui.graphics.ColorProto unchecked_icon_color = 8;
+  sdui.ui.graphics.ColorProto disabled_checked_thumb_color = 9;
+  sdui.ui.graphics.ColorProto disabled_checked_track_color = 10;
+  sdui.ui.graphics.ColorProto disabled_checked_border_color = 11;
+  sdui.ui.graphics.ColorProto disabled_checked_icon_color = 12;
+  sdui.ui.graphics.ColorProto disabled_unchecked_thumb_color = 13;
+  sdui.ui.graphics.ColorProto disabled_unchecked_track_color = 14;
+  sdui.ui.graphics.ColorProto disabled_unchecked_border_color = 15;
+  sdui.ui.graphics.ColorProto disabled_unchecked_icon_color = 16;
+}
+
+message SwitchProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool checked = 2;
+  bool enabled = 3;
+  SwitchColorsProto colors = 4;
+  bool has_thumb_content = 5;
+}

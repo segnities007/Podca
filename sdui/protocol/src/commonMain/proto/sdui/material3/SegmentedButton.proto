@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message SegmentedButtonColorsProto {
+  sdui.ui.graphics.ColorProto active_container_color = 1;
+  sdui.ui.graphics.ColorProto active_content_color = 2;
+  sdui.ui.graphics.ColorProto active_border_color = 3;
+  sdui.ui.graphics.ColorProto inactive_container_color = 4;
+  sdui.ui.graphics.ColorProto inactive_content_color = 5;
+  sdui.ui.graphics.ColorProto inactive_border_color = 6;
+  sdui.ui.graphics.ColorProto disabled_active_container_color = 7;
+  sdui.ui.graphics.ColorProto disabled_active_content_color = 8;
+  sdui.ui.graphics.ColorProto disabled_active_border_color = 9;
+  sdui.ui.graphics.ColorProto disabled_inactive_container_color = 10;
+  sdui.ui.graphics.ColorProto disabled_inactive_content_color = 11;
+  sdui.ui.graphics.ColorProto disabled_inactive_border_color = 12;
+}
+
+message SegmentedButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool selected = 2;
+  bool enabled = 3;
+  string text = 4;
+  SegmentedButtonColorsProto colors = 5;
+  bool has_content = 6;
+}

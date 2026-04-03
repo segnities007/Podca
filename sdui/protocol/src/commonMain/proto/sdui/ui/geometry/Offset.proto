@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.geometry;
+
+option java_package = "com.podca.sdui.protocol.ui.geometry";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.geometry.Offset 相当
+ * 不変の 2D 浮動小数点オフセット。
+ */
+message OffsetProto {
+  float x = 1;
+  float y = 2;
+}

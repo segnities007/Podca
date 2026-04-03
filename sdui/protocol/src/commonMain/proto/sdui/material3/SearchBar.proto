@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/TextFieldDefaults.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum SearchBarValueProto {
+  SEARCH_BAR_VALUE_COLLAPSED = 0;
+  SEARCH_BAR_VALUE_EXPANDED = 1;
+}
+
+message SearchBarColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto divider_color = 2;
+  TextFieldColorsProto input_field_colors = 3;
+}
+
+message SearchBarProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  SearchBarValueProto value = 2;
+  string text = 3;
+  bool enabled = 4;
+  SearchBarColorsProto colors = 5;
+  bool has_content = 6;
+}

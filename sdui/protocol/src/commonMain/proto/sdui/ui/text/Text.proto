@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/text/AnnotatedString.proto";
+import "sdui/ui/text/ParagraphStyle.proto";
+import "sdui/ui/text/TextStyle.proto";
+import "sdui/ui/text/TextOverflow.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+/**
+ * SDUI のテキストノード
+ */
+message TextProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  oneof text_content {
+    string text = 2;
+    AnnotatedStringProto annotated_string = 3;
+  }
+  TextStyleProto style = 4;
+  TextAlignProto text_align = 5;
+  TextDirectionProto text_direction = 6;
+  TextOverflowProto overflow = 7;
+  int32 max_lines = 8;
+  bool soft_wrap = 9;
+}

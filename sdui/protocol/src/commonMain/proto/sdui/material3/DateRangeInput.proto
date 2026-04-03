@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/DatePicker.proto";
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message DateRangeInputProto {
+  DatePickerColorsProto colors = 1;
+  sdui.ui.graphics.ColorProto selected_range_container_color = 2;
+  sdui.ui.graphics.ColorProto selected_range_content_color = 3;
+  string start_date_pattern = 4;
+  string end_date_pattern = 5;
+  string locale_tag = 6;
+}

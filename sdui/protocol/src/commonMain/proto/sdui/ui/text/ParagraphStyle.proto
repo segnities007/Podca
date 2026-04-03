@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/text/PlatformTextStyle.proto";
+import "sdui/ui/unit/TextUnit.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+enum TextAlignProto {
+  TEXT_ALIGN_UNSPECIFIED = 0;
+  TEXT_ALIGN_LEFT = 1;
+  TEXT_ALIGN_RIGHT = 2;
+  TEXT_ALIGN_CENTER = 3;
+  TEXT_ALIGN_JUSTIFY = 4;
+  TEXT_ALIGN_START = 5;
+  TEXT_ALIGN_END = 6;
+}
+
+enum TextDirectionProto {
+  TEXT_DIRECTION_UNSPECIFIED = 0;
+  TEXT_DIRECTION_LTR = 1;
+  TEXT_DIRECTION_RTL = 2;
+  TEXT_DIRECTION_CONTENT = 3;
+  TEXT_DIRECTION_CONTENT_OR_LTR = 4;
+  TEXT_DIRECTION_CONTENT_OR_RTL = 5;
+}
+
+enum TextMotionProto {
+  TEXT_MOTION_STATIC = 0;
+  TEXT_MOTION_ANIMATED = 1;
+}
+
+enum HyphensProto {
+  HYPHENS_UNSPECIFIED = 0;
+  HYPHENS_NONE = 1;
+  HYPHENS_AUTO = 2;
+}
+
+enum LineBreakProto {
+  LINE_BREAK_UNSPECIFIED = 0;
+  LINE_BREAK_SIMPLE = 1;
+  LINE_BREAK_HEADING = 2;
+  LINE_BREAK_PARAGRAPH = 3;
+}
+
+message TextIndentProto {
+  sdui.ui.unit.TextUnitProto first_line = 1;
+  sdui.ui.unit.TextUnitProto rest_line = 2;
+}
+
+enum LineHeightStyleModeProto {
+  LINE_HEIGHT_STYLE_MODE_FIXED = 0;
+  LINE_HEIGHT_STYLE_MODE_MINIMUM = 1;
+  LINE_HEIGHT_STYLE_MODE_TIGHT = 2;
+}
+
+message LineHeightStyleProto {
+  float top_ratio = 1;
+  uint32 trim_mask = 2;
+  LineHeightStyleModeProto mode = 3;
+}
+
+message ParagraphStyleProto {
+  TextAlignProto text_align = 1;
+  TextDirectionProto text_direction = 2;
+  sdui.ui.unit.TextUnitProto line_height = 3;
+  TextIndentProto text_indent = 4;
+  PlatformParagraphStyleProto platform_style = 5;
+  LineHeightStyleProto line_height_style = 6;
+  LineBreakProto line_break = 7;
+  HyphensProto hyphens = 8;
+  TextMotionProto text_motion = 9;
+}

@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/Shape.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message AlertDialogDefaultsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto icon_content_color = 2;
+  sdui.ui.graphics.ColorProto title_content_color = 3;
+  sdui.ui.graphics.ColorProto text_content_color = 4;
+  sdui.ui.graphics.ColorProto tonal_elevation_overlay_color = 5;
+  sdui.ui.unit.DpProto tonal_elevation = 6;
+}
+
+message AlertDialogProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool has_dismiss_button = 2;
+  bool has_icon = 3;
+  bool has_title = 4;
+  bool has_text = 5;
+  sdui.ui.graphics.ShapeProto shape = 6;
+  sdui.ui.graphics.ColorProto container_color = 7;
+  sdui.ui.graphics.ColorProto icon_content_color = 8;
+  sdui.ui.graphics.ColorProto title_content_color = 9;
+  sdui.ui.graphics.ColorProto text_content_color = 10;
+  sdui.ui.unit.DpProto tonal_elevation = 11;
+}
+
+message BasicAlertDialogProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool has_content = 2;
+}

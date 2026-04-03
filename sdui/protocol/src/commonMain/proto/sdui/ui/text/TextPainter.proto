@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message TextPainterProto {
+  bool supports_multi_paragraph = 1;
+  bool supports_inline_content = 2;
+}

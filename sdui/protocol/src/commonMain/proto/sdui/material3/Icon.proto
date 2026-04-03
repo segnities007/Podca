@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/ImageBitmap.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message IconProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  string content_description = 2;
+  sdui.ui.graphics.ColorProto tint = 3;
+  oneof source {
+    string image_vector_name = 4;
+    sdui.ui.graphics.ImageBitmapProto bitmap = 5;
+    string painter_name = 6;
+  }
+}

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/NavigationDrawer.proto";
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message DrawerStateProto {
+  DrawerValueProto current_value = 1;
+  DrawerValueProto target_value = 2;
+  bool is_open = 3;
+  bool is_closed = 4;
+  bool is_animation_running = 5;
+  float current_offset = 6;
+  bool confirm_state_change = 7;
+}
+
+message NavigationDrawerItemColorsProto {
+  sdui.ui.graphics.ColorProto selected_container_color = 1;
+  sdui.ui.graphics.ColorProto unselected_container_color = 2;
+  sdui.ui.graphics.ColorProto selected_icon_color = 3;
+  sdui.ui.graphics.ColorProto unselected_icon_color = 4;
+  sdui.ui.graphics.ColorProto selected_text_color = 5;
+  sdui.ui.graphics.ColorProto unselected_text_color = 6;
+  sdui.ui.graphics.ColorProto selected_badge_color = 7;
+  sdui.ui.graphics.ColorProto unselected_badge_color = 8;
+}

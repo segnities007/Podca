@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message SliderColorsProto {
+  sdui.ui.graphics.ColorProto thumb_color = 1;
+  sdui.ui.graphics.ColorProto active_track_color = 2;
+  sdui.ui.graphics.ColorProto active_tick_color = 3;
+  sdui.ui.graphics.ColorProto inactive_track_color = 4;
+  sdui.ui.graphics.ColorProto inactive_tick_color = 5;
+  sdui.ui.graphics.ColorProto disabled_thumb_color = 6;
+  sdui.ui.graphics.ColorProto disabled_active_track_color = 7;
+  sdui.ui.graphics.ColorProto disabled_active_tick_color = 8;
+  sdui.ui.graphics.ColorProto disabled_inactive_track_color = 9;
+  sdui.ui.graphics.ColorProto disabled_inactive_tick_color = 10;
+}
+
+message SliderPositionsProto {
+  float active_range_start = 1;
+  float active_range_end = 2;
+  repeated float tick_fractions = 3;
+}
+
+message SliderStateProto {
+  float value = 1;
+  int32 steps = 2;
+  float value_range_start = 3;
+  float value_range_end = 4;
+  bool should_auto_snap = 5;
+  float coerced_value_as_fraction = 6;
+  bool is_dragging = 7;
+}
+
+message RangeSliderStateProto {
+  float active_range_start = 1;
+  float active_range_end = 2;
+  int32 steps = 3;
+  float value_range_start = 4;
+  float value_range_end = 5;
+  bool is_dragging = 6;
+  bool is_rtl = 7;
+}
+
+message SliderProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  float value = 2;
+  bool enabled = 3;
+  float value_range_start = 4;
+  float value_range_end = 5;
+  int32 steps = 6;
+  SliderColorsProto colors = 7;
+}

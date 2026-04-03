@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/VertexMode.proto";
+import "sdui/ui/geometry/Offset.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message VerticesProto {
+  sdui.ui.graphics.VertexModeProto vertex_mode = 1;
+  repeated sdui.ui.geometry.OffsetProto positions = 2;
+  repeated sdui.ui.geometry.OffsetProto texture_coordinates = 3;
+  repeated sdui.ui.graphics.ColorProto colors = 4;
+  repeated uint32 indices = 5;
+}

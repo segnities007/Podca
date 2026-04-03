@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message WindowInsetsSidesProto {
+  uint32 mask = 1;
+}
+
+message WindowInsetsProto {
+  int32 left = 1;
+  int32 top = 2;
+  int32 right = 3;
+  int32 bottom = 4;
+}

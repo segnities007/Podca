@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/Arrangement.proto";
+import "sdui/ui/alignment/Alignment.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message ColumnProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  ArrangementVerticalProto vertical_arrangement = 2;
+  sdui.ui.alignment.HorizontalAlignmentProto horizontal_alignment = 3;
+}

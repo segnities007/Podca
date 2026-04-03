@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sdui.ui.text.intl;
+
+option java_package = "com.podca.sdui.protocol.ui.text.intl";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.text.intl.Locale 相当
+ */
+message LocaleProto {
+  string language_tag = 1;
+}
+
+/**
+ * androidx.compose.ui.text.intl.LocaleList 相当
+ */
+message LocaleListProto {
+  repeated LocaleProto locales = 1;
+}

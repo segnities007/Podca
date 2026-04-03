@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/graphics/Brush.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/Shadow.proto";
+import "sdui/ui/graphics/drawscope/DrawStyle.proto";
+import "sdui/ui/text/PlatformTextStyle.proto";
+import "sdui/ui/text/font/FontFamily.proto";
+import "sdui/ui/text/font/FontStyle.proto";
+import "sdui/ui/text/font/FontSynthesis.proto";
+import "sdui/ui/text/font/Font.proto";
+import "sdui/ui/text/font/FontWeight.proto";
+import "sdui/ui/text/intl/Locale.proto";
+import "sdui/ui/unit/TextUnit.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message TextDecorationProto {
+  uint32 mask = 1;
+}
+
+message BaselineShiftProto {
+  float multiplier = 1;
+}
+
+message TextGeometricTransformProto {
+  float scale_x = 1;
+  float skew_x = 2;
+}
+
+message SpanStyleProto {
+  sdui.ui.graphics.ColorProto color = 1;
+  sdui.ui.graphics.BrushProto brush = 2;
+  float alpha = 3;
+  sdui.ui.unit.TextUnitProto font_size = 4;
+  sdui.ui.text.font.FontWeightProto font_weight = 5;
+  sdui.ui.text.font.FontStyleProto font_style = 6;
+  sdui.ui.text.font.FontSynthesisProto font_synthesis = 7;
+  sdui.ui.text.font.FontFamilyProto font_family = 8;
+  string font_feature_settings = 9;
+  sdui.ui.unit.TextUnitProto letter_spacing = 10;
+  BaselineShiftProto baseline_shift = 11;
+  TextGeometricTransformProto text_geometric_transform = 12;
+  sdui.ui.text.intl.LocaleListProto locale_list = 13;
+  sdui.ui.graphics.ColorProto background = 14;
+  TextDecorationProto text_decoration = 15;
+  sdui.ui.graphics.ShadowProto shadow = 16;
+  PlatformSpanStyleProto platform_style = 17;
+  sdui.ui.graphics.drawscope.DrawStyleProto draw_style = 18;
+}

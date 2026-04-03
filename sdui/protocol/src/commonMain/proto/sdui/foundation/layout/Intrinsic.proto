@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+enum IntrinsicSizeProto {
+  INTRINSIC_SIZE_MIN = 0;
+  INTRINSIC_SIZE_MAX = 1;
+}

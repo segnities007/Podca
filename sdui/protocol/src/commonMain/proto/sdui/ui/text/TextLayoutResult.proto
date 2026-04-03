@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/text/AnnotatedString.proto";
+import "sdui/ui/text/MultiParagraph.proto";
+import "sdui/ui/text/TextOverflow.proto";
+import "sdui/ui/text/TextStyle.proto";
+import "sdui/ui/geometry/Size.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message TextLayoutInputProto {
+  oneof text_content {
+    string text = 1;
+    AnnotatedStringProto annotated_string = 2;
+  }
+  TextStyleProto style = 3;
+  int32 max_lines = 4;
+  bool soft_wrap = 5;
+  TextOverflowProto overflow = 6;
+}
+
+message TextLayoutResultProto {
+  TextLayoutInputProto layout_input = 1;
+  MultiParagraphProto multi_paragraph = 2;
+  sdui.ui.geometry.SizeProto size = 3;
+  float first_baseline = 4;
+  float last_baseline = 5;
+  bool did_overflow_height = 6;
+  bool did_overflow_width = 7;
+  bool has_visual_overflow = 8;
+}

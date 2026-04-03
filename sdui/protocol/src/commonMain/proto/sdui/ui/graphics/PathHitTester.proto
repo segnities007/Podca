@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message PathHitTesterProto {
+  bool is_empty = 1;
+}

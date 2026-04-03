@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message RadioButtonColorsProto {
+  sdui.ui.graphics.ColorProto selected_color = 1;
+  sdui.ui.graphics.ColorProto unselected_color = 2;
+  sdui.ui.graphics.ColorProto disabled_selected_color = 3;
+  sdui.ui.graphics.ColorProto disabled_unselected_color = 4;
+}
+
+message RadioButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool selected = 2;
+  bool enabled = 3;
+  RadioButtonColorsProto colors = 4;
+}

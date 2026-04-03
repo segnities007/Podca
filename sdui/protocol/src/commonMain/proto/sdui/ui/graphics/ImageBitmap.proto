@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/graphics/ImageBitmapConfig.proto";
+import "sdui/ui/graphics/colorspace/ColorSpace.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message ImageBitmapProto {
+  int32 width = 1;
+  int32 height = 2;
+  ImageBitmapConfigProto config = 3;
+  bool has_alpha = 4;
+  sdui.ui.graphics.colorspace.ColorSpaceProto color_space = 5;
+  bytes encoded_bytes = 6;
+  bytes pixel_bytes = 7;
+  int32 row_bytes = 8;
+}

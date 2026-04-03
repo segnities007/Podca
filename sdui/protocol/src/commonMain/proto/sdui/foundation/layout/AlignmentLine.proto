@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+enum AlignmentLineProto {
+  ALIGNMENT_LINE_UNSPECIFIED = 0;
+  FIRST_BASELINE = 1;
+  LAST_BASELINE = 2;
+}

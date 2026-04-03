@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sdui.ui;
+
+option java_package = "com.podca.sdui.protocol.ui";
+option java_multiple_files = true;
+
+message ModifierElementProto {
+  string type = 1;
+  string debug_payload = 2;
+}
+
+message ModifierNodeProto {
+  int32 kind_set = 1;
+  bool is_attached = 2;
+  bool should_auto_invalidate = 3;
+}
+
+message ModifierChainProto {
+  repeated ModifierElementProto elements = 1;
+}

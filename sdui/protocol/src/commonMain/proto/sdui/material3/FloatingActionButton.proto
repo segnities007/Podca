@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum FabPositionProto {
+  FAB_POSITION_START = 0;
+  FAB_POSITION_CENTER = 1;
+  FAB_POSITION_END = 2;
+  FAB_POSITION_END_OVERLAY = 3;
+}
+
+message FloatingActionButtonElevationProto {
+  sdui.ui.unit.DpProto default_elevation = 1;
+  sdui.ui.unit.DpProto pressed_elevation = 2;
+  sdui.ui.unit.DpProto focused_elevation = 3;
+  sdui.ui.unit.DpProto hovered_elevation = 4;
+}
+
+message FloatingActionButtonProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  bool has_content = 3;
+}

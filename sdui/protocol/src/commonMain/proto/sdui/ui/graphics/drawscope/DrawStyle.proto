@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sdui.ui.graphics.drawscope;
+
+import "sdui/ui/graphics/PathEffect.proto";
+import "sdui/ui/graphics/StrokeCap.proto";
+import "sdui/ui/graphics/StrokeJoin.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics.drawscope";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.drawscope.DrawStyle 相当
+ */
+message DrawStyleProto {
+  oneof value {
+    FillProto fill = 1;
+    StrokeProto stroke = 2;
+  }
+}
+
+message FillProto {}
+
+message StrokeProto {
+  float width = 1;
+  float miter = 2;
+  sdui.ui.graphics.StrokeCapProto cap = 3;
+  sdui.ui.graphics.StrokeJoinProto join = 4;
+  sdui.ui.graphics.PathEffectProto path_effect = 5;
+}

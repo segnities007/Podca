@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.ui.graphics.colorspace;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics.colorspace";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.colorspace.RenderIntent 相当
+ */
+enum RenderIntentProto {
+  RENDER_INTENT_PERCEPTUAL = 0;
+  RENDER_INTENT_RELATIVE = 1;
+  RENDER_INTENT_SATURATION = 2;
+  RENDER_INTENT_ABSOLUTE = 3;
+}

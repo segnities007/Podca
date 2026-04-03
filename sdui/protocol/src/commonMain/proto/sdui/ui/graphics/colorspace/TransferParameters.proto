@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sdui.ui.graphics.colorspace;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics.colorspace";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.colorspace.TransferParameters 相当
+ * ICC パラメトリック曲線（タイプ 4）のパラメータ。
+ */
+message TransferParametersProto {
+  double gamma = 1;
+  double a = 2;
+  double b = 3;
+  double c = 4;
+  double d = 5;
+  double e = 6;
+  double f = 7;
+}

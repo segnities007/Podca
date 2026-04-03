@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message MultiParagraphProto {
+  float width = 1;
+  float height = 2;
+  int32 line_count = 3;
+  bool did_exceed_max_lines = 4;
+}

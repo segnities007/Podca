@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message ExperimentalTextApiProto {
+  string feature_name = 1;
+  string since_version = 2;
+  bool opt_in_required = 3;
+}

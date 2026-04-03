@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/ColorScheme.proto";
+import "sdui/material3/MotionScheme.proto";
+import "sdui/material3/Shapes.proto";
+import "sdui/material3/Typography.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message MaterialThemeProto {
+  ColorSchemeProto color_scheme = 1;
+  TypographyProto typography = 2;
+  ShapesProto shapes = 3;
+  MotionSchemeProto motion_scheme = 4;
+}

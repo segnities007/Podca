@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/BlendMode.proto";
+import "sdui/ui/graphics/ImageBitmap.proto";
+import "sdui/ui/graphics/Matrix.proto";
+import "sdui/ui/graphics/TileMode.proto";
+import "sdui/ui/geometry/Offset.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message TransformShaderProto {
+  ShaderProto shader = 1;
+  sdui.ui.graphics.MatrixProto matrix = 2;
+}
+
+message LinearGradientShaderProto {
+  sdui.ui.geometry.OffsetProto from = 1;
+  sdui.ui.geometry.OffsetProto to = 2;
+  repeated sdui.ui.graphics.ColorProto colors = 3;
+  repeated float color_stops = 4;
+  sdui.ui.graphics.TileModeProto tile_mode = 5;
+}
+
+message RadialGradientShaderProto {
+  sdui.ui.geometry.OffsetProto center = 1;
+  float radius = 2;
+  repeated sdui.ui.graphics.ColorProto colors = 3;
+  repeated float color_stops = 4;
+  sdui.ui.graphics.TileModeProto tile_mode = 5;
+}
+
+message SweepGradientShaderProto {
+  sdui.ui.geometry.OffsetProto center = 1;
+  repeated sdui.ui.graphics.ColorProto colors = 2;
+  repeated float color_stops = 3;
+}
+
+message ImageShaderProto {
+  sdui.ui.graphics.ImageBitmapProto image = 1;
+  sdui.ui.graphics.TileModeProto tile_mode_x = 2;
+  sdui.ui.graphics.TileModeProto tile_mode_y = 3;
+}
+
+message CompositeShaderProto {
+  ShaderProto dst = 1;
+  ShaderProto src = 2;
+  sdui.ui.graphics.BlendModeProto blend_mode = 3;
+}
+
+message ShaderProto {
+  oneof value {
+    LinearGradientShaderProto linear_gradient = 1;
+    RadialGradientShaderProto radial_gradient = 2;
+    SweepGradientShaderProto sweep_gradient = 3;
+    ImageShaderProto image_shader = 4;
+    CompositeShaderProto composite_shader = 5;
+  }
+  sdui.ui.graphics.MatrixProto local_matrix = 6;
+  bool is_supported = 7;
+}

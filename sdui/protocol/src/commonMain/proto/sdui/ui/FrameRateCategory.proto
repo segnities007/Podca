@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sdui.ui;
+
+option java_package = "com.podca.sdui.protocol.ui";
+option java_multiple_files = true;
+
+enum FrameRateCategoryProto {
+  FRAME_RATE_CATEGORY_DEFAULT = 0;
+  FRAME_RATE_CATEGORY_NO_PREFERENCE = 1;
+  FRAME_RATE_CATEGORY_LOW = 2;
+  FRAME_RATE_CATEGORY_NORMAL = 3;
+  FRAME_RATE_CATEGORY_HIGH = 4;
+}

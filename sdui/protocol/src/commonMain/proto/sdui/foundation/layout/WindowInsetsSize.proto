@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/WindowInsets.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message WindowInsetsWidthModifierProto {
+  WindowInsetsProto insets = 1;
+}
+
+message WindowInsetsHeightModifierProto {
+  WindowInsetsProto insets = 1;
+}

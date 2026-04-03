@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message CharHelpersProto {
+  bool supports_surrogate_pairs = 1;
+  bool supports_combining_marks = 2;
+}

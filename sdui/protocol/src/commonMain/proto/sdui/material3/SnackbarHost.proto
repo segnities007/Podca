@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum SnackbarResultProto {
+  SNACKBAR_RESULT_DISMISSED = 0;
+  SNACKBAR_RESULT_ACTION_PERFORMED = 1;
+}
+
+enum SnackbarDurationProto {
+  SNACKBAR_DURATION_SHORT = 0;
+  SNACKBAR_DURATION_LONG = 1;
+  SNACKBAR_DURATION_INDEFINITE = 2;
+}
+
+message SnackbarVisualsProto {
+  string message = 1;
+  string action_label = 2;
+  bool with_dismiss_action = 3;
+  SnackbarDurationProto duration = 4;
+}
+
+message SnackbarDataProto {
+  SnackbarVisualsProto visuals = 1;
+}
+
+message SnackbarHostStateProto {
+  SnackbarDataProto current_snackbar_data = 1;
+}
+
+message SnackbarHostProto {
+  SnackbarHostStateProto host_state = 1;
+  sdui.ui.modifier.ModifierProto modifier = 2;
+  bool has_custom_snackbar = 3;
+}

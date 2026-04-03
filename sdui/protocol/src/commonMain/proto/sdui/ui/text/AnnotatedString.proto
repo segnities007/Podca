@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/text/Placeholder.proto";
+import "sdui/ui/text/TextRange.proto";
+import "sdui/ui/text/LinkAnnotation.proto";
+import "sdui/ui/text/ParagraphStyle.proto";
+import "sdui/ui/text/SpanStyle.proto";
+import "sdui/ui/text/StringAnnotation.proto";
+import "sdui/ui/text/TtsAnnotation.proto";
+import "sdui/ui/text/UrlAnnotation.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+/**
+ * AnnotatedString の区間データ。
+ */
+message AnnotationRangeProto {
+  int32 start = 1;
+  int32 end = 2;
+  string tag = 3;
+  oneof annotation {
+    SpanStyleProto span_style = 4;
+    ParagraphStyleProto paragraph_style = 5;
+    StringAnnotationProto string_annotation = 6;
+    LinkAnnotationProto link_annotation = 7;
+    UrlAnnotationProto url_annotation = 8;
+    VerbatimTtsAnnotationProto verbatim_tts_annotation = 9;
+    PlaceholderProto placeholder = 10;
+  }
+}
+
+/**
+ * androidx.compose.ui.text.AnnotatedString 相当
+ */
+message AnnotatedStringProto {
+  string text = 1;
+  repeated AnnotationRangeProto annotations = 2;
+}

@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/text/Text.proto";
+import "sdui/ui/text/PlatformTextStyle.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message TextFieldColorsProto {
+  sdui.ui.graphics.ColorProto focused_text_color = 1;
+  sdui.ui.graphics.ColorProto unfocused_text_color = 2;
+  sdui.ui.graphics.ColorProto disabled_text_color = 3;
+  sdui.ui.graphics.ColorProto error_text_color = 4;
+  sdui.ui.graphics.ColorProto focused_container_color = 5;
+  sdui.ui.graphics.ColorProto unfocused_container_color = 6;
+  sdui.ui.graphics.ColorProto disabled_container_color = 7;
+  sdui.ui.graphics.ColorProto error_container_color = 8;
+  sdui.ui.graphics.ColorProto cursor_color = 9;
+  sdui.ui.graphics.ColorProto error_cursor_color = 10;
+  sdui.ui.text.TextSelectionColorsProto text_selection_colors = 11;
+  sdui.ui.graphics.ColorProto focused_indicator_color = 12;
+  sdui.ui.graphics.ColorProto unfocused_indicator_color = 13;
+  sdui.ui.graphics.ColorProto disabled_indicator_color = 14;
+  sdui.ui.graphics.ColorProto error_indicator_color = 15;
+  sdui.ui.graphics.ColorProto focused_leading_icon_color = 16;
+  sdui.ui.graphics.ColorProto unfocused_leading_icon_color = 17;
+  sdui.ui.graphics.ColorProto disabled_leading_icon_color = 18;
+  sdui.ui.graphics.ColorProto error_leading_icon_color = 19;
+  sdui.ui.graphics.ColorProto focused_trailing_icon_color = 20;
+  sdui.ui.graphics.ColorProto unfocused_trailing_icon_color = 21;
+  sdui.ui.graphics.ColorProto disabled_trailing_icon_color = 22;
+  sdui.ui.graphics.ColorProto error_trailing_icon_color = 23;
+  sdui.ui.graphics.ColorProto focused_label_color = 24;
+  sdui.ui.graphics.ColorProto unfocused_label_color = 25;
+  sdui.ui.graphics.ColorProto disabled_label_color = 26;
+  sdui.ui.graphics.ColorProto error_label_color = 27;
+  sdui.ui.graphics.ColorProto focused_placeholder_color = 28;
+  sdui.ui.graphics.ColorProto unfocused_placeholder_color = 29;
+  sdui.ui.graphics.ColorProto disabled_placeholder_color = 30;
+  sdui.ui.graphics.ColorProto error_placeholder_color = 31;
+  sdui.ui.graphics.ColorProto focused_supporting_text_color = 32;
+  sdui.ui.graphics.ColorProto unfocused_supporting_text_color = 33;
+  sdui.ui.graphics.ColorProto disabled_supporting_text_color = 34;
+  sdui.ui.graphics.ColorProto error_supporting_text_color = 35;
+  sdui.ui.graphics.ColorProto focused_prefix_color = 36;
+  sdui.ui.graphics.ColorProto unfocused_prefix_color = 37;
+  sdui.ui.graphics.ColorProto disabled_prefix_color = 38;
+  sdui.ui.graphics.ColorProto error_prefix_color = 39;
+  sdui.ui.graphics.ColorProto focused_suffix_color = 40;
+  sdui.ui.graphics.ColorProto unfocused_suffix_color = 41;
+  sdui.ui.graphics.ColorProto disabled_suffix_color = 42;
+  sdui.ui.graphics.ColorProto error_suffix_color = 43;
+}

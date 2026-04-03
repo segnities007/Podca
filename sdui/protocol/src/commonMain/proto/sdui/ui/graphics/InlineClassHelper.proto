@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message InlineClassHelperProto {
+  string wrapped_type_name = 1;
+  bool packs_into_primitive = 2;
+  bool exposes_require_precondition = 3;
+  bool exposes_illegal_argument_thrower = 4;
+}

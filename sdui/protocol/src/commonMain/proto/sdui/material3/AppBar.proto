@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message TopAppBarColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto scrolled_container_color = 2;
+  sdui.ui.graphics.ColorProto navigation_icon_content_color = 3;
+  sdui.ui.graphics.ColorProto title_content_color = 4;
+  sdui.ui.graphics.ColorProto action_icon_content_color = 5;
+  sdui.ui.graphics.ColorProto subtitle_content_color = 6;
+}
+
+message TopAppBarStateProto {
+  float height_offset_limit = 1;
+  float height_offset = 2;
+  float content_offset = 3;
+  float collapsed_fraction = 4;
+  float overlapped_fraction = 5;
+}
+
+message BottomAppBarStateProto {
+  float height_offset_limit = 1;
+  float height_offset = 2;
+  float content_offset = 3;
+  float collapsed_fraction = 4;
+}
+
+message BottomAppBarScrollBehaviorProto {
+  BottomAppBarStateProto state = 1;
+  bool can_scroll = 2;
+  bool is_pinned = 3;
+}

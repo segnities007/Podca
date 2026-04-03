@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/Shape.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message DragHandleColorsProto {
+  sdui.ui.graphics.ColorProto color = 1;
+  sdui.ui.graphics.ColorProto pressed_color = 2;
+  sdui.ui.graphics.ColorProto dragged_color = 3;
+}
+
+message DragHandleShapesProto {
+  sdui.ui.graphics.ShapeProto shape = 1;
+  sdui.ui.graphics.ShapeProto pressed_shape = 2;
+  sdui.ui.graphics.ShapeProto dragged_shape = 3;
+}
+
+message DragHandleSizesProto {
+  sdui.ui.unit.DpSizeProto size = 1;
+  sdui.ui.unit.DpSizeProto pressed_size = 2;
+  sdui.ui.unit.DpSizeProto dragged_size = 3;
+}

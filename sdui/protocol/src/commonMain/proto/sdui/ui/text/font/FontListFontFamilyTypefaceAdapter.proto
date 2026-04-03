@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.ui.text.font;
+
+option java_package = "com.podca.sdui.protocol.ui.text.font";
+option java_multiple_files = true;
+
+message FontListFontFamilyTypefaceAdapterProto {
+  bool resolves_from_font_list = 1;
+  bool supports_blocking_fallback = 2;
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/StrokeCap.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message ProgressIndicatorDefaultsProto {
+  sdui.ui.graphics.ColorProto linear_color = 1;
+  sdui.ui.graphics.ColorProto linear_track_color = 2;
+  sdui.ui.graphics.ColorProto circular_color = 3;
+  sdui.ui.graphics.ColorProto circular_track_color = 4;
+  sdui.ui.graphics.StrokeCapProto linear_stroke_cap = 5;
+  sdui.ui.graphics.StrokeCapProto circular_stroke_cap = 6;
+  sdui.ui.unit.DpProto linear_indicator_track_gap_size = 7;
+  sdui.ui.unit.DpProto linear_track_stop_indicator_size = 8;
+}
+
+message LinearProgressIndicatorProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  float progress = 2;
+  sdui.ui.graphics.ColorProto color = 3;
+  sdui.ui.graphics.ColorProto track_color = 4;
+  sdui.ui.graphics.StrokeCapProto stroke_cap = 5;
+  sdui.ui.unit.DpProto gap_size = 6;
+}
+
+message CircularProgressIndicatorProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  float progress = 2;
+  sdui.ui.graphics.ColorProto color = 3;
+  sdui.ui.graphics.ColorProto track_color = 4;
+  sdui.ui.graphics.StrokeCapProto stroke_cap = 5;
+  sdui.ui.unit.DpProto gap_size = 6;
+}

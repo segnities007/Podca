@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/graphics/Path.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.StampedPathEffectStyle 相当
+ */
+enum StampedPathEffectStyleProto {
+  STAMPED_PATH_EFFECT_STYLE_TRANSLATE = 0;
+  STAMPED_PATH_EFFECT_STYLE_ROTATE = 1;
+  STAMPED_PATH_EFFECT_STYLE_MORPH = 2;
+}
+
+/**
+ * androidx.compose.ui.graphics.PathEffect 相当
+ */
+message PathEffectProto {
+  oneof value {
+    CornerPathEffectProto corner = 1;
+    DashPathEffectProto dash = 2;
+    ChainPathEffectProto chain = 3;
+    StampedPathEffectProto stamped = 4;
+  }
+}
+
+message CornerPathEffectProto {
+  float radius = 1;
+}
+
+message DashPathEffectProto {
+  repeated float intervals = 1;
+  float phase = 2;
+}
+
+message ChainPathEffectProto {
+  PathEffectProto outer = 1;
+  PathEffectProto inner = 2;
+}
+
+message StampedPathEffectProto {
+  PathProto shape = 1;
+  float advance = 2;
+  float phase = 3;
+  StampedPathEffectStyleProto style = 4;
+}

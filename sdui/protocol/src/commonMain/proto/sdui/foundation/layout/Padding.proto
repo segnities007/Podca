@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message PaddingValuesProto {
+  sdui.ui.unit.DpProto start = 1;
+  sdui.ui.unit.DpProto top = 2;
+  sdui.ui.unit.DpProto end = 3;
+  sdui.ui.unit.DpProto bottom = 4;
+  bool rtl_aware = 5;
+}

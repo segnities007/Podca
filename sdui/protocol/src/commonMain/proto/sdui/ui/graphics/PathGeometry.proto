@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+enum PathDirectionProto {
+  PATH_DIRECTION_CLOCKWISE = 0;
+  PATH_DIRECTION_COUNTER_CLOCKWISE = 1;
+}
+
+message PathGeometryProto {
+  PathDirectionProto direction = 1;
+  int32 contour_count = 2;
+}

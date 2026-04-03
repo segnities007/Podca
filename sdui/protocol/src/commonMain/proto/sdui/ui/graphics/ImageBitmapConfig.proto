@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.ImageBitmapConfig 相当
+ * ピクセルデータの格納形式。
+ */
+enum ImageBitmapConfigProto {
+  // 各チャンネル 8ビット (デフォルト)
+  IMAGE_BITMAP_CONFIG_ARGB_8888 = 0;
+  // アルファチャンネルのみ (1バイト)
+  IMAGE_BITMAP_CONFIG_ALPHA_8 = 1;
+  // 各ピクセル 2バイト (R:5, G:6, B:5ビット)
+  IMAGE_BITMAP_CONFIG_RGB_565 = 2;
+  // 各チャンネル 16ビット浮動小数 (HDR等)
+  IMAGE_BITMAP_CONFIG_F16 = 3;
+  // グラフィックメモリ内のみ (特殊用途)
+  IMAGE_BITMAP_CONFIG_GPU = 4;
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/AppBarDsl.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message AppBarRowScopeProto {
+  AppBarScopeProto scope = 1;
+}
+
+message AppBarRowProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  AppBarRowScopeProto scope = 2;
+}

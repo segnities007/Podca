@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/geometry/Rect.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message CubicBezierEvaluationProto {
+  float p1 = 1;
+  float p2 = 2;
+  float t = 3;
+  float value = 4;
+}
+
+message PathSegmentBoundsProto {
+  sdui.ui.geometry.RectProto bounds = 1;
+}

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/Padding.proto";
+import "sdui/foundation/layout/WindowInsets.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message InsetsPaddingModifierProto {
+  WindowInsetsProto insets = 1;
+}
+
+message PaddingValuesConsumingModifierProto {
+  PaddingValuesProto padding_values = 1;
+}
+
+message ConsumedInsetsModifierProto {
+  WindowInsetsProto consumed = 1;
+}
+
+message UnionInsetsConsumingModifierProto {
+  WindowInsetsProto insets = 1;
+}
+
+message RecalculateWindowInsetsModifierProto {
+  bool force_recalculation = 1;
+}

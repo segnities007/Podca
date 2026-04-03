@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum TimePickerDisplayModeProto {
+  TIME_PICKER_DISPLAY_MODE_PICKER = 0;
+  TIME_PICKER_DISPLAY_MODE_INPUT = 1;
+}

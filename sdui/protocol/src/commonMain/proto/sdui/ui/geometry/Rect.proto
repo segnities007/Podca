@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sdui.ui.geometry;
+
+option java_package = "com.podca.sdui.protocol.ui.geometry";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.geometry.Rect および MutableRect 相当
+ * 浮動小数点精度の軸に平行な矩形。
+ */
+message RectProto {
+  float left = 1;
+  float top = 2;
+  float right = 3;
+  float bottom = 4;
+}

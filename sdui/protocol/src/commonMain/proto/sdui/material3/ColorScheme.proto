@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message ColorSchemeProto {
+  sdui.ui.graphics.ColorProto primary = 1;
+  sdui.ui.graphics.ColorProto on_primary = 2;
+  sdui.ui.graphics.ColorProto primary_container = 3;
+  sdui.ui.graphics.ColorProto on_primary_container = 4;
+  sdui.ui.graphics.ColorProto inverse_primary = 5;
+  sdui.ui.graphics.ColorProto secondary = 6;
+  sdui.ui.graphics.ColorProto on_secondary = 7;
+  sdui.ui.graphics.ColorProto secondary_container = 8;
+  sdui.ui.graphics.ColorProto on_secondary_container = 9;
+  sdui.ui.graphics.ColorProto tertiary = 10;
+  sdui.ui.graphics.ColorProto on_tertiary = 11;
+  sdui.ui.graphics.ColorProto tertiary_container = 12;
+  sdui.ui.graphics.ColorProto on_tertiary_container = 13;
+  sdui.ui.graphics.ColorProto background = 14;
+  sdui.ui.graphics.ColorProto on_background = 15;
+  sdui.ui.graphics.ColorProto surface = 16;
+  sdui.ui.graphics.ColorProto on_surface = 17;
+  sdui.ui.graphics.ColorProto surface_variant = 18;
+  sdui.ui.graphics.ColorProto on_surface_variant = 19;
+  sdui.ui.graphics.ColorProto surface_tint = 20;
+  sdui.ui.graphics.ColorProto inverse_surface = 21;
+  sdui.ui.graphics.ColorProto inverse_on_surface = 22;
+  sdui.ui.graphics.ColorProto error = 23;
+  sdui.ui.graphics.ColorProto on_error = 24;
+  sdui.ui.graphics.ColorProto error_container = 25;
+  sdui.ui.graphics.ColorProto on_error_container = 26;
+  sdui.ui.graphics.ColorProto outline = 27;
+  sdui.ui.graphics.ColorProto outline_variant = 28;
+  sdui.ui.graphics.ColorProto scrim = 29;
+  sdui.ui.graphics.ColorProto surface_bright = 30;
+  sdui.ui.graphics.ColorProto surface_dim = 31;
+  sdui.ui.graphics.ColorProto surface_container = 32;
+  sdui.ui.graphics.ColorProto surface_container_high = 33;
+  sdui.ui.graphics.ColorProto surface_container_highest = 34;
+  sdui.ui.graphics.ColorProto surface_container_low = 35;
+  sdui.ui.graphics.ColorProto surface_container_lowest = 36;
+  sdui.ui.graphics.ColorProto primary_fixed = 37;
+  sdui.ui.graphics.ColorProto primary_fixed_dim = 38;
+  sdui.ui.graphics.ColorProto on_primary_fixed = 39;
+  sdui.ui.graphics.ColorProto on_primary_fixed_variant = 40;
+  sdui.ui.graphics.ColorProto secondary_fixed = 41;
+  sdui.ui.graphics.ColorProto secondary_fixed_dim = 42;
+  sdui.ui.graphics.ColorProto on_secondary_fixed = 43;
+  sdui.ui.graphics.ColorProto on_secondary_fixed_variant = 44;
+  sdui.ui.graphics.ColorProto tertiary_fixed = 45;
+  sdui.ui.graphics.ColorProto tertiary_fixed_dim = 46;
+  sdui.ui.graphics.ColorProto on_tertiary_fixed = 47;
+  sdui.ui.graphics.ColorProto on_tertiary_fixed_variant = 48;
+}

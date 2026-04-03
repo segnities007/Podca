@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.TextUnitType 相当
+ */
+enum TextUnitTypeProto {
+  TEXT_UNIT_TYPE_UNSPECIFIED = 0;
+  TEXT_UNIT_TYPE_SP = 1;
+  TEXT_UNIT_TYPE_EM = 2;
+}
+
+/**
+ * androidx.compose.ui.unit.TextUnit 相当
+ * SP (Scaled Pixels) や EM (Relative font size) を扱うための単位構造。
+ */
+message TextUnitProto {
+  // 値 (16.sp なら 16.0)
+  float value = 1;
+
+  // 単位の種類 (Sp, Em, Unspecified)
+  TextUnitTypeProto type = 2;
+}

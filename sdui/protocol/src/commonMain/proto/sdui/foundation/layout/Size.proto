@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/ui/Alignment.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+enum SizeDirectionProto {
+  SIZE_DIRECTION_HORIZONTAL = 0;
+  SIZE_DIRECTION_VERTICAL = 1;
+  SIZE_DIRECTION_BOTH = 2;
+}
+
+message SizeModifierProto {
+  sdui.ui.unit.DpProto min_width = 1;
+  sdui.ui.unit.DpProto min_height = 2;
+  sdui.ui.unit.DpProto max_width = 3;
+  sdui.ui.unit.DpProto max_height = 4;
+  bool enforce_incoming = 5;
+}
+
+message FillModifierProto {
+  SizeDirectionProto direction = 1;
+  float fraction = 2;
+}
+
+message WrapContentModifierProto {
+  sdui.ui.AlignmentBridgeProto align = 1;
+  bool unbounded = 2;
+}
+
+message DefaultMinSizeModifierProto {
+  sdui.ui.unit.DpProto min_width = 1;
+  sdui.ui.unit.DpProto min_height = 2;
+}

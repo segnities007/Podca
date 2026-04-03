@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum DrawerValueProto {
+  DRAWER_VALUE_CLOSED = 0;
+  DRAWER_VALUE_OPEN = 1;
+}
+
+message NavigationDrawerProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  DrawerValueProto value = 2;
+  bool has_content = 3;
+}

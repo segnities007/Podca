@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message ExperimentalFlexBoxApiProto {
+  string message = 1;
+  string retention = 2;
+}

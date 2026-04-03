@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.FontScaling 相当
+ * フォントのスケーリング設定のみを保持するインターフェースのデータモデル。
+ */
+message FontScalingProto {
+  // フォントのスケーリング係数
+  float font_scale = 1;
+}

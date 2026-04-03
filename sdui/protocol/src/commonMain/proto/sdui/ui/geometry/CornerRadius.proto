@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.geometry;
+
+option java_package = "com.podca.sdui.protocol.ui.geometry";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.geometry.CornerRadius 相当
+ * 角丸の半径 (x, y)。
+ */
+message CornerRadiusProto {
+  float x = 1;
+  float y = 2;
+}

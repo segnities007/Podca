@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+enum LayoutOrientationProto {
+  LAYOUT_ORIENTATION_HORIZONTAL = 0;
+  LAYOUT_ORIENTATION_VERTICAL = 1;
+}
+
+message CrossAxisAlignmentProto {
+  uint32 kind = 1;
+}
+
+message OrientationIndependentConstraintsProto {
+  int32 main_axis_min = 1;
+  int32 main_axis_max = 2;
+  int32 cross_axis_min = 3;
+  int32 cross_axis_max = 4;
+}

@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message PlatformSpanStyleProto {
+  bool emoji_support_match = 1;
+  bool is_default = 2;
+  bool supports_merge = 3;
+}
+
+message PlatformParagraphStyleProto {
+  bool include_font_padding = 1;
+  bool is_default = 2;
+  bool supports_merge = 3;
+}
+
+message PlatformTextStyleProto {
+  PlatformSpanStyleProto span_style = 1;
+  PlatformParagraphStyleProto paragraph_style = 2;
+  bool supports_span_style_merge = 3;
+  bool supports_paragraph_style_merge = 4;
+  bool supports_lerp = 5;
+  bool supports_create_platform_text_style = 6;
+}
+
+message TextSelectionColorsProto {
+  sdui.ui.graphics.ColorProto handle_color = 1;
+  sdui.ui.graphics.ColorProto background_color = 2;
+}

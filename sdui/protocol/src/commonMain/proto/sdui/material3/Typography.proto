@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/text/TextStyle.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message TypographyProto {
+  sdui.ui.text.TextStyleProto display_large = 1;
+  sdui.ui.text.TextStyleProto display_medium = 2;
+  sdui.ui.text.TextStyleProto display_small = 3;
+  sdui.ui.text.TextStyleProto headline_large = 4;
+  sdui.ui.text.TextStyleProto headline_medium = 5;
+  sdui.ui.text.TextStyleProto headline_small = 6;
+  sdui.ui.text.TextStyleProto title_large = 7;
+  sdui.ui.text.TextStyleProto title_medium = 8;
+  sdui.ui.text.TextStyleProto title_small = 9;
+  sdui.ui.text.TextStyleProto body_large = 10;
+  sdui.ui.text.TextStyleProto body_medium = 11;
+  sdui.ui.text.TextStyleProto body_small = 12;
+  sdui.ui.text.TextStyleProto label_large = 13;
+  sdui.ui.text.TextStyleProto label_medium = 14;
+  sdui.ui.text.TextStyleProto label_small = 15;
+  sdui.ui.text.TextStyleProto display_large_emphasized = 16;
+  sdui.ui.text.TextStyleProto display_medium_emphasized = 17;
+  sdui.ui.text.TextStyleProto display_small_emphasized = 18;
+  sdui.ui.text.TextStyleProto headline_large_emphasized = 19;
+  sdui.ui.text.TextStyleProto headline_medium_emphasized = 20;
+  sdui.ui.text.TextStyleProto headline_small_emphasized = 21;
+  sdui.ui.text.TextStyleProto title_large_emphasized = 22;
+  sdui.ui.text.TextStyleProto title_medium_emphasized = 23;
+  sdui.ui.text.TextStyleProto title_small_emphasized = 24;
+  sdui.ui.text.TextStyleProto body_large_emphasized = 25;
+  sdui.ui.text.TextStyleProto body_medium_emphasized = 26;
+  sdui.ui.text.TextStyleProto body_small_emphasized = 27;
+  sdui.ui.text.TextStyleProto label_large_emphasized = 28;
+  sdui.ui.text.TextStyleProto label_medium_emphasized = 29;
+  sdui.ui.text.TextStyleProto label_small_emphasized = 30;
+}

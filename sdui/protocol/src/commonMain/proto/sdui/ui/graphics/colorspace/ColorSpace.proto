@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sdui.ui.graphics.colorspace;
+
+import "sdui/ui/graphics/colorspace/NamedColorSpace.proto";
+import "sdui/ui/graphics/colorspace/ColorModel.proto";
+import "sdui/ui/graphics/colorspace/WhitePoint.proto";
+import "sdui/ui/graphics/colorspace/TransferParameters.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics.colorspace";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.colorspace.ColorSpace 相当の統合定義。
+ */
+message ColorSpaceProto {
+  oneof value {
+    // 名前で指定する既知の色空間 (sRGB, P3 等)
+    NamedColorSpaceProto named = 1;
+
+    // カスタム RGB 色空間の定義
+    CustomRgbColorSpaceProto custom_rgb = 2;
+  }
+}
+
+/**
+ * カスタム RGB 色空間を定義するためのデータ構造。
+ */
+message CustomRgbColorSpaceProto {
+  string name = 1;
+  // xyY または XYZ 形式の 6個または 9個の float
+  repeated float primaries = 2;
+  WhitePointProto white_point = 3;
+  TransferParametersProto transfer_parameters = 4;
+}

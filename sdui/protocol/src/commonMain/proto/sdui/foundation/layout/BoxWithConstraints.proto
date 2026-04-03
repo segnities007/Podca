@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/Box.proto";
+import "sdui/ui/unit/Dp.proto";
+import "sdui/ui/unit/Constraints.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message BoxWithConstraintsScopeProto {
+  sdui.ui.unit.ConstraintsProto constraints = 1;
+  sdui.ui.unit.DpProto min_width = 2;
+  sdui.ui.unit.DpProto max_width = 3;
+  sdui.ui.unit.DpProto min_height = 4;
+  sdui.ui.unit.DpProto max_height = 5;
+}
+
+message BoxWithConstraintsProto {
+  BoxProto box = 1;
+  BoxWithConstraintsScopeProto scope = 2;
+}

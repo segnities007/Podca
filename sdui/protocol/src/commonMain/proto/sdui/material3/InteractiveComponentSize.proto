@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message InteractiveComponentSizeProto {
+  sdui.ui.unit.DpProto minimum_width = 1;
+  sdui.ui.unit.DpProto minimum_height = 2;
+  bool enforced = 3;
+}

@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package sdui.ui.text.font;
+
+import "sdui/ui/text/font/Font.proto";
+import "sdui/ui/text/font/Typeface.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text.font";
+option java_multiple_files = true;
+
+message FontFamilyDefaultProto {}
+
+message FontFamilyGenericProto {
+  string name = 1;
+}
+
+message FontFamilySansSerifProto {
+  string name = 1;
+  string debug_name = 2;
+}
+
+message FontFamilySerifProto {
+  string name = 1;
+  string debug_name = 2;
+}
+
+message FontFamilyMonospaceProto {
+  string name = 1;
+  string debug_name = 2;
+}
+
+message FontFamilyCursiveProto {
+  string name = 1;
+  string debug_name = 2;
+}
+
+message FontFamilyListProto {
+  repeated FontProto fonts = 1;
+}
+
+message LoadedFontFamilyProto {
+  TypefaceProto typeface = 1;
+}
+
+message FontFamilyProto {
+  oneof value {
+    FontFamilyDefaultProto default_family = 1;
+    FontFamilyGenericProto generic_family = 2;
+    FontFamilyListProto list_family = 3;
+    LoadedFontFamilyProto loaded_family = 4;
+    FontFamilySansSerifProto sans_serif_family = 5;
+    FontFamilySerifProto serif_family = 6;
+    FontFamilyMonospaceProto monospace_family = 7;
+    FontFamilyCursiveProto cursive_family = 8;
+  }
+}

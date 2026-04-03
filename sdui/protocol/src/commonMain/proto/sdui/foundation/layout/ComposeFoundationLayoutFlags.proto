@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message ComposeFoundationLayoutFlagsProto {
+  bool is_optimization_enabled = 1;
+  bool is_contextual_flow_layout_enabled = 2;
+  bool is_window_insets_rulers_enabled = 3;
+}

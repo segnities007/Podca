@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+enum PlaceholderVerticalAlignProto {
+  PLACEHOLDER_VERTICAL_ALIGN_UNSPECIFIED = 0;
+  PLACEHOLDER_VERTICAL_ALIGN_ABOVE_BASELINE = 1;
+  PLACEHOLDER_VERTICAL_ALIGN_TOP = 2;
+  PLACEHOLDER_VERTICAL_ALIGN_BOTTOM = 3;
+  PLACEHOLDER_VERTICAL_ALIGN_CENTER = 4;
+  PLACEHOLDER_VERTICAL_ALIGN_TEXT_TOP = 5;
+  PLACEHOLDER_VERTICAL_ALIGN_TEXT_BOTTOM = 6;
+  PLACEHOLDER_VERTICAL_ALIGN_TEXT_CENTER = 7;
+}

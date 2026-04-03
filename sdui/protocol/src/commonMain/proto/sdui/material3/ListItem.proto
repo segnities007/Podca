@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message ListItemColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto headline_color = 2;
+  sdui.ui.graphics.ColorProto leading_icon_color = 3;
+  sdui.ui.graphics.ColorProto overline_color = 4;
+  sdui.ui.graphics.ColorProto supporting_text_color = 5;
+  sdui.ui.graphics.ColorProto trailing_icon_color = 6;
+  sdui.ui.graphics.ColorProto disabled_headline_color = 7;
+  sdui.ui.graphics.ColorProto disabled_leading_icon_color = 8;
+  sdui.ui.graphics.ColorProto disabled_trailing_icon_color = 9;
+}
+
+message ListItemProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  string headline = 3;
+  string supporting = 4;
+  string overline = 5;
+  bool has_leading_icon = 6;
+  bool has_trailing_icon = 7;
+  ListItemColorsProto colors = 8;
+}

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message StringAnnotationProto {
+  string tag = 1;
+  string value = 2;
+}

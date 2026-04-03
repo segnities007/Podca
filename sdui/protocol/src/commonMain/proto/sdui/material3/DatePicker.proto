@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/TextFieldDefaults.proto";
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum DisplayModeProto {
+  DISPLAY_MODE_PICKER = 0;
+  DISPLAY_MODE_INPUT = 1;
+}
+
+message DatePickerColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto title_content_color = 2;
+  sdui.ui.graphics.ColorProto headline_content_color = 3;
+  sdui.ui.graphics.ColorProto weekday_content_color = 4;
+  sdui.ui.graphics.ColorProto subhead_content_color = 5;
+  sdui.ui.graphics.ColorProto navigation_content_color = 6;
+  sdui.ui.graphics.ColorProto year_content_color = 7;
+  sdui.ui.graphics.ColorProto disabled_year_content_color = 8;
+  sdui.ui.graphics.ColorProto current_year_content_color = 9;
+  sdui.ui.graphics.ColorProto selected_year_content_color = 10;
+  sdui.ui.graphics.ColorProto disabled_selected_year_content_color = 11;
+  sdui.ui.graphics.ColorProto selected_year_container_color = 12;
+  sdui.ui.graphics.ColorProto disabled_selected_year_container_color = 13;
+  sdui.ui.graphics.ColorProto day_content_color = 14;
+  sdui.ui.graphics.ColorProto disabled_day_content_color = 15;
+  sdui.ui.graphics.ColorProto selected_day_content_color = 16;
+  sdui.ui.graphics.ColorProto disabled_selected_day_content_color = 17;
+  sdui.ui.graphics.ColorProto selected_day_container_color = 18;
+  sdui.ui.graphics.ColorProto disabled_selected_day_container_color = 19;
+  sdui.ui.graphics.ColorProto today_content_color = 20;
+  sdui.ui.graphics.ColorProto today_date_border_color = 21;
+  sdui.ui.graphics.ColorProto day_in_selection_range_container_color = 22;
+  sdui.ui.graphics.ColorProto day_in_selection_range_content_color = 23;
+  sdui.ui.graphics.ColorProto divider_color = 24;
+  TextFieldColorsProto date_text_field_colors = 25;
+}
+
+message DatePickerProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  DatePickerColorsProto colors = 2;
+  DisplayModeProto display_mode = 3;
+  bool show_mode_toggle = 4;
+  bool has_title = 5;
+  bool has_headline = 6;
+}

@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+enum FlexDirectionProto {
+  FLEX_DIRECTION_ROW = 0;
+  FLEX_DIRECTION_ROW_REVERSE = 1;
+  FLEX_DIRECTION_COLUMN = 2;
+  FLEX_DIRECTION_COLUMN_REVERSE = 3;
+}
+
+enum FlexWrapProto {
+  FLEX_WRAP_NOWRAP = 0;
+  FLEX_WRAP_WRAP = 1;
+  FLEX_WRAP_WRAP_REVERSE = 2;
+}
+
+enum FlexJustifyContentProto {
+  FLEX_JUSTIFY_CONTENT_START = 0;
+  FLEX_JUSTIFY_CONTENT_END = 1;
+  FLEX_JUSTIFY_CONTENT_CENTER = 2;
+  FLEX_JUSTIFY_CONTENT_SPACE_BETWEEN = 3;
+  FLEX_JUSTIFY_CONTENT_SPACE_AROUND = 4;
+  FLEX_JUSTIFY_CONTENT_SPACE_EVENLY = 5;
+}
+
+enum FlexAlignItemsProto {
+  FLEX_ALIGN_ITEMS_START = 0;
+  FLEX_ALIGN_ITEMS_END = 1;
+  FLEX_ALIGN_ITEMS_CENTER = 2;
+  FLEX_ALIGN_ITEMS_STRETCH = 3;
+  FLEX_ALIGN_ITEMS_BASELINE = 4;
+}
+
+enum FlexAlignContentProto {
+  FLEX_ALIGN_CONTENT_START = 0;
+  FLEX_ALIGN_CONTENT_END = 1;
+  FLEX_ALIGN_CONTENT_CENTER = 2;
+  FLEX_ALIGN_CONTENT_SPACE_BETWEEN = 3;
+  FLEX_ALIGN_CONTENT_SPACE_AROUND = 4;
+  FLEX_ALIGN_CONTENT_SPACE_EVENLY = 5;
+  FLEX_ALIGN_CONTENT_STRETCH = 6;
+}
+
+enum FlexAlignSelfProto {
+  FLEX_ALIGN_SELF_AUTO = 0;
+  FLEX_ALIGN_SELF_START = 1;
+  FLEX_ALIGN_SELF_END = 2;
+  FLEX_ALIGN_SELF_CENTER = 3;
+  FLEX_ALIGN_SELF_STRETCH = 4;
+  FLEX_ALIGN_SELF_BASELINE = 5;
+}
+
+message FlexBasisProto {
+  oneof value {
+    sdui.ui.unit.DpProto dp = 1;
+    float percent = 2;
+    bool auto = 3;
+  }
+}
+
+message FlexConfigProto {
+  int32 order = 1;
+  float grow = 2;
+  float shrink = 3;
+  FlexBasisProto basis = 4;
+  FlexAlignSelfProto align_self = 5;
+}
+
+message FlexBoxConfigProto {
+  FlexDirectionProto direction = 1;
+  FlexWrapProto wrap = 2;
+  FlexJustifyContentProto justify_content = 3;
+  FlexAlignItemsProto align_items = 4;
+  FlexAlignContentProto align_content = 5;
+  sdui.ui.unit.DpProto row_gap = 6;
+  sdui.ui.unit.DpProto column_gap = 7;
+}
+
+message FlexBoxScopeProto {
+  FlexConfigProto flex = 1;
+}
+
+message FlexBoxProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  FlexBoxConfigProto config = 2;
+}

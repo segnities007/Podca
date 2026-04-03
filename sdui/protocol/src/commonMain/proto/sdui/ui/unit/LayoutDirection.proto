@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.LayoutDirection 相当
+ */
+enum LayoutDirectionProto {
+  LAYOUT_DIRECTION_LTR = 0;
+  LAYOUT_DIRECTION_RTL = 1;
+}

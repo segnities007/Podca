@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/graphics/BlendMode.proto";
+import "sdui/ui/graphics/PaintingStyle.proto";
+import "sdui/ui/graphics/StrokeCap.proto";
+import "sdui/ui/graphics/StrokeJoin.proto";
+import "sdui/ui/graphics/FilterQuality.proto";
+import "sdui/ui/graphics/Brush.proto";
+import "sdui/ui/graphics/ColorFilter.proto";
+import "sdui/ui/graphics/PathEffect.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.Paint 相当
+ */
+message PaintProto {
+  float alpha = 1;
+  bool is_anti_alias = 2;
+  ColorProto color = 3;
+  BlendModeProto blend_mode = 4;
+  PaintingStyleProto style = 5;
+  float stroke_width = 6;
+  StrokeCapProto stroke_cap = 7;
+  StrokeJoinProto stroke_join = 8;
+  float stroke_miter_limit = 9;
+  FilterQualityProto filter_quality = 10;
+
+  // Shader 相当だが、Compose 側の表現に合わせて BrushProto で保持する。
+  BrushProto shader = 11;
+
+  // カラーフィルタ
+  ColorFilterProto color_filter = 12;
+
+  // path effect
+  PathEffectProto path_effect = 13;
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/IconButton.proto";
+import "sdui/ui/graphics/Shape.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+// IconButtonWidthOptionProto is defined in IconButton.proto.
+message IconButtonDefaultsProto {
+  sdui.ui.graphics.ShapeProto standard_shape = 1;
+  sdui.ui.graphics.ShapeProto small_shape = 2;
+  sdui.ui.graphics.ShapeProto medium_shape = 3;
+  sdui.ui.graphics.ShapeProto large_shape = 4;
+  sdui.ui.unit.DpProto extra_small_container_size = 5;
+  sdui.ui.unit.DpProto small_container_size = 6;
+  sdui.ui.unit.DpProto medium_container_size = 7;
+  sdui.ui.unit.DpProto large_container_size = 8;
+  sdui.ui.unit.DpProto extra_large_container_size = 9;
+  IconButtonWidthOptionProto default_width_option = 10;
+}

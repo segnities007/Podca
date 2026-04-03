@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+import "sdui/ui/geometry/Offset.proto";
+import "sdui/ui/geometry/Rect.proto";
+import "sdui/ui/geometry/RoundRect.proto";
+import "sdui/ui/graphics/BlendMode.proto";
+import "sdui/ui/graphics/ClipOp.proto";
+import "sdui/ui/graphics/ImageBitmap.proto";
+import "sdui/ui/graphics/Matrix.proto";
+import "sdui/ui/graphics/Paint.proto";
+import "sdui/ui/graphics/Path.proto";
+import "sdui/ui/graphics/PointMode.proto";
+import "sdui/ui/graphics/Vertices.proto";
+import "sdui/ui/unit/IntOffset.proto";
+import "sdui/ui/unit/IntSize.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+message NativeCanvasProto {}
+
+message CanvasSaveLayerProto {
+  sdui.ui.geometry.RectProto bounds = 1;
+  sdui.ui.graphics.PaintProto paint = 2;
+}
+
+message CanvasTransformProto {
+  oneof value {
+    sdui.ui.geometry.OffsetProto translate = 1;
+    ScaleTransformProto scale = 2;
+    RotateTransformProto rotate = 3;
+    SkewTransformProto skew = 4;
+    sdui.ui.graphics.MatrixProto matrix = 5;
+  }
+}
+
+message ScaleTransformProto {
+  float scale_x = 1;
+  float scale_y = 2;
+}
+
+message RotateTransformProto {
+  float degrees = 1;
+}
+
+message SkewTransformProto {
+  float skew_x = 1;
+  float skew_y = 2;
+}
+
+message CanvasClipProto {
+  oneof value {
+    sdui.ui.geometry.RectProto rect = 1;
+    sdui.ui.geometry.RoundRectProto round_rect = 2;
+    sdui.ui.graphics.PathProto path = 3;
+  }
+  sdui.ui.graphics.ClipOpProto clip_op = 4;
+}
+
+message CanvasDrawCommandProto {
+  oneof value {
+    DrawLineProto line = 1;
+    DrawRectProto rect = 2;
+    DrawRoundRectProto round_rect = 3;
+    DrawCircleProto circle = 4;
+    DrawOvalProto oval = 5;
+    DrawArcProto arc = 6;
+    DrawPathProto path = 7;
+    DrawImageProto image = 8;
+    DrawPointsProto points = 9;
+    DrawVerticesProto vertices = 10;
+  }
+}
+
+message DrawLineProto {
+  sdui.ui.geometry.OffsetProto p1 = 1;
+  sdui.ui.geometry.OffsetProto p2 = 2;
+  sdui.ui.graphics.PaintProto paint = 3;
+}
+
+message DrawRectProto {
+  sdui.ui.geometry.RectProto rect = 1;
+  sdui.ui.graphics.PaintProto paint = 2;
+}
+
+message DrawRoundRectProto {
+  sdui.ui.geometry.RoundRectProto round_rect = 1;
+  sdui.ui.graphics.PaintProto paint = 2;
+}
+
+message DrawCircleProto {
+  sdui.ui.geometry.OffsetProto center = 1;
+  float radius = 2;
+  sdui.ui.graphics.PaintProto paint = 3;
+}
+
+message DrawOvalProto {
+  sdui.ui.geometry.RectProto bounds = 1;
+  sdui.ui.graphics.PaintProto paint = 2;
+}
+
+message DrawArcProto {
+  sdui.ui.geometry.RectProto bounds = 1;
+  float start_angle = 2;
+  float sweep_angle = 3;
+  bool use_center = 4;
+  sdui.ui.graphics.PaintProto paint = 5;
+}
+
+message DrawPathProto {
+  sdui.ui.graphics.PathProto path = 1;
+  sdui.ui.graphics.PaintProto paint = 2;
+}
+
+message DrawImageProto {
+  sdui.ui.graphics.ImageBitmapProto image = 1;
+  sdui.ui.unit.IntOffsetProto src_offset = 2;
+  sdui.ui.unit.IntSizeProto src_size = 3;
+  sdui.ui.unit.IntOffsetProto dst_offset = 4;
+  sdui.ui.unit.IntSizeProto dst_size = 5;
+  sdui.ui.graphics.PaintProto paint = 6;
+}
+
+message DrawPointsProto {
+  sdui.ui.graphics.PointModeProto mode = 1;
+  repeated sdui.ui.geometry.OffsetProto points = 2;
+  sdui.ui.graphics.PaintProto paint = 3;
+}
+
+message DrawVerticesProto {
+  sdui.ui.graphics.VerticesProto vertices = 1;
+  sdui.ui.graphics.BlendModeProto blend_mode = 2;
+  sdui.ui.graphics.PaintProto paint = 3;
+}
+
+message CanvasProto {
+  repeated CanvasTransformProto transforms = 1;
+  repeated CanvasClipProto clips = 2;
+  repeated CanvasSaveLayerProto save_layers = 3;
+  repeated CanvasDrawCommandProto commands = 4;
+}

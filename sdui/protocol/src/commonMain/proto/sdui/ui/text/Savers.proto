@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message TextSaverEntryProto {
+  string saver_name = 1;
+  string original_type = 2;
+  bool supports_restore = 3;
+  bool is_expect_declaration = 4;
+}
+
+message SaversProto {
+  repeated TextSaverEntryProto savers = 1;
+  bool supports_nullable_save = 2;
+  bool supports_nullable_restore = 3;
+  bool supports_non_null_value_class_saver = 4;
+  repeated string annotation_types = 5;
+}

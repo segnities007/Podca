@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/Arrangement.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message FlowRowScopeProto {
+  float fill_max_row_height_fraction = 1;
+}
+
+message FlowRowOverflowScopeProto {
+  FlowRowScopeProto row_scope = 1;
+  int32 shown_item_count = 2;
+}
+
+message FlowColumnScopeProto {
+  float fill_max_column_width_fraction = 1;
+}
+
+message FlowColumnOverflowScopeProto {
+  FlowColumnScopeProto column_scope = 1;
+  int32 shown_item_count = 2;
+}
+
+message FlowRowProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  ArrangementHorizontalProto horizontal_arrangement = 2;
+  ArrangementVerticalProto vertical_arrangement = 3;
+  int32 max_items_in_each_row = 4;
+  int32 max_lines = 5;
+}
+
+message FlowColumnProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  ArrangementVerticalProto vertical_arrangement = 2;
+  ArrangementHorizontalProto horizontal_arrangement = 3;
+  int32 max_items_in_each_column = 4;
+  int32 max_lines = 5;
+}

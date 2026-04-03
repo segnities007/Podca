@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sdui.foundation.layout;
+
+import "sdui/foundation/layout/FlowLayoutOverflow.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.foundation.layout";
+option java_multiple_files = true;
+
+message FlowLayoutBuildingBlocksProto {
+  int32 max_items_in_main_axis = 1;
+  int32 max_lines = 2;
+  sdui.ui.unit.DpProto main_axis_spacing = 3;
+  sdui.ui.unit.DpProto cross_axis_spacing = 4;
+  FlowLayoutOverflowProto overflow = 5;
+}

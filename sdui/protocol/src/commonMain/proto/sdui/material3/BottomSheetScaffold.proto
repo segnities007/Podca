@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/SheetDefaults.proto";
+import "sdui/material3/SnackbarHost.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message BottomSheetScaffoldStateProto {
+  SheetStateProto bottom_sheet_state = 1;
+  SnackbarHostStateProto snackbar_host_state = 2;
+}
+
+message BottomSheetScaffoldProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  BottomSheetScaffoldStateProto bottom_sheet_scaffold_state = 2;
+  sdui.ui.unit.DpProto sheet_peek_height = 3;
+  bool sheet_gestures_enabled = 4;
+  bool has_content = 5;
+  bool has_sheet_content = 6;
+}

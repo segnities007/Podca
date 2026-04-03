@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/FloatingActionButton.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+// FabPositionProto is defined in FloatingActionButton.proto, because the SDUI protocol
+// models the FAB placement alongside FAB-specific tokens.
+
+message ScaffoldProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  FabPositionProto floating_action_button_position = 2;
+  bool has_content = 3;
+}

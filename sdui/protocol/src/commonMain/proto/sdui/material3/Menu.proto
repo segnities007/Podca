@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message MenuItemColorsProto {
+  sdui.ui.graphics.ColorProto text_color = 1;
+  sdui.ui.graphics.ColorProto leading_icon_color = 2;
+  sdui.ui.graphics.ColorProto trailing_icon_color = 3;
+  sdui.ui.graphics.ColorProto disabled_text_color = 4;
+  sdui.ui.graphics.ColorProto disabled_leading_icon_color = 5;
+  sdui.ui.graphics.ColorProto disabled_trailing_icon_color = 6;
+}
+
+message MenuProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool expanded = 2;
+  bool has_content = 3;
+}

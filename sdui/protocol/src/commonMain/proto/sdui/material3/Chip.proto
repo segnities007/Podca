@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/unit/Dp.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message ChipColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto label_color = 2;
+  sdui.ui.graphics.ColorProto leading_icon_content_color = 3;
+  sdui.ui.graphics.ColorProto trailing_icon_content_color = 4;
+  sdui.ui.graphics.ColorProto disabled_container_color = 5;
+  sdui.ui.graphics.ColorProto disabled_label_color = 6;
+  sdui.ui.graphics.ColorProto disabled_leading_icon_content_color = 7;
+  sdui.ui.graphics.ColorProto disabled_trailing_icon_content_color = 8;
+}
+
+message SelectableChipColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto label_color = 2;
+  sdui.ui.graphics.ColorProto leading_icon_color = 3;
+  sdui.ui.graphics.ColorProto trailing_icon_color = 4;
+  sdui.ui.graphics.ColorProto disabled_container_color = 5;
+  sdui.ui.graphics.ColorProto disabled_label_color = 6;
+  sdui.ui.graphics.ColorProto disabled_leading_icon_color = 7;
+  sdui.ui.graphics.ColorProto disabled_trailing_icon_color = 8;
+  sdui.ui.graphics.ColorProto selected_container_color = 9;
+  sdui.ui.graphics.ColorProto disabled_selected_container_color = 10;
+  sdui.ui.graphics.ColorProto selected_label_color = 11;
+  sdui.ui.graphics.ColorProto selected_leading_icon_color = 12;
+  sdui.ui.graphics.ColorProto selected_trailing_icon_color = 13;
+}
+
+message ChipBorderProto {
+  sdui.ui.graphics.ColorProto border_color = 1;
+  sdui.ui.graphics.ColorProto disabled_border_color = 2;
+  sdui.ui.unit.DpProto border_width = 3;
+}
+
+message ChipElevationProto {
+  sdui.ui.unit.DpProto elevation = 1;
+  sdui.ui.unit.DpProto pressed_elevation = 2;
+  sdui.ui.unit.DpProto focused_elevation = 3;
+  sdui.ui.unit.DpProto hovered_elevation = 4;
+  sdui.ui.unit.DpProto dragged_elevation = 5;
+  sdui.ui.unit.DpProto disabled_elevation = 6;
+}
+
+message SelectableChipElevationProto {
+  sdui.ui.unit.DpProto elevation = 1;
+  sdui.ui.unit.DpProto pressed_elevation = 2;
+  sdui.ui.unit.DpProto focused_elevation = 3;
+  sdui.ui.unit.DpProto hovered_elevation = 4;
+  sdui.ui.unit.DpProto dragged_elevation = 5;
+  sdui.ui.unit.DpProto disabled_elevation = 6;
+}
+
+message ChipProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool enabled = 2;
+  string label = 3;
+  bool has_leading_icon = 4;
+  bool has_trailing_icon = 5;
+  ChipColorsProto colors = 6;
+  ChipBorderProto border = 7;
+  ChipElevationProto elevation = 8;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum MotionSchemeProto {
+  MOTION_SCHEME_UNSPECIFIED = 0;
+  MOTION_SCHEME_STANDARD = 1;
+  MOTION_SCHEME_EXPRESSIVE = 2;
+}

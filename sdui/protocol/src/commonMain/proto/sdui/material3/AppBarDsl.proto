@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message AppBarClickableItemProto {
+  string content_description = 1;
+  bool enabled = 2;
+  bool visible_in_overflow_menu = 3;
+}
+
+message AppBarToggleableItemProto {
+  string content_description = 1;
+  bool checked = 2;
+  bool enabled = 3;
+  bool visible_in_overflow_menu = 4;
+}
+
+message AppBarCustomItemProto {
+  bool visible_in_overflow_menu = 1;
+}
+
+message AppBarScopeProto {
+  repeated AppBarClickableItemProto clickable_items = 1;
+  repeated AppBarToggleableItemProto toggleable_items = 2;
+  repeated AppBarCustomItemProto custom_items = 3;
+}
+
+message AppBarMenuStateProto {
+  bool expanded = 1;
+}

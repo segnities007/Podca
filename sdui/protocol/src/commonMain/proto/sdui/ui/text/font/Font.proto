@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sdui.ui.text.font;
+
+import "sdui/ui/text/font/FontLoadingStrategy.proto";
+import "sdui/ui/text/font/FontStyle.proto";
+import "sdui/ui/text/font/FontSynthesis.proto";
+import "sdui/ui/text/font/FontVariation.proto";
+import "sdui/ui/text/font/FontWeight.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text.font";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.text.font.Font 相当
+ */
+message FontProto {
+  int32 res_id = 1;
+  FontWeightProto weight = 2;
+  FontStyleProto style = 3;
+  FontLoadingStrategyProto loading_strategy = 4;
+  FontVariationSettingsProto variation_settings = 5;
+}

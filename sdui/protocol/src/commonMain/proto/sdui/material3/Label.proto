@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/graphics/Color.proto";
+import "sdui/ui/text/TextStyle.proto";
+import "sdui/ui/unit/TextUnit.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message LabelProto {
+  string text = 1;
+  sdui.ui.graphics.ColorProto color = 2;
+  sdui.ui.text.TextStyleProto style = 3;
+  sdui.ui.unit.TextUnitProto minimized_label_text_size = 4;
+  bool expanded = 5;
+  bool minimized = 6;
+}

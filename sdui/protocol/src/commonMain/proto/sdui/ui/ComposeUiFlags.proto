@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.ui;
+
+option java_package = "com.podca.sdui.protocol.ui";
+option java_multiple_files = true;
+
+message ComposeUiFlagsProto {
+  bool are_vector_backed_layers_enabled = 1;
+  bool is_semantics_publishing_enabled = 2;
+  bool is_nested_scroll_dispatch_enabled = 3;
+}

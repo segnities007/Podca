@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/ui/modifier/Modifier.proto";
+import "sdui/ui/graphics/Color.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum WideNavigationRailValueProto {
+  WIDE_NAVIGATION_RAIL_VALUE_COLLAPSED = 0;
+  WIDE_NAVIGATION_RAIL_VALUE_EXPANDED = 1;
+}
+
+message WideNavigationRailColorsProto {
+  sdui.ui.graphics.ColorProto container_color = 1;
+  sdui.ui.graphics.ColorProto content_color = 2;
+  sdui.ui.graphics.ColorProto modal_container_color = 3;
+  sdui.ui.graphics.ColorProto modal_scrim_color = 4;
+  sdui.ui.graphics.ColorProto modal_content_color = 5;
+}
+
+message ModalWideNavigationRailPropertiesProto {
+  bool should_dismiss_on_back_press = 1;
+}
+
+message WideNavigationRailProto {
+  sdui.ui.modifier.ModifierProto modifier = 1;
+  bool expanded = 2;
+  bool modal = 3;
+  bool has_header = 4;
+}

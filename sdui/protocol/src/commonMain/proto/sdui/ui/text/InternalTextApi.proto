@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message InternalTextApiProto {
+  string annotation_name = 1;
+  string opt_in_level = 2;
+  string message = 3;
+  repeated string targets = 4;
+  string retention = 5;
+}

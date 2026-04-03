@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.Matrix 相当
+ * 4x4 の変換行列（16個の浮動小数点数）。
+ */
+message MatrixProto {
+  // 16個の浮動小数点数
+  repeated float values = 1;
+}

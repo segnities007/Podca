@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sdui.ui.unit;
+
+option java_package = "com.podca.sdui.protocol.ui.unit";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.unit.Constraints 相当
+ * レイアウトの測定に使用される最小/最大サイズの制限（ピクセル単位）。
+ *
+ * 本家の Constraints は Long にパッキングされていますが、
+ * プロトコル上は可読性と扱いやすさのために 4 つのフィールドとして定義します。
+ */
+message ConstraintsProto {
+  // 最小幅 (pixels)
+  int32 min_width = 1;
+
+  // 最大幅 (pixels)。無制限の場合は 2147483647 (Int.MAX_VALUE)
+  int32 max_width = 2;
+
+  // 最小高さ (pixels)
+  int32 min_height = 3;
+
+  // 最大高さ (pixels)。無制限の場合は 2147483647 (Int.MAX_VALUE)
+  int32 max_height = 4;
+}

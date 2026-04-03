@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.ui.text;
+
+import "sdui/ui/geometry/Rect.proto";
+
+option java_package = "com.podca.sdui.protocol.ui.text";
+option java_multiple_files = true;
+
+message ParagraphProto {
+  float width = 1;
+  float height = 2;
+  int32 line_count = 3;
+  bool did_exceed_max_lines = 4;
+  sdui.ui.geometry.RectProto first_bounding_box = 5;
+}

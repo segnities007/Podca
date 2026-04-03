@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+import "sdui/material3/TextField.proto";
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+message SecureTextFieldProto {
+  TextFieldProto field = 1;
+  bool revealed = 2;
+}
+
+message OutlinedSecureTextFieldProto {
+  TextFieldProto field = 1;
+  bool revealed = 2;
+}

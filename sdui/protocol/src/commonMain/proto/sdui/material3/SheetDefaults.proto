@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sdui.material3;
+
+option java_package = "com.podca.sdui.protocol.material3";
+option java_multiple_files = true;
+
+enum SheetValueProto {
+  SHEET_VALUE_HIDDEN = 0;
+  SHEET_VALUE_EXPANDED = 1;
+  SHEET_VALUE_PARTIALLY_EXPANDED = 2;
+}
+
+message SheetStateProto {
+  bool skip_partially_expanded = 1;
+  SheetValueProto current_value = 2;
+  SheetValueProto target_value = 3;
+  bool is_visible = 4;
+  bool is_animation_running = 5;
+  bool has_expanded_state = 6;
+  bool has_partially_expanded_state = 7;
+  bool skip_hidden_state = 8;
+  float offset = 9;
+}

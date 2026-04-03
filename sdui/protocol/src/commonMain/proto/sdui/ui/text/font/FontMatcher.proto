@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sdui.ui.text.font;
+
+option java_package = "com.podca.sdui.protocol.ui.text.font";
+option java_multiple_files = true;
+
+message FontMatcherProto {
+  bool matches_weight = 1;
+  bool matches_style = 2;
+  bool matches_synthesis = 3;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.StrokeJoin 相当
+ */
+enum StrokeJoinProto {
+  STROKE_JOIN_MITER = 0;
+  STROKE_JOIN_ROUND = 1;
+  STROKE_JOIN_BEVEL = 2;
+}

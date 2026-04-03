@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package sdui.ui.graphics;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.BlendMode 相当
+ * ピクセルをブレンドする際のアルゴリズム。
+ */
+enum BlendModeProto {
+  // 何も残さない
+  BLEND_MODE_CLEAR = 0;
+  // ソースのみ
+  BLEND_MODE_SRC = 1;
+  // デスティネーションのみ
+  BLEND_MODE_DST = 2;
+  // ソースをデスティネーションの上に重ねる (デフォルト)
+  BLEND_MODE_SRC_OVER = 3;
+  // ソースをデスティネーションの下に重ねる
+  BLEND_MODE_DST_OVER = 4;
+  // 重なる部分のソースのみ表示
+  BLEND_MODE_SRC_IN = 5;
+  // 重なる部分のデスティネーションのみ表示
+  BLEND_MODE_DST_IN = 6;
+  // 重ならない部分のソースのみ表示
+  BLEND_MODE_SRC_OUT = 7;
+  // 重ならない部分のデスティネーションのみ表示
+  BLEND_MODE_DST_OUT = 8;
+  // 重なる部分にソースを重ね、アルファをデスティネーションに合わせる
+  BLEND_MODE_SRC_ATOP = 9;
+  // 重なる部分にデスティネーションを重ね、アルファをソースに合わせる
+  BLEND_MODE_DST_ATOP = 10;
+  // 排他的論理和
+  BLEND_MODE_XOR = 11;
+  // 加算
+  BLEND_MODE_PLUS = 12;
+  // 乗算 (カラーのみ)
+  BLEND_MODE_MODULATE = 13;
+  // スクリーン
+  BLEND_MODE_SCREEN = 14;
+  // オーバーレイ
+  BLEND_MODE_OVERLAY = 15;
+  // 暗い方を選択
+  BLEND_MODE_DARKEN = 16;
+  // 明るい方を選択
+  BLEND_MODE_LIGHTEN = 17;
+  // 覆い焼きカラー
+  BLEND_MODE_COLOR_DODGE = 18;
+  // 焼き込みカラー
+  BLEND_MODE_COLOR_BURN = 19;
+  // ハードライト
+  BLEND_MODE_HARDLIGHT = 20;
+  // ソフトライト
+  BLEND_MODE_SOFTLIGHT = 21;
+  // 差の絶対値
+  BLEND_MODE_DIFFERENCE = 22;
+  // 除外
+  BLEND_MODE_EXCLUSION = 23;
+  // 乗算 (アルファ含む)
+  BLEND_MODE_MULTIPLY = 24;
+  // 色相
+  BLEND_MODE_HUE = 25;
+  // 彩度
+  BLEND_MODE_SATURATION = 26;
+  // カラー
+  BLEND_MODE_COLOR = 27;
+  // 輝度
+  BLEND_MODE_LUMINOSITY = 28;
+}

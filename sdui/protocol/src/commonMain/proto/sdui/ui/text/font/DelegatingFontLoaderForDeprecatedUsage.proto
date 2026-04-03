@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sdui.ui.text.font;
+
+option java_package = "com.podca.sdui.protocol.ui.text.font";
+option java_multiple_files = true;
+
+message DelegatingFontLoaderForDeprecatedUsageProto {
+  bool delegates_to_platform_loader = 1;
+  bool preserves_legacy_behavior = 2;
+}

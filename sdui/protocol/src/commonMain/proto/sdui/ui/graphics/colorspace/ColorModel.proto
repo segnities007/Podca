@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sdui.ui.graphics.colorspace;
+
+option java_package = "com.podca.sdui.protocol.ui.graphics.colorspace";
+option java_multiple_files = true;
+
+/**
+ * androidx.compose.ui.graphics.colorspace.ColorModel 相当
+ */
+enum ColorModelProto {
+  COLOR_MODEL_RGB = 0;
+  COLOR_MODEL_XYZ = 1;
+  COLOR_MODEL_LAB = 2;
+  COLOR_MODEL_CMYK = 3;
+}
