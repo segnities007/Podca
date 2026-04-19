@@ -42,63 +42,46 @@ public fun PodcaPlayer(
     }
 }
 
+/**
+ * [PodcaDocumentNode.type] に応じて子ツリーを再帰描画する。
+ *
+ * 振り分け順: `Root` → `foundation.*` → `material3.*` → `ui.*` → それ以外（子のみ再帰）。
+ * マッチしない type もクラッシュさせず、子を辿る。
+ */
 @Composable
 public fun PodcaRenderDocumentNode(
     node: PodcaDocumentNode,
     runtime: PodcaRuntime,
 ) {
+    @Composable
+    fun Subtree(child: PodcaDocumentNode) {
+        PodcaRenderDocumentNode(node = child, runtime = runtime)
+    }
+
     when {
         node.type == "Root" -> Column {
-            PodcaRenderChildren(
-                node = node,
-                renderChild = { child ->
-                    PodcaRenderDocumentNode(
-                        node = child,
-                        runtime = runtime,
-                    )
-                },
-            )
+            PodcaRenderChildren(node = node, renderChild = { Subtree(it) })
         }
 
         node.type.startsWith("foundation.") -> PodcaRenderFoundationNode(
             node = node,
-            renderChild = { child ->
-                PodcaRenderDocumentNode(
-                    node = child,
-                    runtime = runtime,
-                )
-            },
+            renderChild = { Subtree(it) },
         )
 
         node.type.startsWith("material3.") -> PodcaRenderMaterial3Node(
             node = node,
             runtime = runtime,
-            renderChild = { child ->
-                PodcaRenderDocumentNode(
-                    node = child,
-                    runtime = runtime,
-                )
-            },
+            renderChild = { Subtree(it) },
         )
 
         node.type.startsWith("ui.") -> PodcaRenderUiNode(
             node = node,
-            renderChild = { child ->
-                PodcaRenderDocumentNode(
-                    node = child,
-                    runtime = runtime,
-                )
-            },
+            renderChild = { Subtree(it) },
         )
 
         else -> PodcaRenderChildren(
             node = node,
-            renderChild = { child ->
-                PodcaRenderDocumentNode(
-                    node = child,
-                    runtime = runtime,
-                )
-            },
+            renderChild = { Subtree(it) },
         )
     }
 }

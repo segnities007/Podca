@@ -71,4 +71,4 @@ Podca は **Hybrid SDUI** として設計します。
 
 長期的には **クライアントを薄くし、表現を低レベル命令で足す** Remote Compose 寄りの形に寄せたい。その場合、ウィジェット単位の `.proto` 増殖を抑え、**少数の命令セット＋インタプリタ**へ表現の中心を移す検討をする。現状の `material3.*` / `foundation.*` ツリーは当面の生産性・互換のため維持しつつ、新規の広がり方をここで意識する。
 
-詳細なディレクトリツリーは [ARCHITECTURE.md](./ARCHITECTURE.md)。リポジトリ全体の起動・API はルートの [README.md](../README.md)。
+詳細なディレクトリツリーは [ARCHITECTURE.md](./ARCHITECTURE.md)。`player` サブツリーの描画パイプラインは [player/README.md](./player/README.md)。リポジトリ全体の起動・API はルートの [README.md](../README.md)。
