@@ -1,0 +1,3 @@
+Vendored from: https://github.com/android/skills
+Commit: b281881e3fbe044d29b4ea757de06758a4ca81ec
+License: see ANDROID_SKILLS_LICENSE.txt (Apache-2.0)

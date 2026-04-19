@@ -7,11 +7,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 
 class PodcaActionDispatcherTest {
     @Test
-    fun dispatch_returns_rejected_result_when_handler_is_missing() = runBlocking {
+    fun dispatch_returns_rejected_result_when_handler_is_missing() = runTest {
         val dispatcher = PodcaActionDispatcher()
         val event = ClientEventProto(
             event_id = "event-1",
@@ -28,7 +28,7 @@ class PodcaActionDispatcherTest {
     }
 
     @Test
-    fun dispatch_invokes_registered_handler() = runBlocking {
+    fun dispatch_invokes_registered_handler() = runTest {
         val dispatcher = PodcaActionDispatcher()
         val event = ClientEventProto(
             event_id = "event-2",

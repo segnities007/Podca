@@ -9,6 +9,7 @@ import androidx.compose.runtime.Recomposer
 import com.podca.sdui.protocol.core.ActionBindingProto
 import com.podca.sdui.protocol.core.NodeProto
 import com.squareup.wire.Message
+import kotlin.time.TimeSource
 import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancelAndJoin
@@ -142,9 +143,10 @@ public suspend fun renderPodcaTree(content: @Composable () -> Unit): PodcaNode =
         val root = PodcaNode(type = "Root")
         val applier = PodcaApplier(root)
         lateinit var frameClock: BroadcastFrameClock
+        val start = TimeSource.Monotonic.markNow()
         frameClock = BroadcastFrameClock {
             launch {
-                frameClock.sendFrame(System.nanoTime())
+                frameClock.sendFrame(start.elapsedNow().inWholeNanoseconds)
             }
         }
         val recomposer = Recomposer(coroutineContext + frameClock)

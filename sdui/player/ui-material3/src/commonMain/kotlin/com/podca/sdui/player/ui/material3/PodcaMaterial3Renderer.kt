@@ -588,12 +588,12 @@ public fun PodcaRenderMaterial3Node(
 
         "material3.TimePicker" -> {
             val proto = runCatching { TimePickerProto.ADAPTER.decode(node.payload) }.getOrElse { TimePickerProto(enabled = true) }
+            val hour = proto.selected_hour.coerceIn(0, 23)
+            val minute = proto.selected_minute.coerceIn(0, 59)
+            fun pad2(n: Int): String = n.toString().padStart(2, '0')
             Column(modifier = proto.modifier.toComposeModifier()) {
                 Text(
-                    text = "TimePicker %02d:%02d".format(
-                        proto.selected_hour.coerceIn(0, 23),
-                        proto.selected_minute.coerceIn(0, 59),
-                    ),
+                    text = "TimePicker ${pad2(hour)}:${pad2(minute)}",
                 )
                 PodcaRenderChildren(node = node, renderChild = renderChild)
             }

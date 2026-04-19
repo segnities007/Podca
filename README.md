@@ -1,95 +1,159 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop (JVM), Server.
+# Podca
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Server-Driven UI (SDUI) for Kotlin Multiplatform / Compose Multiplatform.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+Podca lets you describe UI as a tree (nodes + actions) on the Studio side, ship it as bytes, and render it on the Player side.
 
-* [/server](./server/src/main/kotlin) is for the Ktor server application.
+## Repository Layout
 
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+- `composeApp/`: The Compose Multiplatform sample application (marketing site + SDUI demo in `podcaIntroMain/` and shared web helpers in `webMain/`).
+- `sdui/`: Protocol, Studio, and Player libraries（モジュール一覧と開発フローは [sdui/README.md](sdui/README.md)、ツリーと責務は [sdui/ARCHITECTURE.md](sdui/ARCHITECTURE.md)）。
+- `docs/`: プロダクトの目的・技術スタック要約と、各 README への索引（[docs/README.md](docs/README.md)）。
+- `server/`: Ktor server (health API, optional static hosting of the web build).
+- `iosApp/`: iOS entry point that hosts the ComposeApp UI.
+- `.cursor/skills/`: Cursor 向けに置いた [Android 公式 Skills](https://github.com/android/skills)（AGP / Compose 移行 / Navigation 3 など）。エディタがプロジェクトスキルを読み込む設定なら、エージェントやインライン補助のコンテキストとして利用できます（Gemini 用の `android skills add` とは別経路）。
 
-### Build and Run Android Application
+## Architecture (High Level)
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+Gradle モジュール（`settings.gradle.kts` の `include` と一致）:
 
-### Build and Run Desktop (JVM) Application
+- **`sdui:protocol`**: Wire / Protobuf の SDUI ノード・アクション定義。
+- **`sdui:studio:*`**: オーサリング用（`Podca*` DSL でツリーを組み立て、`ByteArray` にエンコード）。公開 API は主に **`sdui:studio:studio`**。
+- **`sdui:player:*`**: 再生用（バイト列をデコードして Compose で描画）。アプリから使うのは主に **`sdui:player:player`** と **`sdui:player:engine`**。
 
-To build and run the development version of the desktop app, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:run
-  ```
+マーケティング用のサンプルツリーは **`sdui:marketing`** にまとまっています（`AGENTS.md` のデモ方針と同じ）。
 
-### Build and Run Server
+## アプリの起動方法
 
-To build and run the development version of the server, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :server:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :server:run
-  ```
+このリポジトリで起動できるのは次の **2 つ**です（別プロセスです）。
 
-### Build and Run Web Application
+| 何を起動するか | モジュール | 役割 |
+|----------------|------------|------|
+| サンプルアプリ（SDUI デモ UI） | `composeApp` | Android / iOS / Desktop / ブラウザで同じ `App()` を表示 |
+| API ＋ 任意で Web 静的配信 | `server` | Ktor。`/api/health` など。サイトファイルを置けば `/` で配信も可 |
 
-To build and run the development version of the web app, use the run configuration from the run widget
-in your IDE's toolbar or run it directly from the terminal:
-- for the Wasm target (faster, modern browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-- for the JS target (slower, supports older browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:jsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
-    ```
+### composeApp の起動（サンプルアプリ）
 
-### Build and Run iOS Application
+**共通**: リポジトリのルートでコマンドを実行します（Windows は `gradlew.bat`）。
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+1. **Android**  
+   - ターミナル: `./gradlew :composeApp:assembleDebug` でビルドし、Android Studio の Run で `composeApp` を選んで端末／エミュレータにインストールして起動。  
+   - または Studio からそのまま Run（推奨）。
+
+2. **デスクトップ（JVM）**  
+   ```shell
+   ./gradlew :composeApp:run
+   ```  
+   Windows: `.\gradlew.bat :composeApp:run`
+
+3. **Web ブラウザ（開発サーバ）**  
+   - Wasm（推奨）: `./gradlew :composeApp:wasmJsBrowserDevelopmentRun`  
+   - JS: `./gradlew :composeApp:jsBrowserDevelopmentRun`  
+   起動後、Gradle のログに出る URL（通常は `http://localhost:...`）をブラウザで開きます。
+
+4. **iOS**  
+   - `iosApp` フォルダを Xcode で開き、スキームを選んで Run。  
+   - Compose の UI は `ComposeApp` フレームワーク経由で表示されます（`iosApp/iosApp/ContentView.swift`）。
+
+### server の起動（Ktor）
+
+サイトを配信しない場合でもサーバーだけ動かせます。
+
+```shell
+./gradlew :server:run
+```
+
+Windows: `.\gradlew.bat :server:run`  
+デフォルトで **ポート 9090**（`server` モジュールの `SERVER_PORT`）。Webpack の開発サーバ（`:composeApp:wasmJsBrowserDevelopmentRun` などがよく使う **8080**）などと被りにくい番号にしてあります。
+
+- 動作確認: `http://localhost:9090/api/health` → `ok`
+- **別ポートにしたい場合**: `PODCA_SERVER_PORT=8088 ./gradlew :server:run`（Windows PowerShell: `$env:PODCA_SERVER_PORT=8088; .\gradlew.bat :server:run`）。環境変数 `PORT` でも上書きできます（1〜65535）。
+- ビルド済みの Web 一式を同じプロセスで配信したい場合は、README 後半の **「Serve the build with Ktor」** と **`PODCA_SITE_ROOT`** の説明を参照してください。
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## Marketing site (Web)
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+The web build is a single-page app with **hash routes** that stay in sync with in-app navigation (back/forward and deep links):
+
+| Section | URL fragment |
+|---------|----------------|
+| Home | `#home` |
+| Architecture | `#architecture` |
+| Get started | `#get-started` |
+| Examples | `#examples` |
+
+On Android, Desktop, and iOS the same `MarketingApp()` runs without URL syncing.
+
+Entry composable: `App()` in `composeApp/src/podcaIntroMain/kotlin/.../App.kt`.
+
+### Development (browser)
+
+Wasm (recommended):
+
+```shell
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+```
+
+Windows:
+
+```shell
+.\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
+```
+
+JS (slower, more compatible):
+
+```shell
+./gradlew :composeApp:jsBrowserDevelopmentRun
+```
+
+Windows:
+
+```shell
+.\gradlew.bat :composeApp:jsBrowserDevelopmentRun
+```
+
+### Production static output
+
+```shell
+./gradlew :composeApp:wasmJsBrowserDistribution
+```
+
+Outputs under `composeApp/build/dist/wasmJs/productionExecutable/` (includes `composeApp.js`, wasm binaries, `index.html`, and `styles.css` copied from `composeApp/src/webMain/resources/`).
+
+For a JS production bundle, use `:composeApp:jsBrowserDistribution` (output under `composeApp/build/dist/js/productionExecutable/`).
+
+Host that folder on any static file server (S3, nginx, GitHub Pages, Netlify, etc.). Hash routing does not require server-side path rewrites.
+
+### Serve the build with Ktor (optional)
+
+1. Build the Wasm distribution (see above), or run:
+
+   ```shell
+   ./gradlew :server:preparePodcaSite
+   ```
+
+   which copies artifacts into `server/build/podca-site/`.
+
+2. Point the server at that directory and run:
+
+   ```shell
+   export PODCA_SITE_ROOT="$(pwd)/server/build/podca-site"
+   ./gradlew :server:run
+   ```
+
+   If `PODCA_SITE_ROOT` is not set, the server looks for `composeApp/build/dist/wasmJs/productionExecutable` relative to the current working directory (repository root works).
+
+- `GET /api/health` — health check.
+- `GET /api/podca/marketing-document?tab=0..3` — マーケ用タブごとの SDUI ドキュメント（`application/octet-stream`）。`composeApp` の `MarketingApp` が Ktor Client で取得する本流と同じペイロード（`sdui:marketing` をサーバー上でエンコード）。
+- `GET /api/podca/welcome-document` — 別系統のサンプル SDUI ペイロード（同上フォーマット）。マーケデモのタブ API ではない。
+
+どちらもサーバー側は **Podca Studio**（`Podca*` DSL）でエンコードしており、androidx Compose UI / Material には依存しません。
+
+## Run the sample & server (quick reference)
+
+Launch steps for **composeApp** (Android, Desktop, Web dev server, iOS) and **server** are summarized in Japanese in the **アプリの起動方法** section (above). Web production build and Ktor static hosting stay under **Marketing site (Web)**.
+
+## License
+
+Apache License 2.0. See [LICENSE](./LICENSE).

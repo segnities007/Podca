@@ -18,29 +18,24 @@ Podca は **Hybrid SDUI** として設計します。
 
 このため、Podca は「関数本体を配る」仕組みではなく、「UI とロジックの接点を宣言的に配る」仕組みです。
 
-## モジュール構成
+## モジュール構成（Gradle パス）
 
-Podca は以下の 3 つの主要レイヤーで構成されています。
+リポジトリルートの `settings.gradle.kts` の `include` と対応します。
 
-### 1. Podca Protocol (`podca-protocol`)
-全ての基盤となる通信規約です。
-- 役割: Wire (Protobuf) を用いた UI コンポーネントのシリアライズ定義。
-- 内容: `sdui/ui/` (Modifier, Color等), `sdui/foundation/`, `sdui/material3/` 等。
-
-### 2. Podca Studio (`podca-studio-`)
-番組（UI）を制作するサーバーサイド SDK です。
-- `podca-studio-core`: サーバー側での Composition や Applier の基盤。
-- `podca-studio-ui-core`: `androidx.compose.ui` 相当。Modifier, Alignment, Color 等の DSL。
-- `podca-studio-ui-foundation`: Row, Column, Text 等の基本 DSL。
-- `podca-studio-ui-material3`: Material 3 デザインシステムに基づく DSL。
-
-### 3. Podca Player (`podca-player-`)
-番組を受信し、画面に再生するクライアントサイド SDK です。
-- `podca-player`: 利用者が Compose App で使用する最上位のエントリーポイント。
-- `podca-player-engine`: バイナリのデコード、action dispatch、state store、document controller を行うコアエンジン。
-- `podca-player-ui-core`: `androidx.compose.ui` 相当。ModifierApplier 等、Modifier を実機 UI に適用する核。
-- `podca-player-ui-foundation`: Foundation コンポーネントの描画実装。
-- `podca-player-ui-material3`: Material 3 コンポーネントの描画実装。
+| Gradle モジュール | 役割 |
+|-------------------|------|
+| `:sdui:protocol` | Wire / Protobuf。`NodeProto` および `ui` / `foundation` / `material3` 相当の共有契約。 |
+| `:sdui:studio:core` | `PodcaNode` / `PodcaTree`、エンコードの基盤。 |
+| `:sdui:studio:ui-core` | Modifier・Alignment・Color 等（Compose UI 寄りの DSL）。 |
+| `:sdui:studio:ui-foundation` | Row / Column / Flow / Grid 等のレイアウト DSL。 |
+| `:sdui:studio:ui-material3` | Material 3 コンポーネントの DSL。 |
+| `:sdui:studio:studio` | 公開 API（`PodcaStudio` など）。アプリ・サーバーが依存するなら主にこれ。 |
+| `:sdui:marketing` | マーケ／紹介用のスタジオツリー定義とエンコード（`composeApp` デモと Ktor サンプルが利用）。 |
+| `:sdui:player:engine` | デコード、アクション dispatch、状態ストア、ドキュメント制御。 |
+| `:sdui:player:ui-core` | `ui.*` 系ノードのレンダリング。 |
+| `:sdui:player:ui-foundation` | `foundation.*` 系ノードのレンダリング。 |
+| `:sdui:player:ui-material3` | `material3.*` 系ノードのレンダリング。 |
+| `:sdui:player:player` | 公開 API（`PodcaPlayer` / `PodcaRuntime`）。 |
 
 ### Action / State の扱い
 
@@ -57,13 +52,23 @@ Podca は以下の 3 つの主要レイヤーで構成されています。
 - `studio` は `key` と `actions` を持つ `NodeProto` を生成する
 - `player` は `NodeProto` を Compose に復元する renderer を持つ
 - `player` の renderer は現時点で `Root` / 基礎レイアウト / 基本 Material 3 コンポーネントをカバーし、それ以外は安全な fallback で流す
-- `player-engine` は decode / dispatch / state patch 反映 の実行基盤を持つ
+- `player:engine` は decode / dispatch / state patch 反映 の実行基盤を持つ
 - ビジネスロジックは原則ローカル実装に置き、SDUI はその配線を宣言する
 
 ---
 
 ## 開発の進め方
 
-1. Protocol の定義: `podca-protocol` に `.proto` ファイルを追加。
-2. Studio の実装: サーバー側でそのコンポーネントを表現する DSL を作成。
-3. Player の実装: クライアント側でその信号を Compose UI に変換する Renderer を作成。
+1. Protocol の定義: `:sdui:protocol` の `src/commonMain/proto/` に `.proto` を追加し、Wire 生成物を確認する。
+2. Studio の実装: 対応する `Podca*` DSL を `sdui/studio/*` に追加する。
+3. Player の実装: 対応するレンダラを `sdui/player/ui-*` に追加する。
+
+（例外やデモ専用の回避は `AGENTS.md` の方針に従わない。）
+
+---
+
+## 進化の方向（メモ）
+
+長期的には **クライアントを薄くし、表現を低レベル命令で足す** Remote Compose 寄りの形に寄せたい。その場合、ウィジェット単位の `.proto` 増殖を抑え、**少数の命令セット＋インタプリタ**へ表現の中心を移す検討をする。現状の `material3.*` / `foundation.*` ツリーは当面の生産性・互換のため維持しつつ、新規の広がり方をここで意識する。
+
+詳細なディレクトリツリーは [ARCHITECTURE.md](./ARCHITECTURE.md)。リポジトリ全体の起動・API はルートの [README.md](../README.md)。

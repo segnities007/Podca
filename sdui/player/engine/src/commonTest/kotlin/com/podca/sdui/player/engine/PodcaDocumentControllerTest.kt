@@ -12,7 +12,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 
 class PodcaDocumentControllerTest {
     @Test
@@ -28,7 +28,7 @@ class PodcaDocumentControllerTest {
     }
 
     @Test
-    fun dispatch_applies_state_patch_from_handler() = runBlocking {
+    fun dispatch_applies_state_patch_from_handler() = runTest {
         val dispatcher = PodcaActionDispatcher()
         val controller = PodcaDocumentController(actionDispatcher = dispatcher)
         val root = NodeProto(
@@ -83,7 +83,7 @@ class PodcaDocumentControllerTest {
     }
 
     @Test
-    fun dispatch_returns_rejected_result_when_action_is_not_registered() = runBlocking {
+    fun dispatch_returns_rejected_result_when_action_is_not_registered() = runTest {
         val controller = PodcaDocumentController(actionDispatcher = PodcaActionDispatcher())
         controller.setDocument(
             PodcaDocumentNode(

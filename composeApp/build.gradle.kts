@@ -1,3 +1,5 @@
+import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.tasks.Copy
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -41,9 +43,63 @@ kotlin {
     }
     
     sourceSets {
+        val iosMain by creating {
+            dependsOn(commonMain.get())
+        }
+        sourceSets.named("iosArm64Main").configure { dependsOn(iosMain) }
+        sourceSets.named("iosSimulatorArm64Main").configure { dependsOn(iosMain) }
+
+        val podcaIntroMain by creating {
+            dependsOn(commonMain.get())
+            kotlin.srcDir("src/podcaIntroMain/kotlin")
+            dependencies {
+                implementation(projects.sdui.player.player)
+                implementation(projects.sdui.studio.studio)
+                implementation(projects.sdui.marketing)
+                implementation(libs.navigation.compose)
+                implementation(libs.ktor.clientCore)
+                implementation(libs.kotlinx.coroutinesCore)
+            }
+        }
+        val webMain by creating {
+            dependsOn(podcaIntroMain)
+            kotlin.srcDir("src/webMain/kotlin")
+            resources.srcDir("src/webMain/resources")
+            dependencies {
+                implementation(libs.compose.runtime)
+                implementation(libs.navigation.compose)
+                implementation(libs.kotlinx.browser)
+            }
+        }
+        iosMain.dependsOn(podcaIntroMain)
+        androidMain.get().dependsOn(podcaIntroMain)
+        jvmMain.get().dependsOn(podcaIntroMain)
+        sourceSets.named("jsMain").configure {
+            dependsOn(podcaIntroMain)
+            dependsOn(webMain)
+        }
+        sourceSets.named("wasmJsMain").configure {
+            dependsOn(podcaIntroMain)
+            dependsOn(webMain)
+        }
+
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.clientOkHttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.clientDarwin)
+        }
+        sourceSets.named("jsMain").configure {
+            dependencies {
+                implementation(libs.ktor.clientJs)
+            }
+        }
+        sourceSets.named("wasmJsMain").configure {
+            dependencies {
+                implementation(libs.ktor.clientJsWasmJs)
+            }
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -62,7 +118,44 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.ktor.clientJava)
         }
+    }
+}
+
+val copyPodcaWebStaticsWasm by tasks.registering(Copy::class) {
+    group = "build"
+    description = "Copies index.html and styles.css next to the Wasm production bundle."
+    from(layout.projectDirectory.dir("src/webMain/resources")) {
+        include("index.html", "styles.css")
+    }
+    into(layout.buildDirectory.dir("dist/wasmJs/productionExecutable"))
+}
+
+tasks.named("wasmJsBrowserProductionWebpack") {
+    finalizedBy(copyPodcaWebStaticsWasm)
+}
+
+val copyPodcaWebStaticsJs by tasks.registering(Copy::class) {
+    group = "build"
+    description = "Copies index.html and styles.css next to the JS production bundle."
+    from(layout.projectDirectory.dir("src/webMain/resources")) {
+        include("index.html", "styles.css")
+    }
+    into(layout.buildDirectory.dir("dist/js/productionExecutable"))
+}
+
+tasks.named("jsBrowserProductionWebpack") {
+    finalizedBy(copyPodcaWebStaticsJs)
+}
+
+tasks.withType<Copy>().configureEach {
+    if (name == "wasmJsProcessResources" || name == "jsProcessResources") {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    // jsMain と wasmJsMain の両方が webMain に依存するため、メタデータ用リソース集約で同一パスが二重になる
+    if (name == "metadataWebMainProcessResources") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
 

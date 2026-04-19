@@ -1,5 +1,7 @@
 # Podca Directory Structure
 
+リポジトリ全体の起動方法・Ktor の HTTP API・`composeApp` の構成は、ルートの [README.md](../README.md) を参照。
+
 ## Runtime Model
 
 Podca は **Hybrid SDUI** を採用します。
@@ -47,17 +49,19 @@ Podca は **Hybrid SDUI** を採用します。
 
 ```text
 sdui/
-├── protocol/               # 【全基盤】通信規格・Protobuf 定義
+├── protocol/               # 【全基盤】通信規格・Protobuf 定義 (:sdui:protocol)
 │   └── src/commonMain/proto/ # .proto ファイル (Wire 生成元)
 │
-├── studio/                 # 【制作側】Server-side SDK
+├── marketing/              # マーケ／紹介用ツリー (:sdui:marketing)。encode はサーバー・クライアント双方から利用可
+│
+├── studio/                 # 【制作側】Server-side SDK (:sdui:studio:*)
 │   ├── core/               # Composition / Applier 基盤
 │   ├── ui-core/            # Modifier / Alignment DSL (androidx.compose.ui 相当)
 │   ├── ui-foundation/      # Row / Column DSL (androidx.compose.foundation 相当)
 │   ├── ui-material3/       # Button / Card DSL (androidx.compose.material3 相当)
 │   └── studio/             # 公開 API (Entry Point: `PodcaStudio`)
 │
-└── player/                 # 【再生側】Client-side SDK
+└── player/                 # 【再生側】Client-side SDK (:sdui:player:*)
     ├── engine/             # Binary Decoder / Registry (再生エンジン)
     ├── ui-core/            # Modifier Applier (androidx.compose.ui 相当)
     ├── ui-foundation/      # Foundation レンダラー実装
@@ -77,11 +81,13 @@ sdui/
 
 ## Player Renderer Position
 
-`player/ui-core`, `player/ui-foundation`, `player/ui-material3` は、`NodeProto` を Compose に戻すレンダラー層です。
+`player/player`（`PodcaPlayer` / `PodcaRenderDocumentNode`）がルートから振り分け、`player/ui-core` / `player/ui-foundation` / `player/ui-material3` が各名前空間の `NodeProto` を Compose に戻すレンダラー層です。
 
 - `player/ui-core`
-  - `Modifier` や基本的な UI 型の適用
-  - ルートノードから child tree を描画へ落とす土台
+  - `ui.*` 系ノード（例: `ui.ZIndexModifier`）の描画
+  - `Modifier` を payload から復元する共通処理の一部
+- `player/player`（`PodcaPlayer`）
+  - `Root` ノードの特別扱いと、`foundation.*` / `material3.*` / `ui.*` への振り分け
 - `player/ui-foundation`
   - `Box` / `Row` / `Column` / `Flow` などの基礎レイアウト
   - `key` を持つノードや action を持つノードをそのまま描画に接続
@@ -90,10 +96,12 @@ sdui/
   - `actions` を UI イベントに結び、`PodcaRuntime.dispatch(...)` へ流す
   - `key` を持つ node を event 発火点として扱う
 
-### Current Renderer Coverage
+### Current Renderer Coverage（抜粋）
 
+- `player/player`（`PodcaRenderDocumentNode`）
+  - `Root` と子の traversal、名前空間別ディスパッチ
 - `player/ui-core`
-  - `Root` と child traversal
+  - `ui.ZIndexModifier` など `PodcaRenderUiNode` が扱うノード
 - `player/ui-foundation`
   - `Box`
   - `BoxWithConstraints`

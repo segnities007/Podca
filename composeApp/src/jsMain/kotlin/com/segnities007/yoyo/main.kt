@@ -2,10 +2,12 @@ package com.segnities007.yoyo
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
+import kotlinx.browser.document
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    ComposeViewport {
+    val root = document.body ?: return
+    ComposeViewport(root) {
         App()
     }
 }

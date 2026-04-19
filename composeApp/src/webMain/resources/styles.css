@@ -4,4 +4,14 @@ html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    background: #19191C;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+}
+
+.loader {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: #19191C;
 }

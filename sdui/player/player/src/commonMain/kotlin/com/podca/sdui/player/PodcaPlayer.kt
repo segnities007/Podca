@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.podca.sdui.player.engine.PodcaDocumentNode
 import com.podca.sdui.player.engine.PodcaRuntime
@@ -17,7 +18,7 @@ public fun PodcaPlayer(
     runtime: PodcaRuntime,
     modifier: Modifier = Modifier,
 ) {
-    val document = runtime.document.collectAsState().value
+    val document by runtime.document.collectAsState()
     PodcaPlayer(
         document = document,
         runtime = runtime,

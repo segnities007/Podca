@@ -17,3 +17,6 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+
+# JVM 実行ファイルのコピー先など（IDE / Gradle が生成することがあるがソースではない）
+server/bin/

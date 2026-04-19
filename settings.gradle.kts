@@ -46,6 +46,7 @@ include(":sdui:studio:ui-core")
 include(":sdui:studio:ui-foundation")
 include(":sdui:studio:ui-material3")
 include(":sdui:studio:studio") // 公開 API 追加
+include(":sdui:marketing")
 
 // Podca Player (Client-side SDK)
 include(":sdui:player:engine")

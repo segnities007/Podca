@@ -1,37 +1,44 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.wire)
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+    androidLibrary {
+        namespace = "com.podca.sdui.protocol"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        withHostTestBuilder {}
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_11)
+                }
+            }
         }
     }
     iosArm64()
     iosSimulatorArm64()
     jvm()
-    
+    js {
+        browser()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+    }
+
     sourceSets {
         commonMain {
-            kotlin.srcDir(layout.buildDirectory.dir("generated/source/wire/release"))
-
             dependencies {
                 api(libs.wire.runtime)
             }
         }
-    }
-}
-
-extensions.configure<com.android.build.api.dsl.LibraryExtension> {
-    namespace = "com.podca.sdui.protocol"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }
 
@@ -45,10 +52,14 @@ wire {
 
 tasks.matching {
     it.name == "compileKotlinMetadata" ||
+        it.name.startsWith("compileCommonMainKotlinMetadata") ||
         it.name == "compileKotlinJvm" ||
-        it.name == "compileDebugKotlinAndroid" ||
-        it.name == "compileReleaseKotlinAndroid" ||
-        it.name.startsWith("compileKotlinIos")
+        it.name == "compileAndroidMain" ||
+        it.name.startsWith("compileKotlinIos") ||
+        it.name == "compileKotlinJs" ||
+        it.name == "compileKotlinWasmJs" ||
+        it.name.startsWith("compileKotlinJs") ||
+        it.name.startsWith("compileKotlinWasmJs")
 }.configureEach {
-    dependsOn("generateReleaseProtos")
+    dependsOn("generateProtos")
 }
