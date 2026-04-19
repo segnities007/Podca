@@ -13,6 +13,7 @@
 | [AGENTS.md](../AGENTS.md) | AI／開発者向けの厳格な方針（SDUI ファースト、拡張の順序など）。 |
 | [sdui/README.md](../sdui/README.md) | SDUI ライブラリのモジュール一覧と開発フロー。 |
 | [sdui/ARCHITECTURE.md](../sdui/ARCHITECTURE.md) | ランタイムモデルと `sdui/` 以下のディレクトリ構造。 |
+| [sdui/player/README.md](../sdui/player/README.md) | Player サブツリーのモジュール表と描画パイプライン。 |
 | [sdui/protocol/README.md](../sdui/protocol/README.md) | Protocol の監査方針と Compose API との対応表。 |
 
 ## 技術スタック（要約）
