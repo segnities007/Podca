@@ -7,7 +7,7 @@ Podca lets you describe UI as a tree (nodes + actions) on the Studio side, ship 
 ## Repository Layout
 
 - `composeApp/`: The Compose Multiplatform sample application (marketing site + SDUI demo in `podcaIntroMain/` and shared web helpers in `webMain/`).
-- `sdui/`: Protocol, Studio, and Player libraries（モジュール一覧と開発フローは [sdui/README.md](sdui/README.md)、ツリーと責務は [sdui/ARCHITECTURE.md](sdui/ARCHITECTURE.md)）。
+- `sdui/`: Protocol, Studio, and Player libraries（モジュール一覧は [sdui/README.md](sdui/README.md)、ランタイム責務は [sdui/ARCHITECTURE.md](sdui/ARCHITECTURE.md)、Player の描画パイプラインは [sdui/player/README.md](sdui/player/README.md)）。
 - `docs/`: プロダクトの目的・技術スタック要約と、各 README への索引（[docs/README.md](docs/README.md)）。
 - `server/`: Ktor server (health API, optional static hosting of the web build).
 - `iosApp/`: iOS entry point that hosts the ComposeApp UI.
