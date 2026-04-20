@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package sdui.remote;
+
+option java_package = "com.podca.sdui.remote.core";
+option java_multiple_files = true;
+
+// Podca Remote IR: compact layout tree in NodeProto.payload for type "remote.Node".
+// Mirrors the role of AndroidX remote-core (protocol + document subtree), not byte-compatible.
+
+enum RemoteKindProto {
+  REMOTE_KIND_UNSPECIFIED = 0;
+  REMOTE_KIND_BOX = 1;
+  REMOTE_KIND_COLUMN = 2;
+  REMOTE_KIND_ROW = 3;
+  REMOTE_KIND_TEXT = 4;
+  REMOTE_KIND_SPACER = 5;
+  // Single child; host `NodeProto.actions` should include this action_id for encoding clarity.
+  REMOTE_KIND_CLICKABLE = 6;
+  // Single child; vertical scroll with optional max height (dp). Child is usually a COLUMN subtree.
+  REMOTE_KIND_VERTICAL_SCROLL = 7;
+}
+
+message RemotePaddingProto {
+  float start = 1;
+  float top = 2;
+  float end = 3;
+  float bottom = 4;
+}
+
+// Main-axis arrangement for Column (vertical) or Row (horizontal).
+enum RemoteArrangementMainAxisProto {
+  REMOTE_MAIN_AXIS_UNSPECIFIED = 0;
+  REMOTE_MAIN_AXIS_START = 1;
+  REMOTE_MAIN_AXIS_CENTER = 2;
+  REMOTE_MAIN_AXIS_END = 3;
+  REMOTE_MAIN_AXIS_SPACED_BY = 4;
+}
+
+// Cross-axis alignment for Column children (horizontal) or Row children (vertical).
+enum RemoteAlignmentCrossAxisProto {
+  REMOTE_CROSS_AXIS_UNSPECIFIED = 0;
+  REMOTE_CROSS_AXIS_START = 1;
+  REMOTE_CROSS_AXIS_CENTER = 2;
+  REMOTE_CROSS_AXIS_END = 3;
+}
+
+message RemoteNodeProto {
+  RemoteKindProto kind = 1;
+  repeated RemoteNodeProto children = 2;
+  RemotePaddingProto padding = 3;
+  // REMOTE_KIND_TEXT
+  string text = 4;
+  float font_size = 5;
+  float font_weight = 6;
+  // REMOTE_KIND_SPACER (dp)
+  float spacer_height = 7;
+  float spacer_width = 8;
+  // REMOTE_KIND_CLICKABLE
+  string click_action_id = 9;
+  // REMOTE_KIND_COLUMN
+  RemoteArrangementMainAxisProto column_vertical_main = 10;
+  float column_vertical_spacing_dp = 11;
+  RemoteAlignmentCrossAxisProto column_horizontal_cross = 12;
+  // REMOTE_KIND_ROW
+  RemoteArrangementMainAxisProto row_horizontal_main = 13;
+  float row_horizontal_spacing_dp = 14;
+  RemoteAlignmentCrossAxisProto row_vertical_cross = 15;
+  // REMOTE_KIND_VERTICAL_SCROLL
+  float vertical_scroll_max_height_dp = 16;
+  // When parent is COLUMN or ROW: Compose Modifier.weight(layout_weight) if > 0.
+  float layout_weight = 17;
+  // Any kind: applied before padding; maps to Modifier.fillMaxWidth/Height.
+  bool fill_max_width = 18;
+  bool fill_max_height = 19;
+  // REMOTE_KIND_TEXT: packed 0xAARRGGBB; 0 means unset (inherit default text color).
+  uint32 text_color_argb = 20;
+}

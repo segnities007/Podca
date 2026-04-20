@@ -1,0 +1,44 @@
+# Track R スモーク（週次/手動）
+# マルチターゲット経路の劣化を早期検知する補助ワークフロー。
+
+name: track-r-smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * 1" # every Monday 02:00 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: track-r-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke-matrix:
+    name: smoke · ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: remote-player-jvm
+            gradle: remoteVerifyJvm :sdui:player:engine:jvmTest
+          - name: server-api
+            gradle: :server:test :server:build
+          - name: compose-multitarget-compile
+            gradle: :composeApp:assembleDebug :composeApp:compileKotlinIosArm64 :composeApp:compileKotlinIosSimulatorArm64 :composeApp:compileKotlinJvm :composeApp:compileKotlinJs :composeApp:compileKotlinWasmJs
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run smoke matrix task
+        run: ./gradlew ${{ matrix.gradle }} --no-daemon

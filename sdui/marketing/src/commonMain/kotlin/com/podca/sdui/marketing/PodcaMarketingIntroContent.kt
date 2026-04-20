@@ -15,6 +15,42 @@ import com.podca.sdui.protocol.ui.text.TextAlignProto
 import com.podca.sdui.protocol.ui.text.font.FontFamilyMonospaceProto
 import com.podca.sdui.protocol.ui.text.font.FontFamilyProto
 import com.podca.sdui.studio.PodcaStudio
+import com.podca.sdui.remote.core.RemoteAlignmentCrossAxisProto
+import com.podca.sdui.remote.core.RemoteArrangementMainAxisProto
+import com.podca.sdui.remote.core.RemoteCanvasWireFixtures
+import com.podca.sdui.remote.creation.PodcaRemoteNode
+import com.podca.sdui.remote.creation.remoteClickable
+import com.podca.sdui.remote.creation.remoteColumn
+import com.podca.sdui.remote.creation.remoteRow
+import com.podca.sdui.remote.creation.remoteVerticalScroll
+import com.podca.sdui.remote.creation.withLayoutWeight
+import com.podca.sdui.remote.creation.remotePadding
+import com.podca.sdui.remote.creation.remoteSpacer
+import com.podca.sdui.remote.creation.PodcaRemoteCanvasProgram
+import com.podca.sdui.remote.creation.canvasDrawArcDp
+import com.podca.sdui.remote.creation.canvasDrawImagePngInRectDp
+import com.podca.sdui.remote.creation.canvasDrawLineDp
+import com.podca.sdui.remote.creation.canvasDrawTextDp
+import com.podca.sdui.remote.creation.canvasFillLinearGradientRectDp
+import com.podca.sdui.remote.creation.canvasFillPolylineDp
+import com.podca.sdui.remote.creation.canvasFillRadialGradientRectDp
+import com.podca.sdui.remote.creation.canvasFillCircleDp
+import com.podca.sdui.remote.creation.canvasFillSectorDp
+import com.podca.sdui.remote.creation.canvasFillOvalDp
+import com.podca.sdui.remote.creation.canvasFillRectDp
+import com.podca.sdui.remote.creation.canvasFillRoundRectDp
+import com.podca.sdui.remote.creation.canvasPointerInputRectDp
+import com.podca.sdui.remote.creation.canvasPopClip
+import com.podca.sdui.remote.creation.canvasPopTransform
+import com.podca.sdui.remote.creation.canvasPushClipPolylineDp
+import com.podca.sdui.remote.creation.canvasPushClipRectDp
+import com.podca.sdui.remote.creation.canvasPushRotateDegDp
+import com.podca.sdui.remote.creation.canvasPushScaleDp
+import com.podca.sdui.remote.creation.canvasStrokePolylineDp
+import com.podca.sdui.remote.creation.canvasStrokeRectDp
+import com.podca.sdui.remote.creation.canvasStrokeRoundRectDp
+import com.podca.sdui.remote.creation.remoteCanvasProgram
+import com.podca.sdui.remote.creation.remoteText
 import com.podca.sdui.studio.ui.core.PodcaColor
 import com.podca.sdui.studio.ui.core.PodcaDp
 import com.podca.sdui.studio.ui.core.PodcaModifier
@@ -34,6 +70,22 @@ import com.podca.sdui.studio.ui.material3.PodcaText
 import com.podca.sdui.studio.ui.material3.PodcaTextButton
 
 private val ClickTrigger: ActionTriggerProto = ActionTriggerProto.ACTION_TRIGGER_CLICK
+
+/** Demo action for Remote IR tap → [PodcaRuntime.dispatch] (registered in composeApp). */
+private const val RemoteDemoTapActionId: String = "podca.remote.demo_tap"
+
+/** 0xFF6B7280 — muted body text for Remote `BasicText` demos. */
+private val RemoteMutedBodyArgb: Int = (0xFF shl 24) or (0x6B shl 16) or (0x72 shl 8) or 0x80
+
+private val RemoteCanvasBgArgb: Int = (0xFF shl 24) or (0x1A shl 16) or (0x1C shl 8) or 0x20
+private val RemoteCanvasBarArgb: Int = (0xFF shl 24) or (0x26 shl 16) or (0xA6 shl 8) or 0x9A
+private val RemoteCanvasAccentArgb: Int = (0xFF shl 24) or (0xF5 shl 16) or (0x9E shl 8) or 0x0B
+
+private val RemoteCanvasHairlineArgb: Int = (0xFF shl 24) or (0x55 shl 16) or (0x5A shl 8) or 0x67
+private val RemoteCanvasLabelArgb: Int = (0xFF shl 24) or (0xE8 shl 16) or (0xEA shl 8) or 0xED
+private val RemoteCanvasGradientEndArgb: Int = (0xFF shl 24) or (0x22 shl 16) or (0x28 shl 8) or 0x36
+/** Translucent teal for polyline fill demo (SSoT path ops). */
+private val RemoteCanvasPolyFillArgb: Int = (0x55 shl 24) or (0x26 shl 16) or (0x99 shl 8) or 0x9A
 
 private fun verticalSpaced(dp: Float): ArrangementVerticalProto =
     ArrangementVerticalProto(
@@ -289,6 +341,235 @@ private fun IntroHomeSdui() {
                     fontSize = 14f,
                     lineHeight = 21f,
                     color = ColorMutedBody,
+                )
+            }
+        }
+        PodcaElevatedCard(
+            modifier = modFillMaxWidth(),
+            key = "card_remote_ir",
+        ) {
+            PodcaColumn(
+                modifier = modPaddingSymmetric(20f, 18f),
+                verticalArrangement = verticalSpaced(10f),
+            ) {
+                PodcaRemoteNode(
+                    key = "remote_intro_callout",
+                    actions =
+                        listOf(
+                            ActionBindingProto(
+                                trigger = ClickTrigger,
+                                action_id = RemoteDemoTapActionId,
+                            ),
+                        ),
+                    root =
+                        remoteVerticalScroll(
+                            maxHeightDp = 200f,
+                            fillMaxWidth = true,
+                            child =
+                                remoteColumn(
+                                    padding = remotePadding(bottom = 4f),
+                                    verticalMain = RemoteArrangementMainAxisProto.REMOTE_MAIN_AXIS_SPACED_BY,
+                                    verticalSpacingDp = 8f,
+                                    horizontalCross = RemoteAlignmentCrossAxisProto.REMOTE_CROSS_AXIS_UNSPECIFIED,
+                                    remoteText(
+                                        text = "Thin client, compact layout IR",
+                                        fontSize = 17f,
+                                        fontWeight = 600f,
+                                    ),
+                                    remoteText(
+                                        text =
+                                            "This block is one encoded RemoteNodeProto subtree (Column / Text / Spacer / VerticalScroll / fill / ARGB text) " +
+                                                "rendered by Player without material3-specific codecs — add kinds in protocol when you need more primitives.",
+                                        fontSize = 14f,
+                                        textColorArgb = RemoteMutedBodyArgb,
+                                    ),
+                                    remoteRow(
+                                        padding = null,
+                                        horizontalMain = RemoteArrangementMainAxisProto.REMOTE_MAIN_AXIS_UNSPECIFIED,
+                                        horizontalSpacingDp = 0f,
+                                        verticalCross = RemoteAlignmentCrossAxisProto.REMOTE_CROSS_AXIS_UNSPECIFIED,
+                                        remoteText(text = "Row + weight", fontSize = 12f).withLayoutWeight(1f),
+                                        remoteText(text = "1 : 1", fontSize = 12f).withLayoutWeight(1f),
+                                    ),
+                                    remoteSpacer(heightDp = 10f),
+                                    remoteClickable(
+                                        actionId = RemoteDemoTapActionId,
+                                        child =
+                                            remoteText(
+                                                text = "Tap here — dispatches podca.remote.demo_tap via PodcaRuntime",
+                                                fontSize = 14f,
+                                                fontWeight = 600f,
+                                            ),
+                                    ),
+                                ),
+                        ),
+                )
+            }
+        }
+        PodcaElevatedCard(
+            modifier = modFillMaxWidth(),
+            key = "card_remote_canvas_ops",
+        ) {
+            PodcaColumn(
+                modifier = modPaddingSymmetric(20f, 18f),
+                verticalArrangement = verticalSpaced(10f),
+            ) {
+                PodcaText(
+                    text = "Canvas op stream (Remote Compose–style)",
+                    fontWeight = 600,
+                    fontSize = 17f,
+                )
+                PodcaText(
+                    text =
+                        "Op stream (parity with AndroidX RemoteCanvas): polyline, gradients, ovals, circle, arc / sector, clipPath (poly push + pop), text, translate/scale/rotate stack, stroke join/cap, `DRAW_IMAGE` (PNG → rect), pointer. " +
+                            "Additive opcodes keep the default `wire_opset_version`; bump only on breaking interpreter changes (AGENTS.md).",
+                    fontSize = 14f,
+                    lineHeight = 21f,
+                    color = ColorMutedBody,
+                )
+                PodcaRemoteCanvasProgram(
+                    key = "remote_canvas_demo_stripes",
+                    program =
+                        remoteCanvasProgram(
+                            widthDp = 200f,
+                            heightDp = 88f,
+                            canvasFillLinearGradientRectDp(
+                                0f,
+                                0f,
+                                200f,
+                                88f,
+                                RemoteCanvasBgArgb,
+                                RemoteCanvasGradientEndArgb,
+                            ),
+                            canvasFillLinearGradientRectDp(
+                                0f,
+                                0f,
+                                6f,
+                                88f,
+                                RemoteCanvasAccentArgb,
+                                RemoteCanvasHairlineArgb,
+                                gradientAxis = 1,
+                            ),
+                            canvasStrokeRectDp(0f, 0f, 200f, 88f, 1f, RemoteCanvasHairlineArgb),
+                            canvasPushClipRectDp(14f, 8f, 186f, 80f),
+                            canvasFillRadialGradientRectDp(
+                                138f,
+                                4f,
+                                194f,
+                                32f,
+                                RemoteCanvasAccentArgb,
+                                RemoteCanvasBgArgb,
+                            ),
+                            canvasFillOvalDp(154f, 8f, 184f, 26f, RemoteCanvasAccentArgb),
+                            canvasFillCircleDp(169f, 17f, 3.5f, RemoteCanvasLabelArgb),
+                            canvasDrawArcDp(
+                                154f,
+                                8f,
+                                184f,
+                                26f,
+                                startAngleDeg = -90f,
+                                sweepAngleDeg = 115f,
+                                strokeWidthDp = 1.2f,
+                                colorArgb = RemoteCanvasHairlineArgb,
+                            ),
+                            canvasFillSectorDp(
+                                148f,
+                                52f,
+                                188f,
+                                78f,
+                                startAngleDeg = 200f,
+                                sweepAngleDeg = 48f,
+                                colorArgb = RemoteCanvasPolyFillArgb,
+                            ),
+                            canvasDrawTextDp(
+                                18f,
+                                10f,
+                                182f,
+                                32f,
+                                "Canvas op stream",
+                                11f,
+                                600,
+                                RemoteCanvasLabelArgb,
+                                textAlign = 1,
+                                textAlignVertical = 1,
+                            ),
+                            canvasDrawLineDp(
+                                18f,
+                                34f,
+                                182f,
+                                46f,
+                                1.5f,
+                                RemoteCanvasAccentArgb,
+                            ),
+                            canvasFillRoundRectDp(18f, 48f, 182f, 66f, 8f, RemoteCanvasBarArgb),
+                            canvasFillRectDp(18f, 66f, 182f, 76f, RemoteCanvasAccentArgb),
+                            canvasStrokeRoundRectDp(17f, 47f, 183f, 67f, 8f, 1f, RemoteCanvasHairlineArgb),
+                            canvasFillPolylineDp(
+                                RemoteCanvasPolyFillArgb,
+                                138f,
+                                56f,
+                                186f,
+                                56f,
+                                162f,
+                                76f,
+                            ),
+                            canvasPushClipPolylineDp(
+                                listOf(
+                                    92f,
+                                    58f,
+                                    118f,
+                                    74f,
+                                    108f,
+                                    78f,
+                                    86f,
+                                    68f,
+                                ),
+                            ),
+                            canvasFillRectDp(20f, 56f, 180f, 80f, RemoteCanvasPolyFillArgb),
+                            canvasPopClip(),
+                            canvasPushScaleDp(pivotXDp = 99f, pivotYDp = 70f, scaleX = 1.06f, scaleY = 1.06f),
+                            canvasPushRotateDegDp(pivotXDp = 99f, pivotYDp = 70f, degrees = -12f),
+                            canvasStrokePolylineDp(
+                                RemoteCanvasLabelArgb,
+                                1f,
+                                listOf(
+                                    20f,
+                                    68f,
+                                    60f,
+                                    72f,
+                                    100f,
+                                    68f,
+                                    140f,
+                                    73f,
+                                    178f,
+                                    69f,
+                                ),
+                                strokeJoin = 1,
+                                strokeCap = 1,
+                            ),
+                            canvasPopTransform(),
+                            canvasPopTransform(),
+                            canvasPopClip(),
+                            canvasDrawImagePngInRectDp(
+                                158f,
+                                4f,
+                                190f,
+                                30f,
+                                RemoteCanvasWireFixtures.demoBadgePng8x8Teal26A69A,
+                            ),
+                            canvasPointerInputRectDp(
+                                10f,
+                                58f,
+                                190f,
+                                82f,
+                                RemoteDemoTapActionId,
+                            ),
+                        ),
+                )
+                PodcaText(
+                    text = "Tap the lower bar — same podca.remote.demo_tap as the declarative remote block.",
+                    fontSize = 12f,
+                    color = ColorMutedSmall,
                 )
             }
         }

@@ -1,0 +1,64 @@
+name: "Remote gap tracking"
+description: "Track one AndroidX Compose Remote API gap against Podca Remote"
+title: "[Remote Gap] "
+labels:
+  - remote
+  - gap
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Track a single gap from `sdui/remote/ANDROIDX_REMOTE_MAP.md` with clear acceptance criteria.
+  - type: input
+    id: androidx-api
+    attributes:
+      label: AndroidX API row
+      description: "Exact API or row name from ANDROIDX_REMOTE_MAP.md (e.g. drawTextOnPath)"
+      placeholder: "drawTextOnPath"
+    validations:
+      required: true
+  - type: dropdown
+    id: current-status
+    attributes:
+      label: Current status in map
+      options:
+        - "△"
+        - "—"
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: Gap summary
+      description: "What behavior is missing or intentionally different now?"
+      placeholder: "Current Podca behavior and missing semantics..."
+    validations:
+      required: true
+  - type: textarea
+    id: ssot
+    attributes:
+      label: AndroidX SSoT reference
+      description: "Point to implementation/API docs used as source of truth."
+      placeholder: "androidx-main path, class, method, behavior note..."
+    validations:
+      required: true
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Planned implementation order
+      description: "Keep protocol-first sequence."
+      value: |
+        1. remote-core (.proto / opcode contract)
+        2. remote-player-compose (interpreter/rendering)
+        3. remote-creation (authoring helpers)
+        4. Tests + ANDROIDX_REMOTE_MAP.md sync
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: "Write measurable checks."
+      placeholder: "- [ ] ..."
+    validations:
+      required: true

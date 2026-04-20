@@ -25,6 +25,9 @@ Podca は **Hybrid SDUI** として設計します。
 | Gradle モジュール | 役割 |
 |-------------------|------|
 | `:sdui:protocol` | Wire / Protobuf。`NodeProto` および `ui` / `foundation` / `material3` 相当の共有契約。 |
+| `:sdui:remote:remote-core` | **Podca Remote** の Wire 契約。**SSoT**: `RemoteCanvasProgramProto`（`remote.CanvasProgram` の op 列）。**糖衣**: `RemoteNodeProto`（`remote.Node`）。 |
+| `:sdui:remote:remote-player-compose` | **op インタプリタ**（Canvas 等）と `remote.Node` の Compose 再生。AndroidX `remote-player-compose` に相当する役割。 |
+| `:sdui:remote:remote-creation` | `PodcaRemoteCanvasProgram` / `remoteCanvasProgram` と `PodcaRemoteNode` 等 — スタジオから Remote ペイロードを載せる API。 |
 | `:sdui:studio:core` | `PodcaNode` / `PodcaTree`、エンコードの基盤。 |
 | `:sdui:studio:ui-core` | Modifier・Alignment・Color 等（Compose UI 寄りの DSL）。 |
 | `:sdui:studio:ui-foundation` | Row / Column / Flow / Grid 等のレイアウト DSL。 |
@@ -59,9 +62,10 @@ Podca は **Hybrid SDUI** として設計します。
 
 ## 開発の進め方
 
-1. Protocol の定義: `:sdui:protocol` の `src/commonMain/proto/` に `.proto` を追加し、Wire 生成物を確認する。
-2. Studio の実装: 対応する `Podca*` DSL を `sdui/studio/*` に追加する。
-3. Player の実装: 対応するレンダラを `sdui/player/ui-*` に追加する。
+1. Protocol の定義: `:sdui:protocol` の `src/commonMain/proto/` に `.proto` を追加し、Wire 生成物を確認する（広い Material / Foundation 契約）。
+2. **Podca Remote** の定義: `:sdui:remote:remote-core` の `.proto` に **まず canvas op**（`RemoteCanvasProgram.proto`）を追加し、`remote-player-compose` のインタプリタ → `remote-creation` のヘルパの順で更新する。`RemoteNodeProto` への追加は、意図した糖衣化のときのみ。埋め込みバイナリ（例: `DRAW_IMAGE` の PNG）は **`RemoteCanvasWireFixtures`** に **1 か所**に集約し、他モジュールでバイト列を複製しない（検証は `remote-creation` の `commonTest` と `remote-player-compose` の `jvmTest`；ルートで **`./gradlew remoteVerifyJvm`** または [remote/README.md](./remote/README.md) の *ローカル検証* を参照。）
+3. Studio の実装: 対応する `Podca*` DSL を `sdui/studio/*` に追加する。
+4. Player の実装: 対応するレンダラを `sdui/player/ui-*` に追加する（`remote.Node` は `remote-player-compose`）。
 
 （例外やデモ専用の回避は `AGENTS.md` の方針に従わない。）
 
@@ -69,6 +73,6 @@ Podca は **Hybrid SDUI** として設計します。
 
 ## 進化の方向（メモ）
 
-長期的には **クライアントを薄くし、表現を低レベル命令で足す** Remote Compose 寄りの形に寄せたい。その場合、ウィジェット単位の `.proto` 増殖を抑え、**少数の命令セット＋インタプリタ**へ表現の中心を移す検討をする。現状の `material3.*` / `foundation.*` ツリーは当面の生産性・互換のため維持しつつ、新規の広がり方をここで意識する。
+**Remote サブシステム**では、表現の中心を **Remote Compose 粒度の op stream（`remote.CanvasProgram`）** に置く（SSoT）。`material3.*` / `foundation.*`（`sdui/protocol`）は当面の生産性のため維持し、**Remote に足す新機能は opcode から** とする。
 
-詳細なディレクトリツリーは [ARCHITECTURE.md](./ARCHITECTURE.md)。`player` サブツリーの描画パイプラインは [player/README.md](./player/README.md)。リポジトリ全体の起動・API はルートの [README.md](../README.md)。
+Remote の規約と拡張順は [remote/README.md](./remote/README.md)。AndroidX との **対応調査・ギャップ一覧**は [remote/ANDROIDX_REMOTE_MAP.md](./remote/ANDROIDX_REMOTE_MAP.md)。ディレクトリ全体は [ARCHITECTURE.md](./ARCHITECTURE.md)。`player` の振り分けは [player/README.md](./player/README.md)。ルートの起動・API は [README.md](../README.md)。

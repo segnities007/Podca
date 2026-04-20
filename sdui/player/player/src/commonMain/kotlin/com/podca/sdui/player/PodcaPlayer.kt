@@ -10,6 +10,8 @@ import com.podca.sdui.player.engine.PodcaDocumentNode
 import com.podca.sdui.player.engine.PodcaRuntime
 import com.podca.sdui.player.ui.core.PodcaRenderChildren
 import com.podca.sdui.player.ui.core.PodcaRenderUiNode
+import com.podca.sdui.remote.player.compose.PodcaRenderRemoteCanvasProgramNode
+import com.podca.sdui.remote.player.compose.PodcaRenderRemoteDocumentNode
 import com.podca.sdui.player.ui.foundation.PodcaRenderFoundationNode
 import com.podca.sdui.player.ui.material3.PodcaRenderMaterial3Node
 
@@ -45,7 +47,7 @@ public fun PodcaPlayer(
 /**
  * [PodcaDocumentNode.type] に応じて子ツリーを再帰描画する。
  *
- * 振り分け順: `Root` → `foundation.*` → `material3.*` → `ui.*` → それ以外（子のみ再帰）。
+ * 振り分け順: `Root` → `remote.CanvasProgram`（描画 op 列）→ `remote.Node` → `foundation.*` → `material3.*` → `ui.*` → それ以外（子のみ再帰）。
  * マッチしない type もクラッシュさせず、子を辿る。
  */
 @Composable
@@ -62,6 +64,16 @@ public fun PodcaRenderDocumentNode(
         node.type == "Root" -> Column {
             PodcaRenderChildren(node = node, renderChild = { Subtree(it) })
         }
+
+        node.type == "remote.CanvasProgram" -> PodcaRenderRemoteCanvasProgramNode(
+            node = node,
+            runtime = runtime,
+        )
+
+        node.type == "remote.Node" -> PodcaRenderRemoteDocumentNode(
+            node = node,
+            runtime = runtime,
+        )
 
         node.type.startsWith("foundation.") -> PodcaRenderFoundationNode(
             node = node,

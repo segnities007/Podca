@@ -28,6 +28,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(project(":sdui:studio:studio"))
+            implementation(project(":sdui:remote:remote-core"))
+            implementation(project(":sdui:remote:remote-creation"))
             implementation(libs.kotlinx.coroutinesCore)
         }
     }

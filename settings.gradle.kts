@@ -40,6 +40,13 @@ include(":shared")
 // Podca Protocol
 include(":sdui:protocol")
 
+// Podca Remote — mirrors AndroidX compose/remote **stack** (core → player → creation), not 1:1 module count:
+// upstream also has remote-creation-core, remote-player-core, remote-player-view, *-testutils, integration-tests.
+// Podca folds those into three KMP modules; see sdui/remote/ANDROIDX_REMOTE_MAP.md.
+include(":sdui:remote:remote-core")
+include(":sdui:remote:remote-player-compose")
+include(":sdui:remote:remote-creation")
+
 // Podca Studio (Server-side SDK)
 include(":sdui:studio:core")
 include(":sdui:studio:ui-core")

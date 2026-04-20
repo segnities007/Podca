@@ -1,0 +1,35 @@
+# Track R コア（計画書 PRODUCT_COMPLETION_PLAN_v1.md 付録 D）
+# Phase 1: main の PR で必須にできるコアセット（Ubuntu）。
+
+name: track-r-core
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: track-r-core-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gradle-check:
+    name: remoteVerifyJvm · player engine · server · composeApp all compile targets
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run Track R core checks
+        run: ./gradlew remoteVerifyJvm :sdui:player:engine:jvmTest :server:build :composeApp:assembleDebug :composeApp:compileKotlinIosArm64 :composeApp:compileKotlinIosSimulatorArm64 :composeApp:compileKotlinJvm :composeApp:compileKotlinJs :composeApp:compileKotlinWasmJs --no-daemon

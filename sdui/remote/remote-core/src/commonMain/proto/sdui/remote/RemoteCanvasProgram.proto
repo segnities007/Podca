@@ -1,0 +1,313 @@
+syntax = "proto3";
+
+package sdui.remote;
+
+option java_package = "com.podca.sdui.remote.core";
+option java_multiple_files = true;
+
+// Podca Remote **canvas op stream** (Remote Compose–style dense ops, Podca-specific wire).
+// Distinct from declarative `remote.Node` / RemoteNodeProto.
+// Behavioural reference: AndroidX `androidx.compose.remote.creation.compose.layout.RemoteCanvas` (translate / scale / rotate / transform(Matrix) + clipPath / drawPath / drawText / drawBitmap + save/restore), not wire-identical.
+// Opcodes: FILL_* / circle / polyline / path (verb stream) / oval / arc (sector), gradients, STROKE_* (+ stroke_join/cap), round-rect rx+optional ry, **FILL_ROUNDED_POLYGON** / **STROKE_ROUNDED_POLYGON** (closed polyline + uniform corner radius dp + optional vertex morph polyline + literal t), **DRAW_IMAGE** (PNG bytes, optional src rect px, optional alpha, optional **blend mode** = same numeric ids as `sdui.ui.graphics.BlendModeProto`, optional **filter quality** 0=default Medium / 1=Low / 2=Medium / 3=High for Compose `drawImage`, optional **tint ColorFilter** = `ColorFilter.tint` + SrcIn, optional **lighting ColorFilter** = `ColorFilter.lighting` multiply/add ARGB), **DRAW_TWEEN_PATH** (two verb paths + literal [tween_path_fraction] and/or optional **[tween_path_fraction_remote_float_id]** → same host named-float map as CONDITIONAL — dp coord lerp when structures match; AndroidX `drawTweenPath` subset), **CONDITIONAL_BEGIN / CONDITIONAL_END** (literal compare and/or named float ids → host map + optional **[conditional_operand_*_is_wire_nan]** explicit NaN side, AndroidX `ConditionalOperations` subset), **LOOP_BEGIN / LOOP_END** (literal repeat count + program [loop_expand_max_repeat_per_block] per-block cap; AndroidX `LOOP_START` subset — player may expand before interpret; do not nest LOOP with CONDITIONAL), **STATE_LAYOUT_BEGIN / STATE_LAYOUT_END** (per-state op spans; AndroidX `startStateLayout` / `endStateLayout` subset — literal [state_layout_id] on BEGIN + optional [state_layout_semantics_*] for root `Modifier.semantics`; host `PodcaRuntime` selects active id; player strips markers after filter), **PUSH_OFFSCREEN_RENDER / POP_OFFSCREEN_RENDER / CLEAR_OFFSCREEN_BITMAP_POOL** (AndroidX `drawToOffscreenBitmap` subset + explicit pool-release hint — rect = dst on parent + logical size for inner ops in dp + program [offscreen_bitmap_pool_max_entries] named-pool LRU cap), transforms (PUSH_TRANSLATE / PUSH_SCALE / PUSH_ROTATE_DEG / PUSH_TRANSFORM_MATRIX + POP_TRANSFORM), PUSH_CANVAS_SAVE / POP_CANVAS_RESTORE (clip + transform stacks), DRAW_LINE, **DRAW_TEXT_ON_PATH** (MOVE+LINE path baseline), **DRAW_TEXT_ON_CIRCLE** (center + radius + arc + warp), **DRAW_TEXT_ANCHORED** (anchor + pan + flags + `TextMeasurer`), DRAW_TEXT / DRAW_TEXT_AT / **DRAW_TEXT_RUN** (UTF-16 slice of [text_body]), PUSH_CLIP_RECT / PUSH_CLIP_ROUND_RECT / PUSH_CLIP_POLYLINE / PUSH_CLIP_PATH / POP_CLIP, POINTER_INPUT — see RemoteCanvasOpCodeProto.
+
+// Vertex list for FILL_POLYLINE / STROKE_POLYLINE / PUSH_CLIP_POLYLINE / FILL_ROUNDED_POLYGON / STROKE_ROUNDED_POLYGON (paired x,y in dp).
+message RemoteCanvasPolylineProto {
+  repeated float xy_dp = 1;
+}
+
+// Verb stream + flat coords (dp), same order as androidx.compose.ui.graphics.Path (move/line/quad/cubic/close).
+enum RemoteCanvasPathVerbProto {
+  REMOTE_PATH_VERB_UNSPECIFIED = 0;
+  REMOTE_PATH_VERB_MOVE_TO = 1;
+  REMOTE_PATH_VERB_LINE_TO = 2;
+  REMOTE_PATH_VERB_QUADRATIC_TO = 3;
+  REMOTE_PATH_VERB_CUBIC_TO = 4;
+  REMOTE_PATH_VERB_CLOSE = 5;
+}
+
+message RemoteCanvasPathProto {
+  repeated RemoteCanvasPathVerbProto verbs = 1;
+  repeated float coords_dp = 2;
+}
+
+enum RemoteCanvasOpCodeProto {
+  REMOTE_CANVAS_OP_UNSPECIFIED = 0;
+  REMOTE_CANVAS_OP_FILL_RECT = 1;
+  // Hit rectangle: no drawing; tap dispatches [pointer_action_id] via PodcaRuntime (same path as payload-driven remote clicks).
+  REMOTE_CANVAS_OP_POINTER_INPUT_RECT = 2;
+  // Axis-aligned rounded rect fill; uses rect_*_dp, corner_radius_dp (rx), optional corner_radius_y_dp (ry).
+  REMOTE_CANVAS_OP_FILL_ROUND_RECT = 3;
+  // Clip with axis-aligned rect until POP_CLIP; [clip_op] 0 = Intersect, 1 = Difference (Compose ClipOp).
+  REMOTE_CANVAS_OP_PUSH_CLIP_RECT = 4;
+  REMOTE_CANVAS_OP_POP_CLIP = 5;
+  // Axis-aligned rect outline; rect_*_dp, color_argb, stroke_width_dp (>0).
+  REMOTE_CANVAS_OP_STROKE_RECT = 6;
+  // Line from (rect_l_dp,rect_t_dp) to (rect_r_dp,rect_b_dp); color_argb, stroke_width_dp.
+  REMOTE_CANVAS_OP_DRAW_LINE = 7;
+  // Text in rect bounds; text_body, font_size_sp (>0), font_weight (0=400, else 100..1000), color_argb; optional [draw_text_rect_top_is_first_baseline] for rect top = first baseline (same as DRAW_TEXT_AT).
+  REMOTE_CANVAS_OP_DRAW_TEXT = 8;
+  // Positioned text: (rect_l_dp,rect_t_dp) = layout origin in dp (default: top-left of BasicText box). When [draw_text_rect_top_is_first_baseline] is true, rect_t_dp is the **first line baseline** Y (Canvas-style). rect_r_dp = max width (0 = canvas−x); rect_b_dp = max height (0 ≈ 5 lines from font line-height hint). Same text_* fields as DRAW_TEXT.
+  REMOTE_CANVAS_OP_DRAW_TEXT_AT = 31;
+  // Rounded-rect outline; rect_*, corner radii as FILL_ROUND_RECT, color_argb, stroke_width_dp.
+  REMOTE_CANVAS_OP_STROKE_ROUND_RECT = 9;
+  // Axis-aligned ellipse inscribed in rect_*_dp; color_argb fill.
+  REMOTE_CANVAS_OP_FILL_OVAL = 10;
+  REMOTE_CANVAS_OP_STROKE_OVAL = 11;
+  // Linear gradient in rect: color_argb → gradient_end_color_argb; axis from gradient_axis (0 horizontal, 1 vertical).
+  REMOTE_CANVAS_OP_FILL_LINEAR_GRADIENT_RECT = 12;
+  // Radial gradient in rect: center at rect center, color_argb inside → gradient_end_color_argb at edge (end 0 = solid color_argb).
+  REMOTE_CANVAS_OP_FILL_RADIAL_GRADIENT_RECT = 13;
+  // Closed polygon fill; vertices in [polyline.xy_dp], color_argb.
+  REMOTE_CANVAS_OP_FILL_POLYLINE = 14;
+  // Open (or user-closed) polyline stroke; [polyline.xy_dp], color_argb, stroke_width_dp.
+  REMOTE_CANVAS_OP_STROKE_POLYLINE = 15;
+  // Pivot (rect_l_dp, rect_t_dp) in dp, clockwise degrees in [transform_rotate_deg]; affects subsequent Canvas draws until POP_TRANSFORM.
+  REMOTE_CANVAS_OP_PUSH_ROTATE_DEG = 16;
+  REMOTE_CANVAS_OP_POP_TRANSFORM = 17;
+  // Translation (rect_l_dp, rect_t_dp) = (dx, dy) in dp; matches RemoteCanvas.translate(dx, dy) on the vector stack.
+  REMOTE_CANVAS_OP_PUSH_TRANSLATE_DP = 18;
+  // Pivot (rect_l_dp, rect_t_dp) in dp; scale [transform_scale_x], [transform_scale_y] (>0); matches RemoteCanvas.scale(sx, sy, pivot).
+  REMOTE_CANVAS_OP_PUSH_SCALE_DP = 19;
+  // Center (rect_l_dp, rect_t_dp), radius [circle_radius_dp] in dp; matches RemoteCanvas.drawCircle (fill).
+  REMOTE_CANVAS_OP_FILL_CIRCLE = 20;
+  // Same geometry as FILL_CIRCLE; color_argb, stroke_width_dp, stroke_join / stroke_cap.
+  REMOTE_CANVAS_OP_STROKE_CIRCLE = 21;
+  // Ellipse bounds rect_*; [arc_start_deg] / [arc_sweep_deg]; [arc_use_center] 0 = stroke arc, 1 = filled sector. Matches RemoteCanvas.drawArc / drawSector.
+  REMOTE_CANVAS_OP_DRAW_ARC = 22;
+  // Closed polygon clip; [polyline.xy_dp] (≥6 floats, even); [clip_op] as PUSH_CLIP_RECT. Matches RemoteCanvas.clipPath (polygon subset).
+  REMOTE_CANVAS_OP_PUSH_CLIP_POLYLINE = 23;
+  // Snapshot clip + transform stacks; matches RemoteCanvas.save().
+  REMOTE_CANVAS_OP_PUSH_CANVAS_SAVE = 24;
+  // Restore to last PUSH_CANVAS_SAVE snapshot; extra POP is a no-op. Matches RemoteCanvas.restore().
+  REMOTE_CANVAS_OP_POP_CANVAS_RESTORE = 25;
+  // Concatenate 4×4 row-major matrix (16 floats) matching androidx.compose.ui.graphics.Matrix.values; popped with POP_TRANSFORM. Matches RemoteCanvas.transform(matrix).
+  REMOTE_CANVAS_OP_PUSH_TRANSFORM_MATRIX = 26;
+  // Fill arbitrary path; [path] verbs + coords_dp in dp. Matches RemoteCanvas.drawPath (fill).
+  REMOTE_CANVAS_OP_FILL_PATH = 27;
+  // Stroke path; [path], color_argb, stroke_width_dp, stroke_join / stroke_cap.
+  REMOTE_CANVAS_OP_STROKE_PATH = 28;
+  // Clip to path until POP_CLIP; [path], [clip_op]. Matches RemoteCanvas.clipPath (subset: encoded path).
+  REMOTE_CANVAS_OP_PUSH_CLIP_PATH = 29;
+  // Clip to rounded rect; rect_* + corner radii as FILL_ROUND_RECT; [clip_op]. clipPath(RoundRect) on player (Compose SSoT).
+  REMOTE_CANVAS_OP_PUSH_CLIP_ROUND_RECT = 30;
+  // Draw PNG in axis-aligned dst rect_*_dp; [image_png_bytes] = encoded PNG (Compose `ByteArray.decodeToImageBitmap`). Matches AndroidX `drawScaledBitmap` when [image_src_rect_enabled]: src rect in **decoded bitmap pixel space** (l/t inclusive, r/b exclusive); when disabled (default), full bitmap → dst rect (also covers `drawBitmap` at implicit scale). Optional [draw_image_filter_quality] maps to Compose `FilterQuality`. Wire fixtures: `RemoteCanvasWireFixtures` in `remote-core`.
+  REMOTE_CANVAS_OP_DRAW_IMAGE = 32;
+  // If comparison holds (and all enclosing CONDITIONAL_BEGIN branches hold), execute following ops until CONDITIONAL_END. [conditional_cmp] 0=EQ..5=GTE matches AndroidX ConditionalOperations.TYPE_*; operands are [conditional_literal_a/b] and/or [conditional_remote_float_id_*] / host map; optional [conditional_operand_*_is_wire_nan] forces **Float.NaN** on that side (explicit AndroidX-style absent/sentinel subset). Optional [conditional_literal_nan_eq]: EQ treats two NaNs as equal (subset of upstream sentinels).
+  REMOTE_CANVAS_OP_CONDITIONAL_BEGIN = 33;
+  REMOTE_CANVAS_OP_CONDITIONAL_END = 34;
+  // Repeat the enclosed ops [loop_repeat_count] times (0 = none). Paired with LOOP_END. Subset of AndroidX loop start (literal count only); player expands to a flat op list before paint (clamp per [RemoteCanvasProgramProto.loop_expand_max_repeat_per_block]) — **do not place LOOP between CONDITIONAL_BEGIN and its CONDITIONAL_END** (undefined).
+  REMOTE_CANVAS_OP_LOOP_BEGIN = 35;
+  REMOTE_CANVAS_OP_LOOP_END = 36;
+  // Rasterize enclosed ops into an [ImageBitmap] sized to rect width×height (dp), then draw that bitmap into rect on the parent (after clip/transform). Inner ops use coordinates 0..w, 0..h dp. Subset of AndroidX `drawToOffscreenBitmap`; nesting supported.
+  REMOTE_CANVAS_OP_PUSH_OFFSCREEN_RENDER = 37;
+  REMOTE_CANVAS_OP_POP_OFFSCREEN_RENDER = 38;
+  // Stroke path = linear interpolation in **dp** between [path] (from) and [tween_path_to] (to) at blend **t** in [0,1] (see [tween_path_fraction] + optional [tween_path_fraction_remote_float_id] on RemoteCanvasOpProto). Requires identical [verbs] sequences and equal [coords_dp] lengths for lerp; else optional [tween_path_incompatible_fallback]. Subset of AndroidX `drawTweenPath`.
+  REMOTE_CANVAS_OP_DRAW_TWEEN_PATH = 39;
+  // Closed polygon fill with uniform corner rounding in dp ([polyline.xy_dp] closed like FILL_POLYLINE, [corner_radius_dp]); optional [rounded_polygon_morph_polyline] + [rounded_polygon_morph_t] lerp vertices in dp before rounding (same vertex count). Convex-only rounded path; non-convex → player falls back to sharp [FILL_POLYLINE]. Subset of AndroidX `drawRoundedPolygon` / `drawRoundedPolygonMorph` (quadratic corner blend, not full graphics-shapes circular fillet).
+  REMOTE_CANVAS_OP_FILL_ROUNDED_POLYGON = 40;
+  // Same geometry as FILL_ROUNDED_POLYGON; stroke via color_argb / stroke_width_dp / stroke_join / stroke_cap.
+  REMOTE_CANVAS_OP_STROKE_ROUNDED_POLYGON = 41;
+  // UTF-8 [text_body] laid along an **open** polyline encoded as [path] with **MOVE_TO + LINE_TO verbs only** (dp coords); same font/color fields as DRAW_TEXT. [text_on_path_start_offset_dp] advances the start along the path; [text_align] 0=start / 1=center string on path / 2=end toward path end (subset of AndroidX `drawTextOnPath`).
+  REMOTE_CANVAS_OP_DRAW_TEXT_ON_PATH = 42;
+  // UTF-8 [text_body] on a circle: center ([rect_l_dp],[rect_t_dp]), radius [circle_radius_dp] (>0), [arc_start_deg] / [arc_sweep_deg] like DRAW_ARC on a full circle (sweep 0 = 360° span for layout), [text_on_circle_warp_radius_offset_dp] radial offset of baseline (dp), [text_on_path_start_offset_dp] = arc-length start offset (dp) along the arc from [arc_start_deg], [text_align] 0=start / 1=center / 2=end along arc. Subset of AndroidX `drawTextOnCircle` (no Alignment/Placement enums on wire — outside placement only).
+  REMOTE_CANVAS_OP_DRAW_TEXT_ON_CIRCLE = 43;
+  // Marks ops for layout state [state_layout_id] (paired with STATE_LAYOUT_END). Subset of AndroidX `startStateLayout` / `endStateLayout` (optional [state_layout_semantics_*] on BEGIN = tiny RecordingModifier / Semantics subset — not arbitrary modifier bytes).
+  REMOTE_CANVAS_OP_STATE_LAYOUT_BEGIN = 44;
+  REMOTE_CANVAS_OP_STATE_LAYOUT_END = 45;
+  // UTF-8 [text_body] with anchor ([rect_l_dp],[rect_t_dp]) + pan ([text_anchor_pan_*]) + [draw_anchored_text_flags] (subset of AndroidX `drawAnchoredText` int flags); max box like DRAW_TEXT_AT via [rect_r_dp]/[rect_b_dp]. `TextMeasurer` placement on player.
+  REMOTE_CANVAS_OP_DRAW_TEXT_ANCHORED = 46;
+  // UTF-16 slice of [text_body] at the same layout box as DRAW_TEXT_AT ([rect_*]); [draw_text_run_*] run indices + [draw_text_run_context_*] shaping window + [draw_text_run_is_rtl]. Player: full context in `BasicText`, run-only pixels via span alpha (subset of AndroidX `drawTextRun`).
+  REMOTE_CANVAS_OP_DRAW_TEXT_RUN = 47;
+  // Explicitly clears the named offscreen bitmap pool (all [offscreen_bitmap_id] entries). Subset hint for AndroidX RemoteBitmap release pathways.
+  REMOTE_CANVAS_OP_CLEAR_OFFSCREEN_BITMAP_POOL = 48;
+}
+
+message RemoteCanvasOpProto {
+  RemoteCanvasOpCodeProto code = 1;
+  // FILL_* / STROKE_* / OVAL / CIRCLE / DRAW_ARC / GRADIENT / POINTER / PUSH_CLIP — bounds in dp. PUSH_CLIP_* use [clip_op]. PUSH_CLIP_ROUND_RECT: rect_* + corner radii as FILL_ROUND_RECT. FILL/STROKE_PATH / PUSH_CLIP_PATH: [path]. FILL_PATH / STROKE_PATH / DRAW_TWEEN_PATH (stroke): optional [path_draw_blend_mode_*] / [path_draw_alpha_*] for Compose `DrawScope.drawPath`. FILL_ROUNDED_POLYGON / STROKE_ROUNDED_POLYGON: closed [polyline.xy_dp] + [corner_radius_dp] + optional [rounded_polygon_morph_polyline] / [rounded_polygon_morph_t]. DRAW_TEXT_ON_PATH: open [path] MOVE+LINE + [text_body] + [text_on_path_start_offset_dp] + [text_align] along path. DRAW_TEXT_ON_CIRCLE: center + radius + arc + [text_on_circle_warp_radius_offset_dp] + [text_on_path_start_offset_dp] (arc length) + [text_align]. STATE_LAYOUT_BEGIN: [state_layout_id] + optional [state_layout_semantics_merge_descendants] / [state_layout_semantics_test_tag] / [state_layout_semantics_content_description]; STATE_LAYOUT_END: no fields. DRAW_TEXT_ANCHORED: anchor [rect_l/t] + [text_anchor_pan_*] + [draw_anchored_text_flags] + max [rect_r/b]. DRAW_TEXT_RUN: same rect/font as DRAW_TEXT_AT + [draw_text_run_*] UTF-16 indices. DRAW_TWEEN_PATH: [path] from + [tween_path_to] to + [tween_path_fraction] + optional [tween_path_fraction_remote_float_id] + optional [tween_path_incompatible_fallback]; stroke via color_argb / stroke_width_dp / stroke_join / stroke_cap. DRAW_TEXT / DRAW_TEXT_AT / DRAW_TEXT_RUN: [text_line_height_sp] optional (sp); optional [draw_text_line_height_style] when line height > 0; optional [draw_text_rect_top_is_first_baseline]; optional [draw_text_rect_bottom_is_last_baseline] (ignored when top baseline flag true); optional [draw_text_disable_font_padding] (Android-only in v1). DRAW_TEXT_AT: origin + max w/h as above. DRAW_IMAGE: [image_png_bytes] PNG + dst rect_*; optional [image_src_rect_*] when [image_src_rect_enabled]; optional [draw_image_alpha_*] for opacity; optional [draw_image_blend_mode_*] (BlendModeProto ids); optional [draw_image_filter_quality] (0 default Medium, 1 Low, 2 Medium, 3 High); optional [draw_image_color_filter_tint_*] (Compose `ColorFilter.tint`; optional [draw_image_color_filter_tint_blend_mode_*]); optional [draw_image_scale_type_*] (uniform Fit / Crop / FillBounds); optional [draw_image_scale_factor_*]; optional [draw_image_content_description]. PUSH_OFFSCREEN_RENDER: rect_* = dst on parent + logical w/h for inner ops (dp); optional [offscreen_skip_clear_before_draw] + [offscreen_clear_color_argb] + optional [offscreen_bitmap_id] + optional [offscreen_discard_pooled_bitmap_after_pop]. CONDITIONAL_BEGIN: [conditional_cmp] + [conditional_literal_a/b] + optional [conditional_literal_nan_eq] + optional [conditional_remote_float_id_a/b] + optional [conditional_remote_float_fallback_to_literal] + optional [conditional_operand_a_is_wire_nan] / [conditional_operand_b_is_wire_nan]. FILL/STROKE_ROUND_RECT: rx [corner_radius_dp], ry [corner_radius_y_dp] (0 = rx). FILL_CIRCLE / STROKE_CIRCLE: center (rect_l_dp, rect_t_dp), radius [circle_radius_dp]. DRAW_ARC: oval rect_* + [arc_*]. PUSH_TRANSLATE_DP: (rect_l_dp, rect_t_dp) = (dx, dy) in dp. PUSH_SCALE_DP / PUSH_ROTATE_DEG: pivot (rect_l_dp, rect_t_dp). PUSH_TRANSFORM_MATRIX: [transform_matrix_values] length 16. Colors 0xAARRGGBB in color_argb / gradient_end_color_argb.
+  float rect_l_dp = 2;
+  float rect_t_dp = 3;
+  float rect_r_dp = 4;
+  float rect_b_dp = 5;
+  uint32 color_argb = 6;
+  // POINTER_INPUT_RECT: non-empty action id; encoded as click trigger on the host PodcaNode key.
+  string pointer_action_id = 7;
+  // FILL_ROUND_RECT / STROKE_ROUND_RECT: horizontal corner radius rx in dp (<= 0 with ry also <= 0 → axis-aligned rect).
+  float corner_radius_dp = 8;
+  // STROKE_* / DRAW_LINE: hairline width in dp (defaults interpreted as 1dp if <= 0 where stroke applies).
+  float stroke_width_dp = 9;
+  // DRAW_TEXT: UTF-8 body; clipped to rect and current clip stack (intersected bounds).
+  string text_body = 10;
+  // DRAW_TEXT: sp size (>0); font_weight: 0 = w400, else clamped to 100..1000 for FontWeight.
+  float font_size_sp = 11;
+  int32 font_weight = 12;
+  // FILL_LINEAR_GRADIENT_RECT: end color 0xAARRGGBB (if 0, player falls back to solid color_argb only).
+  uint32 gradient_end_color_argb = 13;
+  // DRAW_TEXT: horizontal alignment — 0 Start, 1 Center, 2 End (Compose TextAlign).
+  int32 text_align = 14;
+  // FILL_LINEAR_GRADIENT_RECT: 0 = left→right, 1 = top→bottom. Ignored for radial.
+  int32 gradient_axis = 15;
+  // DRAW_TEXT: vertical placement in rect — 0 Top, 1 Center, 2 Bottom (Compose Alignment in host Box).
+  int32 text_align_vertical = 16;
+  // FILL_POLYLINE / STROKE_POLYLINE / PUSH_CLIP_POLYLINE: vertex pairs in dp.
+  RemoteCanvasPolylineProto polyline = 17;
+  // PUSH_ROTATE_DEG: clockwise rotation in degrees (negative allowed).
+  float transform_rotate_deg = 18;
+  // STROKE_* / STROKE_POLYLINE: 0 Miter, 1 Round, 2 Bevel.
+  int32 stroke_join = 19;
+  // STROKE_* / DRAW_LINE / STROKE_POLYLINE: 0 Butt, 1 Round, 2 Square.
+  int32 stroke_cap = 20;
+  // PUSH_SCALE_DP: X/Y scale factors (defaults 1). Ignored for other ops.
+  float transform_scale_x = 21;
+  float transform_scale_y = 22;
+  // FILL_CIRCLE / STROKE_CIRCLE: radius in dp (>0).
+  float circle_radius_dp = 23;
+  // DRAW_ARC: degrees per Compose DrawScope.drawArc (0° = 3 o'clock).
+  float arc_start_deg = 24;
+  float arc_sweep_deg = 25;
+  // DRAW_ARC: 0 = open arc (stroke), 1 = closed sector from oval center (fill).
+  int32 arc_use_center = 26;
+  // PUSH_CLIP_RECT / PUSH_CLIP_POLYLINE: 0 = ClipOp.Intersect, 1 = ClipOp.Difference (Compose).
+  int32 clip_op = 27;
+  // PUSH_TRANSFORM_MATRIX: exactly 16 floats, row-major 4×4 as androidx.compose.ui.graphics.Matrix (identity = 1,0,0,0 / 0,1,0,0 / 0,0,1,0 / 0,0,0,1).
+  repeated float transform_matrix_values = 28;
+  // FILL_ROUND_RECT / STROKE_ROUND_RECT: vertical corner radius ry in dp; 0 = use corner_radius_dp (uniform). Matches RemoteCanvas.drawRoundRect rx, ry.
+  float corner_radius_y_dp = 29;
+  // FILL_PATH / STROKE_PATH / PUSH_CLIP_PATH: verb stream + coords (dp).
+  RemoteCanvasPathProto path = 30;
+  // DRAW_IMAGE: PNG file bytes (encoded image); player decodes with Compose `decodeToImageBitmap`.
+  bytes image_png_bytes = 31;
+  // DRAW_IMAGE optional source crop (pixel coords in decoded bitmap). If [image_src_rect_enabled] is false, ignore and use full image.
+  bool image_src_rect_enabled = 32;
+  uint32 image_src_l_px = 33;
+  uint32 image_src_t_px = 34;
+  uint32 image_src_r_px = 35;
+  uint32 image_src_b_px = 36;
+  // DRAW_IMAGE: when [draw_image_alpha_enabled], pass [draw_image_alpha] (0..1) to Compose `drawImage` alpha. Subset of AndroidX bitmap + paint opacity.
+  bool draw_image_alpha_enabled = 37;
+  float draw_image_alpha = 38;
+  // CONDITIONAL_BEGIN: [conditional_cmp] 0=EQ, 1=NEQ, 2=LT, 3=LTE, 4=GT, 5=GTE (AndroidX ConditionalOperations). Operands default to [conditional_literal_a/b]; non-empty [conditional_remote_float_id_*] selects a **named float** from the host runtime map (player: unknown id → NaN operand unless [conditional_remote_float_fallback_to_literal]); [conditional_operand_*_is_wire_nan] forces **NaN** on that side. Full AndroidX RemoteFloat / NaN token model is not wire-identical.
+  int32 conditional_cmp = 39;
+  float conditional_literal_a = 40;
+  float conditional_literal_b = 41;
+  // DRAW_IMAGE: when [draw_image_blend_mode_enabled], pass [draw_image_blend_mode] to Compose `drawImage` blendMode. Values 0..28 match `sdui.ui.graphics.BlendModeProto` (same as androidx.compose.ui.graphics.BlendMode integer wire). LOOP_BEGIN: [loop_repeat_count].
+  bool draw_image_blend_mode_enabled = 42;
+  int32 draw_image_blend_mode = 43;
+  // LOOP_BEGIN: number of times to execute ops strictly between this BEGIN and the matching LOOP_END. Other opcodes ignore this field.
+  uint32 loop_repeat_count = 44;
+  // PUSH_OFFSCREEN_RENDER: when [offscreen_skip_clear_before_draw] is false (default), the player fills the offscreen bitmap with [offscreen_clear_color_argb] (0xAARRGGBB) before inner ops — matches AndroidX `drawToOffscreenBitmap(bitmap, clearColor, ...)`. When true, no clear (AndroidX `drawToOffscreenBitmap(bitmap) { }` / `drawOnBitmap(..., 1, 0)`); fresh buffers may contain undefined pixels unless the host reuses textures. Optional [offscreen_bitmap_id] + [offscreen_discard_pooled_bitmap_after_pop] — see field comments below.
+  bool offscreen_skip_clear_before_draw = 45;
+  uint32 offscreen_clear_color_argb = 46;
+  // DRAW_IMAGE: Compose `drawImage` filterQuality; 0 = default (Medium), 1 = Low, 2 = Medium, 3 = High. Other values treated as 0 by the player.
+  int32 draw_image_filter_quality = 47;
+  // DRAW_TEXT / DRAW_TEXT_AT / DRAW_TEXT_RUN: when > 0, sp line height for Compose [TextStyle.lineHeight] and for max-line / default-height hints in the player; when <= 0, player uses ~1.35× [font_size_sp] for those hints unless [draw_text_rect_top_is_first_baseline] changes vertical anchoring.
+  float text_line_height_sp = 48;
+  // CONDITIONAL_BEGIN: when true, EQ treats two NaN literals as equal and NEQ as false for NaN,NaN; ordering (LT..GTE) still false if either operand is NaN. Default false = Kotlin/IEEE `==` on floats.
+  bool conditional_literal_nan_eq = 49;
+  // PUSH_OFFSCREEN_RENDER: optional stable id for **reuse** of the same pixel-sized [ImageBitmap] across frames / repeated blocks when the player keeps a pool (empty = allocate a fresh buffer each block). Same logical size required; otherwise the player allocates a new bitmap for that id.
+  string offscreen_bitmap_id = 50;
+  // DRAW_IMAGE: when [draw_image_scale_type_enabled], scale the **source** (full or src-rect) uniformly inside rect_* (AndroidX `ScaleType` / Compose [ContentScale] subset). [draw_image_scale_type]: 0 = Fit (letterbox), 1 = Crop (fill then center-crop), 2 = FillBounds (stretch to rect — same as leaving [draw_image_scale_type_enabled] false). Other values: player treats as 2.
+  bool draw_image_scale_type_enabled = 51;
+  int32 draw_image_scale_type = 52;
+  // CONDITIONAL_BEGIN: optional **RemoteFloat-style** id for operand A / B (UTF-8). Empty = use literal; non-empty = runtime float map (see `PodcaRuntime.remoteCanvasConditionalFloats`).
+  string conditional_remote_float_id_a = 53;
+  string conditional_remote_float_id_b = 54;
+  // DRAW_TEXT / DRAW_TEXT_AT / DRAW_TEXT_RUN: when true, [rect_t_dp] is the Y coordinate of the **first line typographic baseline** (dp); the player shifts [BasicText] upward so that baseline aligns with the rect top edge. When false (default), [rect_t_dp] is the top of the text box (legacy). Horizontal [text_align] unchanged; vertical [text_align_vertical] is ignored when this flag is true (player uses top-aligned row for baseline correction).
+  bool draw_text_rect_top_is_first_baseline = 55;
+  // DRAW_IMAGE: when [draw_image_scale_factor_enabled], multiply the **post scale-type** dst width/height by [draw_image_scale_factor] (>0, non-finite → 1) and re-center inside rect_* (dp box in px). Subset of AndroidX scale knobs.
+  bool draw_image_scale_factor_enabled = 56;
+  float draw_image_scale_factor = 57;
+  // DRAW_IMAGE: optional accessibility label; player places a non-interactive [Semantics] overlay on rect_* (same clip/offscreen stack as pointer hits — not pixel-identical to Fit/Crop inner bitmap bounds).
+  string draw_image_content_description = 58;
+  // DRAW_IMAGE: when [draw_image_color_filter_tint_enabled], player applies Compose `ColorFilter.tint` with color [draw_image_color_filter_tint_argb] and blend mode **SrcIn** by default; when [draw_image_color_filter_tint_blend_mode_enabled], uses [draw_image_color_filter_tint_blend_mode] (0..28 = same ids as [draw_image_blend_mode] / BlendModeProto). When [draw_image_color_filter_lighting_enabled] is also true, **lighting wins** (tint ignored in v1). When [draw_image_color_filter_color_matrix_enabled] with a valid 20-float matrix and no lighting, **matrix wins** over tint.
+  bool draw_image_color_filter_tint_enabled = 79;
+  uint32 draw_image_color_filter_tint_argb = 80;
+  // DRAW_IMAGE: when true, player applies Compose `ColorFilter.lighting(multiply, add)` (AndroidX `LightingColorFilter` subset). When [draw_image_color_filter_color_matrix_enabled] is also true, **lighting wins** (matrix ignored in v1). When only matrix + tint, **matrix wins** over tint.
+  bool draw_image_color_filter_lighting_enabled = 88;
+  uint32 draw_image_color_filter_lighting_mul_argb = 89;
+  uint32 draw_image_color_filter_lighting_add_argb = 90;
+  // DRAW_IMAGE: when true, player applies Compose `ColorFilter.colorMatrix` built from [draw_image_color_filter_color_matrix] (**exactly 20** floats, row-major 4×5 as Skia / Android `ColorMatrix`). Length ≠ 20 or any non-finite entry → matrix disabled. See lighting / tint fields above for precedence.
+  bool draw_image_color_filter_color_matrix_enabled = 91;
+  repeated float draw_image_color_filter_color_matrix = 92;
+  // DRAW_IMAGE: when [draw_image_color_filter_tint_enabled] and true, [draw_image_color_filter_tint_blend_mode] selects the `ColorFilter.tint` blend mode; when false, **SrcIn** (legacy).
+  bool draw_image_color_filter_tint_blend_mode_enabled = 93;
+  int32 draw_image_color_filter_tint_blend_mode = 94;
+  // FILL_PATH / STROKE_PATH / DRAW_TWEEN_PATH (stroke): when [path_draw_blend_mode_enabled], pass [path_draw_blend_mode] (0..28 = same ids as [draw_image_blend_mode] / BlendModeProto) to Compose `DrawScope.drawPath` blendMode; when false, **SrcOver** (Compose default-style composite).
+  bool path_draw_blend_mode_enabled = 95;
+  int32 path_draw_blend_mode = 96;
+  // FILL_PATH / STROKE_PATH / DRAW_TWEEN_PATH (stroke): when [path_draw_alpha_enabled], pass [path_draw_alpha] (0..1) as drawPath alpha; non-finite → **1**; when false, **1**.
+  bool path_draw_alpha_enabled = 97;
+  float path_draw_alpha = 98;
+  // FILL_PATH / STROKE_PATH / DRAW_TWEEN_PATH (stroke): optional Compose `ColorFilter.tint` for vector draws (subset of AndroidX paint color filter). When [path_draw_color_filter_tint_blend_mode_enabled] is false, blend mode defaults to SrcIn.
+  bool path_draw_color_filter_tint_enabled = 99;
+  uint32 path_draw_color_filter_tint_argb = 100;
+  bool path_draw_color_filter_tint_blend_mode_enabled = 101;
+  int32 path_draw_color_filter_tint_blend_mode = 102;
+  // STROKE_* / DRAW_LINE / STROKE_PATH / DRAW_TWEEN_PATH stroke: optional dash pattern in **dp** (Compose `PathEffect.dashPathEffect` subset). Enabled only when [stroke_dash_enabled] true.
+  bool stroke_dash_enabled = 103;
+  float stroke_dash_on_dp = 104;
+  float stroke_dash_off_dp = 105;
+  float stroke_dash_phase_dp = 106;
+  // DRAW_TWEEN_PATH: end path (from path is [path]); same verb grammar as FILL_PATH / STROKE_PATH.
+  RemoteCanvasPathProto tween_path_to = 59;
+  // DRAW_TWEEN_PATH: literal interpolation parameter 0=start path, 1=end path (used when [tween_path_fraction_remote_float_id] is empty; non-finite → 0 before clamp).
+  float tween_path_fraction = 60;
+  // FILL_ROUNDED_POLYGON / STROKE_ROUNDED_POLYGON: optional end polygon for vertex lerp morph; [rounded_polygon_morph_t] in [0,1] (non-finite → 0). Empty or vertex count mismatch → ignore morph (draw base [polyline] only).
+  RemoteCanvasPolylineProto rounded_polygon_morph_polyline = 61;
+  // FILL_ROUNDED_POLYGON / STROKE_ROUNDED_POLYGON: morph blend 0 = base [polyline] vertices, 1 = [rounded_polygon_morph_polyline] vertices (dp lerp).
+  float rounded_polygon_morph_t = 62;
+  // DRAW_TEXT_ON_PATH: distance in dp along the path from the first vertex where glyph placement begins (non-finite → 0; clamped by the player to path length). DRAW_TEXT_ON_CIRCLE: arc-length offset (dp) from [arc_start_deg] along the sweep (same clamp semantics).
+  float text_on_path_start_offset_dp = 63;
+  // DRAW_TEXT_ON_CIRCLE: signed radial offset (dp) added to [circle_radius_dp] for the text baseline (AndroidX `warpRadiusOffset` subset; non-finite → 0).
+  float text_on_circle_warp_radius_offset_dp = 64;
+  // STATE_LAYOUT_BEGIN: which state variant the enclosed ops belong to (host selects active id at playback). Optional [state_layout_semantics_*] apply to the program root when this branch is active (see field 83+).
+  int32 state_layout_id = 65;
+  // DRAW_TEXT_ANCHORED: pan offset (dp) added to the anchor before resolving placement (AndroidX panx/pany subset).
+  float text_anchor_pan_x_dp = 66;
+  float text_anchor_pan_y_dp = 67;
+  // DRAW_TEXT_ANCHORED: 0 = anchor at **top-left** of measured layout box; 1 = anchor at **center** of measured box; 2 = anchor at **left** of first line **baseline**; 3 = anchor at **horizontal center** of first line + first line **baseline**. Other values: player treats as 0.
+  int32 draw_anchored_text_flags = 68;
+  // DRAW_TEXT_RUN: inclusive start index in **UTF-16 code units** into [text_body] (clamped by the player).
+  int32 draw_text_run_start = 69;
+  // DRAW_TEXT_RUN: exclusive end index in UTF-16 code units; **−1** means end of string.
+  int32 draw_text_run_end = 70;
+  // DRAW_TEXT_RUN: shaping context start (UTF-16 into [text_body]); clamped; expanded if needed so the window contains the run.
+  int32 draw_text_run_context_start = 71;
+  // DRAW_TEXT_RUN: exclusive shaping context end (UTF-16); **≤ 0** or **−1** = end of [text_body] (same sentinel family as [draw_text_run_end] −1).
+  int32 draw_text_run_context_end = 72;
+  // DRAW_TEXT_RUN: when true, player uses `TextDirection.Rtl` on [TextStyle] (subset of upstream `isRtl`).
+  bool draw_text_run_is_rtl = 73;
+  // DRAW_TEXT / DRAW_TEXT_AT / DRAW_TEXT_RUN: optional [androidx.compose.ui.text.style.LineHeightStyle] when [text_line_height_sp] > 0 — **0** = legacy (omit); **1** = Default (Proportional + Trim.Both + Fixed); **2** = Top + Both + Fixed; **3** = Bottom + Both + Fixed; **4** = Center + Both + Fixed; **5** = Proportional + Trim.None + Fixed. Improves multi-line spacing vs Canvas; values outside 0..5 → **0**.
+  int32 draw_text_line_height_style = 74;
+  // DRAW_TEXT / DRAW_TEXT_AT / DRAW_TEXT_RUN: when true and [draw_text_rect_top_is_first_baseline] is false, [rect_b_dp] (or DRAW_TEXT_AT bottom of the max-height box) is the **last line typographic baseline** Y; player vertically offsets [BasicText] so that baseline aligns with the rect bottom. When both flags true, player applies **top** baseline mode only (v1).
+  bool draw_text_rect_bottom_is_last_baseline = 75;
+  // DRAW_TEXT / DRAW_TEXT_AT / DRAW_TEXT_RUN: when true, Android player sets Compose `PlatformParagraphStyle(includeFontPadding = false)` on [TextStyle] (Canvas / tighter metrics closer to many `Paint` stacks; also allows [LineHeightStyle.Trim] to apply per Compose rules). **JVM Desktop / JS / Wasm / iOS** players ignore this flag in v1 (`PlatformParagraphStyle` there has no `includeFontPadding` hook in Compose Multiplatform 1.10.x).
+  bool draw_text_disable_font_padding = 76;
+  // DRAW_TWEEN_PATH: when [path] and [tween_path_to] are **incompatible** for dp lerp (see `lerpRemoteCanvasPathProtosOrNull` in `remote-core`), **0** = skip draw (legacy); **1** = stroke [path] (from); **2** = stroke [tween_path_to] (to). Values outside 0..2 → **0**.
+  int32 tween_path_incompatible_fallback = 77;
+  // DRAW_TWEEN_PATH: when **non-empty**, blend **t** is read from the host named-float map (`PodcaRuntime.remoteCanvasConditionalFloats`, same ids as CONDITIONAL_BEGIN); unknown id or non-finite resolved value → **0** before clamp to [0,1]. When **empty**, **t** comes from [tween_path_fraction] only.
+  string tween_path_fraction_remote_float_id = 78;
+  // CONDITIONAL_BEGIN: when **true**, a **missing** host-map entry for a non-empty [conditional_remote_float_id_a] / [conditional_remote_float_id_b] uses [conditional_literal_a] / [conditional_literal_b] as that operand instead of **NaN** (subset of AndroidX absent-`RemoteFloat` / literal coalesce). Default **false** = missing id → **NaN** (legacy).
+  bool conditional_remote_float_fallback_to_literal = 81;
+  // PUSH_OFFSCREEN_RENDER: when **true** and [offscreen_bitmap_id] is non-empty, evict that id from the player pool after this block is composited (subset of explicit `RemoteBitmap` release / one-shot vs pooled reuse).
+  bool offscreen_discard_pooled_bitmap_after_pop = 82;
+  // STATE_LAYOUT_BEGIN: when non-default, the player applies Compose `Modifier.semantics` on the **program root** for the **active** [state_layout_id] branch (first matching BEGIN in wire order after the same active-id resolution as [filterRemoteCanvasStateLayoutBlocksForPlayback]). Subset of AndroidX `RecordingModifier` / container semantics — not a general modifier stream.
+  bool state_layout_semantics_merge_descendants = 83;
+  string state_layout_semantics_test_tag = 84;
+  string state_layout_semantics_content_description = 85;
+  // CONDITIONAL_BEGIN: when true, operand A / B is **Float.NaN** regardless of [conditional_literal_*] and [conditional_remote_float_id_*] / host map (wire-explicit NaN token subset vs inferring NaN only from missing ids).
+  bool conditional_operand_a_is_wire_nan = 86;
+  bool conditional_operand_b_is_wire_nan = 87;
+}
+
+message RemoteCanvasProgramProto {
+  repeated RemoteCanvasOpProto ops = 1;
+  float width_dp = 2;
+  float height_dp = 3;
+  // Monotonic opset for this program; interpreters use it for capability checks as opcodes grow.
+  uint32 wire_opset_version = 4;
+  // Upper bound for [RemoteCanvasOpProto.loop_repeat_count] applied **per** `LOOP_BEGIN` during `expandRemoteCanvasLoopBlocks` (before paint, including inside offscreen and regardless of `CONDITIONAL_*` truth). **0** = player default cap (**512** in v1 — bounded decode/memory vs huge literal repeats). **>0** = use that value as the cap (minimum **1** after decode); authors accept larger expanded op lists when raising the ceiling.
+  uint32 loop_expand_max_repeat_per_block = 5;
+  // Max **named** [RemoteCanvasOpProto.offscreen_bitmap_id] entries the player keeps in its LRU pool for this program (**0** = **16** in v1). **>0** = cap in **[1, 512]** after decode (player clamps); bounds GPU/memory vs unbounded id churn. Unnamed offscreen blocks (empty id) are unaffected.
+  uint32 offscreen_bitmap_pool_max_entries = 6;
+}

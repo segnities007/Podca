@@ -97,6 +97,9 @@ fun MarketingApp() {
                     navController = navController,
                     runtime = runtime,
                     byteCache = cache,
+                    onDocumentLoadFailure = {
+                        offline = true
+                    },
                 )
             }
         }
@@ -120,6 +123,9 @@ private fun registerMarketingNavActions(runtime: PodcaRuntime, navController: Na
         navController.navigateTopLevel(MarketingRoutes.EXAMPLES)
         PodcaAcceptedActionResult(eventId = event.event_id)
     }
+    runtime.register("podca.remote.demo_tap") { event ->
+        PodcaAcceptedActionResult(eventId = event.event_id)
+    }
 }
 
 /**
@@ -131,6 +137,7 @@ private fun MarketingNavHost(
     navController: NavHostController,
     runtime: PodcaRuntime,
     byteCache: Map<Int, ByteArray>,
+    onDocumentLoadFailure: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         NavHost(
@@ -157,7 +164,11 @@ private fun MarketingNavHost(
     LaunchedEffect(backStackEntry?.destination?.route, byteCache) {
         val route = backStackEntry?.destination?.route ?: MarketingRoutes.HOME
         val tab = routeToTab(route)
-        runtime.loadDocument(byteCache.getValue(tab))
+        runCatching {
+            runtime.loadDocument(byteCache.getValue(tab))
+        }.onFailure {
+            onDocumentLoadFailure()
+        }
     }
 }
 

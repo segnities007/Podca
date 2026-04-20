@@ -4,7 +4,9 @@ import com.podca.sdui.marketing.encodePodcaMarketingDocument
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -16,10 +18,26 @@ import io.ktor.server.routing.routing
 import io.ktor.server.http.content.staticFiles
 import io.ktor.server.http.content.default
 import java.io.File
+import java.net.URI
 import kotlinx.coroutines.runBlocking
 
 /** Default listening port when `PODCA_SERVER_PORT` / `PORT` are unset. */
 internal const val SERVER_PORT: Int = 9090
+internal const val DEFAULT_PODCA_DOCUMENT_MAX_BYTES: Int = 16 * 1024 * 1024
+private const val PODCA_CORS_ALLOWED_ORIGINS_ENV: String = "PODCA_CORS_ALLOWED_ORIGINS"
+private const val PODCA_DOCUMENT_MAX_BYTES_ENV: String = "PODCA_DOCUMENT_MAX_BYTES"
+private val DEFAULT_PODCA_CORS_ALLOWED_ORIGINS: List<String> =
+    listOf(
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:9090",
+        "http://127.0.0.1:9090",
+    )
+
+internal data class PodcaCorsOrigin(
+    val hostWithOptionalPort: String,
+    val scheme: String,
+)
 
 fun main() {
     val port = resolveServerPort()
@@ -47,12 +65,77 @@ private fun resolvePodcaSiteDirectory(): File? {
     return candidates.firstOrNull { it.isDirectory }
 }
 
-fun Application.module() {
+internal fun resolvePodcaCorsAllowedOrigins(raw: String? = System.getenv(PODCA_CORS_ALLOWED_ORIGINS_ENV)): List<PodcaCorsOrigin> {
+    val source = if (raw.isNullOrBlank()) DEFAULT_PODCA_CORS_ALLOWED_ORIGINS else raw.split(',')
+    val parsed =
+        source
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .map { value ->
+                val uri = runCatching { URI(value) }.getOrElse {
+                    throw IllegalArgumentException(
+                        "Invalid origin '$value' in $PODCA_CORS_ALLOWED_ORIGINS_ENV. Use CSV like http://localhost:8080,https://podca.example.com.",
+                    )
+                }
+                val scheme = uri.scheme?.lowercase()
+                require(scheme == "http" || scheme == "https") {
+                    "Invalid origin '$value' in $PODCA_CORS_ALLOWED_ORIGINS_ENV. Scheme must be http or https."
+                }
+                val host = uri.host?.trim().orEmpty()
+                require(host.isNotEmpty()) {
+                    "Invalid origin '$value' in $PODCA_CORS_ALLOWED_ORIGINS_ENV. Host is required."
+                }
+                val hostWithPort =
+                    if (uri.port >= 0) {
+                        "$host:${uri.port}"
+                    } else {
+                        host
+                    }
+                PodcaCorsOrigin(
+                    hostWithOptionalPort = hostWithPort,
+                    scheme = scheme,
+                )
+            }
+            .distinct()
+    require(parsed.isNotEmpty()) {
+        "$PODCA_CORS_ALLOWED_ORIGINS_ENV must contain at least one valid origin."
+    }
+    return parsed
+}
+
+internal fun resolvePodcaDocumentMaxBytes(raw: String? = System.getenv(PODCA_DOCUMENT_MAX_BYTES_ENV)): Int {
+    if (raw.isNullOrBlank()) return DEFAULT_PODCA_DOCUMENT_MAX_BYTES
+    return raw.toIntOrNull()?.takeIf { it > 0 }
+        ?: throw IllegalArgumentException(
+            "$PODCA_DOCUMENT_MAX_BYTES_ENV must be a positive integer byte size.",
+        )
+}
+
+private suspend fun ApplicationCall.respondPodcaDocumentBytes(
+    bytes: ByteArray,
+    maxDocumentBytes: Int,
+) {
+    if (bytes.size > maxDocumentBytes) {
+        respondText(
+            text = "Podca document exceeds max size ($maxDocumentBytes bytes).",
+            status = HttpStatusCode.PayloadTooLarge,
+        )
+        return
+    }
+    respondBytes(bytes, ContentType.Application.OctetStream)
+}
+
+internal fun Application.module(
+    corsAllowedOrigins: List<PodcaCorsOrigin> = resolvePodcaCorsAllowedOrigins(),
+    maxDocumentBytes: Int = resolvePodcaDocumentMaxBytes(),
+) {
     install(CORS) {
         allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Get)
         allowHeader(HttpHeaders.ContentType)
-        anyHost()
+        corsAllowedOrigins.forEach { origin ->
+            allowHost(origin.hostWithOptionalPort, schemes = listOf(origin.scheme))
+        }
     }
     val siteDir = resolvePodcaSiteDirectory()
     routing {
@@ -62,11 +145,17 @@ fun Application.module() {
         get("/api/podca/marketing-document") {
             val tab = call.request.queryParameters["tab"]?.toIntOrNull()?.coerceIn(0, 3) ?: 0
             val bytes = runBlocking { encodePodcaMarketingDocument(tab) }
-            call.respondBytes(bytes, ContentType.Application.OctetStream)
+            call.respondPodcaDocumentBytes(
+                bytes = bytes,
+                maxDocumentBytes = maxDocumentBytes,
+            )
         }
         get("/api/podca/welcome-document") {
             val bytes = encodeServerWelcomeDocument()
-            call.respondBytes(bytes, ContentType.Application.OctetStream)
+            call.respondPodcaDocumentBytes(
+                bytes = bytes,
+                maxDocumentBytes = maxDocumentBytes,
+            )
         }
         if (siteDir != null) {
             staticFiles("/", siteDir) {

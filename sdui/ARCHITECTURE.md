@@ -54,6 +54,11 @@ sdui/
 │
 ├── marketing/              # マーケ／紹介用ツリー (:sdui:marketing)。encode はサーバー・クライアント双方から利用可
 │
+├── remote/                 # 【Podca Remote】AndroidX compose/remote の粒度を SSoT にした薄いクライアント用サブシステム（Podca 専用ワイヤ）
+│   ├── remote-core/        # Wire 契約。**正史**: `RemoteCanvasProgramProto`（op 列・`remote.CanvasProgram`）。**糖衣**: `RemoteNodeProto`（`remote.Node`）。`DRAW_IMAGE` 用の共有 PNG バイト列: **`RemoteCanvasWireFixtures`**
+│   ├── remote-player-compose/ # CMP で op インタプリタ（Canvas / pointer 等）と `remote.Node` 再生
+│   └── remote-creation/    # スタジオ側 DSL（canvas program / RemoteNode を PodcaNode に載せる）
+│
 ├── studio/                 # 【制作側】Server-side SDK (:sdui:studio:*)
 │   ├── core/               # Composition / Applier 基盤
 │   ├── ui-core/            # Modifier / Alignment DSL (androidx.compose.ui 相当)
@@ -79,9 +84,16 @@ sdui/
 6. ローカルの `ViewModel / UseCase` が処理し、必要なら `ActionResultProto.state_patch` を返す
 7. state 更新後に UI を再描画する
 
+## Podca Remote（SSoT）
+
+- **Remote Compose 粒度**（描画命令・ヒット領域・将来のレイアウト／状態）の契約は **`RemoteCanvasProgramProto`** を中心に **`remote-core`** で定義する。
+- **`DRAW_IMAGE`** 向けの **公式 PNG バイト列**（テスト・デモ用）は **`RemoteCanvasWireFixtures`**（`remote-core` の Kotlin）に **1 か所**に集約する。Wire 往復は **`remote-creation`** の `commonTest`、JVM 上の `decodeToImageBitmap` は **`remote-player-compose`** の `jvmTest` で固定する（`AGENTS.md` / [remote/README.md](./remote/README.md) の検証コマンド。リポジトリルートでは **`./gradlew remoteVerifyJvm`**）。
+- **AndroidX `RemoteCanvas` とのマクロ／ミクロ対応**（モジュール分割差・API ギャップ・ロードマップ）は [ANDROIDX_REMOTE_MAP.md](./remote/ANDROIDX_REMOTE_MAP.md)。
+- **`remote-player-compose`** はその **op インタプリタ**（`Canvas` 上の塗り／角丸（`corner_radius_y_dp` で ry）／**path**（動詞列 `RemoteCanvasPathProto` = `drawPath` / `clipPath`）／楕円／**円**（`FILL_CIRCLE` / `STROKE_CIRCLE`）／**弧・扇**（`DRAW_ARC` + `arc_use_center`）／線形（`gradient_axis`）・放射グラデ／**ポリライン**（`RemoteCanvasPolylineProto`）／ストローク（join/cap）／線／**`DRAW_IMAGE`**（`image_png_bytes` を PNG としてデコードし dst `rect_*` に `drawImage`）、`PUSH_CLIP_RECT`・**`PUSH_CLIP_ROUND_RECT`**（`clipPath(RoundRect)`）・**`PUSH_CLIP_POLYLINE`**（`clipPath` 相当、`clip_op` Intersect/Difference）・`POP_CLIP`、**transform スタック**（`PUSH_TRANSLATE_DP` / `PUSH_SCALE_DP` / `PUSH_ROTATE_DEG` / `PUSH_TRANSFORM_MATRIX`（Compose `Matrix` 4×4）・`POP_TRANSFORM` — AndroidX `RemoteCanvas` に相当、Canvas ベクタのみ）、**save/restore**（`PUSH_CANVAS_SAVE` / `POP_CANVAS_RESTORE` — clip+transform のスナップショット；ポリは `Path().addPath` で複製、テキスト／ポインタは矩形クリップ列をミラー）、テキストは `DRAW_TEXT` / `DRAW_TEXT_AT` → `Box` + `BasicText`（`text_align` / `text_align_vertical`；ポリクリップは外接矩形で近似、`clip_op` Difference はテキスト／ポインタの矩形合成に未反映でプレースホルダ）、矩形ヒットの `POINTER_INPUT_RECT` → `PodcaRuntime.dispatch`、`wire_opset_version` による世代ガード）を持つ。宣言的 **`RemoteNodeProto`** は同モジュール内で別インタプリタとして動かし、**新規表現力の第一追加先は canvas ops** とする（`AGENTS.md` と [remote/README.md](./remote/README.md)）。
+
 ## Player Renderer Position
 
-`player/player`（`PodcaPlayer` / `PodcaRenderDocumentNode`）がルートから振り分け、`player/ui-core` / `player/ui-foundation` / `player/ui-material3` が各名前空間の `NodeProto` を Compose に戻すレンダラー層です。
+`player/player`（`PodcaPlayer` / `PodcaRenderDocumentNode`）がルートから振り分け、`player/ui-core` / `player/ui-foundation` / `player/ui-material3` が各名前空間の `NodeProto` を Compose に戻すレンダラー層です。`remote.CanvasProgram` と `remote.Node` は **`remote-player-compose`** に委譲する。
 
 - `player/ui-core`
   - `ui.*` 系ノード（例: `ui.ZIndexModifier`）の描画

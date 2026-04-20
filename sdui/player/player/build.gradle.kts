@@ -29,6 +29,7 @@ kotlin {
         commonMain.dependencies {
             api(project(":sdui:player:ui-foundation"))
             api(project(":sdui:player:ui-material3"))
+            implementation(project(":sdui:remote:remote-player-compose"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.ui)

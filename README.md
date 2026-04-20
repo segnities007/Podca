@@ -7,8 +7,8 @@ Podca lets you describe UI as a tree (nodes + actions) on the Studio side, ship 
 ## Repository Layout
 
 - `composeApp/`: The Compose Multiplatform sample application (marketing site + SDUI demo in `podcaIntroMain/` and shared web helpers in `webMain/`).
-- `sdui/`: Protocol, Studio, and Player libraries（モジュール一覧は [sdui/README.md](sdui/README.md)、ランタイム責務は [sdui/ARCHITECTURE.md](sdui/ARCHITECTURE.md)、Player の描画パイプラインは [sdui/player/README.md](sdui/player/README.md)）。
-- `docs/`: プロダクトの目的・技術スタック要約と、各 README への索引（[docs/README.md](docs/README.md)）。
+- `sdui/`: Protocol, Studio, and Player libraries（モジュール一覧は [sdui/README.md](sdui/README.md)、ランタイム責務は [sdui/ARCHITECTURE.md](sdui/ARCHITECTURE.md)、Player の描画パイプラインは [sdui/player/README.md](sdui/player/README.md)。**Podca Remote と AndroidX Compose Remote の対応表**は [sdui/remote/ANDROIDX_REMOTE_MAP.md](sdui/remote/ANDROIDX_REMOTE_MAP.md)。）
+- `docs/`: プロダクトの目的・技術スタック要約と、各 README への索引（[docs/README.md](docs/README.md)）。**完成計画書 v1.3.1（文書完成）**: [docs/design/PRODUCT_COMPLETION_PLAN_v1.md](docs/design/PRODUCT_COMPLETION_PLAN_v1.md)。コントリビューション: [CONTRIBUTING.md](CONTRIBUTING.md)。**
 - `server/`: Ktor server (health API, optional static hosting of the web build).
 - `iosApp/`: iOS entry point that hosts the ComposeApp UI.
 - `.cursor/skills/`: Cursor 向けに置いた [Android 公式 Skills](https://github.com/android/skills)（AGP / Compose 移行 / Navigation 3 など）。エディタがプロジェクトスキルを読み込む設定なら、エージェントやインライン補助のコンテキストとして利用できます（Gemini 用の `android skills add` とは別経路）。
@@ -22,6 +22,8 @@ Gradle モジュール（`settings.gradle.kts` の `include` と一致）:
 - **`sdui:player:*`**: 再生用（バイト列をデコードして Compose で描画）。アプリから使うのは主に **`sdui:player:player`** と **`sdui:player:engine`**。
 
 マーケティング用のサンプルツリーは **`sdui:marketing`** にまとまっています（`AGENTS.md` のデモ方針と同じ）。
+
+**Podca Remote**（`remote.CanvasProgram` の op 列・`DRAW_IMAGE` など）の JVM 検証は、ルートで **`./gradlew remoteVerifyJvm`**（[sdui/remote/README.md](sdui/remote/README.md) の *ローカル検証*）。
 
 ## アプリの起動方法
 
@@ -68,6 +70,8 @@ Windows: `.\gradlew.bat :server:run`
 
 - 動作確認: `http://localhost:9090/api/health` → `ok`
 - **別ポートにしたい場合**: `PODCA_SERVER_PORT=8088 ./gradlew :server:run`（Windows PowerShell: `$env:PODCA_SERVER_PORT=8088; .\gradlew.bat :server:run`）。環境変数 `PORT` でも上書きできます（1〜65535）。
+- **CORS 許可オリジン**: `PODCA_CORS_ALLOWED_ORIGINS` に `http://localhost:8080,https://podca.example.com` のような CSV を設定（未設定時は localhost/127.0.0.1 の開発用オリジンのみ許可）。
+- **文書レスポンス上限**: `PODCA_DOCUMENT_MAX_BYTES`（既定 `16777216` = 16 MiB）。`/api/podca/marketing-document` と `/api/podca/welcome-document` は上限超過で `413 Payload Too Large` を返します。
 - ビルド済みの Web 一式を同じプロセスで配信したい場合は、README 後半の **「Serve the build with Ktor」** と **`PODCA_SITE_ROOT`** の説明を参照してください。
 
 ---

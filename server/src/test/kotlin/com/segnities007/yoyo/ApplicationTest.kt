@@ -42,4 +42,41 @@ class ApplicationTest {
             assertTrue(response.bodyAsBytes().isNotEmpty(), "tab=$tab")
         }
     }
+
+    @Test
+    fun testPodcaMarketingDocumentRespectsMaxBytes() = testApplication {
+        application {
+            module(maxDocumentBytes = 1)
+        }
+        val response = client.get("/api/podca/marketing-document")
+        assertEquals(HttpStatusCode.PayloadTooLarge, response.status)
+    }
+
+    @Test
+    fun testPodcaWelcomeDocumentRespectsMaxBytes() = testApplication {
+        application {
+            module(maxDocumentBytes = 1)
+        }
+        val response = client.get("/api/podca/welcome-document")
+        assertEquals(HttpStatusCode.PayloadTooLarge, response.status)
+    }
+
+    @Test
+    fun testResolvePodcaCorsAllowedOriginsParsesCsv() {
+        val parsed = resolvePodcaCorsAllowedOrigins("http://localhost:8080,https://podca.example.com")
+        assertEquals(
+            listOf(
+                PodcaCorsOrigin(hostWithOptionalPort = "localhost:8080", scheme = "http"),
+                PodcaCorsOrigin(hostWithOptionalPort = "podca.example.com", scheme = "https"),
+            ),
+            parsed,
+        )
+    }
+
+    @Test
+    fun testResolvePodcaDocumentMaxBytesRejectsInvalid() {
+        assertFailsWith<IllegalArgumentException> {
+            resolvePodcaDocumentMaxBytes("0")
+        }
+    }
 }
