@@ -1,4 +1,4 @@
-# プロダクト未完整理（ステータス）v1.6
+# プロダクト未完整理（ステータス）v1.11
 
 **結論: プロダクトは未完成。** 本書は「まだできていない／曖昧なままのもの」を **領域別に整理**する（WBS の実行状況トラッキング用）。
 
@@ -19,7 +19,7 @@
 |------|------|------|
 | 「完成」の P0 範囲の合意 | **未** | 基本設計 §2 と WBS 1.1.1 |
 | PR チェックリストの文書化 | **済** | [`.github/pull_request_template.md`](../../.github/pull_request_template.md) |
-| **GitHub Actions**（`main` の PR ゲート） | **一部** | [`.github/workflows/track-r-core.yml`](../../.github/workflows/track-r-core.yml) = R2 相当＋`assembleDebug`＋iOS/JVM/JS/Wasm compile を実行。PR テンプレ・[CONTRIBUTING](../../CONTRIBUTING.md) **同梱済**。**default branch の必須チェック設定と実ラン緑確認は未** |
+| **GitHub Actions**（`main` の PR ゲート） | **一部** | [`.github/workflows/track-r-core.yml`](../../.github/workflows/track-r-core.yml) = R2 相当＋`assembleDebug`＋iOS/JVM/JS/Wasm compile を実行。PR テンプレ・[CONTRIBUTING](../../CONTRIBUTING.md) **同梱済**。**実ラン緑（run #1 / id: `24651110048`）は確認済み、default branch の必須チェック設定は未** |
 | マルチターゲット smoke CI | **一部** | [`.github/workflows/track-r-smoke.yml`](../../.github/workflows/track-r-smoke.yml) を追加。週次/手動トリガーと matrix 定義は済、実ラン緑確認は未 |
 | マップの **△ ごと Issue 化** | **一部** | [`.github/ISSUE_TEMPLATE/remote-gap.yml`](../../.github/ISSUE_TEMPLATE/remote-gap.yml) を追加。Issue 起票の運用面は残 |
 
@@ -61,7 +61,7 @@
 
 | 項目 | 状態 | メモ |
 |------|------|------|
-| 全ターゲットの **自動ビルド** | **一部** | `track-r-core` で JVM/JS/Wasm を常設。Android/iOS の CI 常設は未 |
+| 全ターゲットの **自動ビルド** | **済** | `track-r-core` で `assembleDebug` + iOS arm64/simulator + JVM/JS/Wasm compile を常設 |
 | server の **本番 CORS** | **済** | `anyHost()` を撤廃し、`PODCA_CORS_ALLOWED_ORIGINS`（CSV）で許可オリジンを明示可能 |
 | **レスポンスサイズ上限**の実装 | **済** | `PODCA_DOCUMENT_MAX_BYTES`（既定 16 MiB）を超える `GET /api/podca/marketing-document` / `/api/podca/welcome-document` は 413 を返す |
 | **Docker / 本番 TLS** | **未** | WBS 4.2 |
@@ -104,3 +104,4 @@
 | v1.8 | 2026-04-20 | `track-r-smoke` ワークフローを追加し、マルチターゲット smoke CI を「一部」に更新。 |
 | v1.9 | 2026-04-20 | Remote ギャップ追跡用の Issue テンプレートを追加し、§1 の「△ ごと Issue 化」を更新。 |
 | v1.10 | 2026-04-20 | Remote offscreen 明示解放 op と path tint color filter を追加し、§2 の未完要約を更新。 |
+| v1.11 | 2026-04-20 | `track-r-core` の GitHub 実ラン成功（run #1）を反映し、§1/§4 を更新。 |

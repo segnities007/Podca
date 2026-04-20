@@ -219,9 +219,9 @@ PRODUCT_COMPLETION_PLAN_v1.md（本書）… 実行順・ゲート・Track R/S
 コピー用（完了したら `[x]` にする）。**成果物パスは付録 F**。
 
 > 2026-04-20 時点メモ: ローカルでは R1a–f / R2a,b / R3 / R4 / R5a,b / R6 を実行済み。  
-> 未チェックの R1-min / R2（必須チェック設定）は GitHub 側（リモート実行結果・ブランチ保護）での確認が必要。
+> GitHub Actions `track-r-core` 実ラン（run #1, id: `24651110048`）は success。未チェックは R2（default branch の必須チェック設定）のみ。
 
-- [ ] **R1-min** リポジトリの **`track-r-core`** GitHub Actions が **緑**（[`.github/workflows/track-r-core.yml`](../../.github/workflows/track-r-core.yml) = `remoteVerifyJvm` + `engine:jvmTest` + `server:build` + `compileKotlinJvm` + `compileKotlinJs` + `compileKotlinWasmJs`）
+- [x] **R1-min** リポジトリの **`track-r-core`** GitHub Actions が **緑**（run #1 / id: `24651110048` / [`.github/workflows/track-r-core.yml`](../../.github/workflows/track-r-core.yml) = `remoteVerifyJvm` + `engine:jvmTest` + `server:build` + `compileKotlinJvm` + `compileKotlinJs` + `compileKotlinWasmJs`）
 - [x] **R1a** `./gradlew :composeApp:assembleDebug`
 - [x] **R1b** `./gradlew :composeApp:compileKotlinIosArm64`
 - [x] **R1c** `./gradlew :composeApp:compileKotlinIosSimulatorArm64`
